@@ -3,8 +3,10 @@ var router = express.Router();
 var multer = require("multer");
 var path = require("path");
 var membershipTypeMstSchema = require('../model/membershiptypemst');
-
+var cityMasterSchema = require('../model/citymaster');
 var categoryMasterSchema = require('../model/categorymaster');
+var cityBusinessCategorySchema = require('../model/citybusinesscategory');
+
 const config = require('../config');
 
 //image uploading
@@ -174,7 +176,6 @@ router.post('/addCategoryMaster',uploadbusinesscategory.single("businessIcon"), 
 
 router.post('/CategoryMaster', async function(req,res,next){
   try{
-    const {businessCategoryName,startDate,bookingAmt,clientAmt,refundAmt,csgtPercent,sgstPercent,igstPercent} = req.body;
     let data = await categoryMasterSchema.find();
     res
       .status(200)
@@ -250,4 +251,135 @@ router.post('/deleteCategoryMaster',async function(req,res,next){
   }
 });
 
+
+router.post('/addCityMaster',async function(req,res,next){
+  try{
+    const {id,cityCode,cityName,stateName,stateCode} = req.body;
+    if(id == "0"){
+      var citymaster = new cityMasterSchema({
+        _id:new config.mongoose.Types.ObjectId,
+        cityCode:cityCode,
+        cityName:cityName,
+        stateName:stateName,
+        stateCode:stateCode
+      });
+      await citymaster.save();
+    }
+    else{
+      var citymaster = ({
+        cityCode:cityCode,
+        cityName:cityName,
+        stateName:stateName,
+        stateCode:stateCode
+      });
+      let data = await cityMasterSchema.findByIdAndUpdate(id,citymaster);
+    }
+    res
+    .status(200)
+    .json({ Message: "City Master Added!", Data: 1, IsSuccess: true });
+ } catch (err) {
+  res.json({
+    Message: err.message,
+    Data: 0,
+    IsdSuccess: false,
+  });
+ }
+});
+
+
+router.post('/getCityMaster', async function(req,res,next){
+ try{
+   let data = await cityMasterSchema.find();
+  res
+  .status(200)
+  .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
+
+}catch (err) {
+  res.json({
+    Message: err.message,
+    Data: 0,
+    IsdSuccess: false,
+  });
+}
+});
+
+router.post('/deleteCityMaster', async function(req,res,next){
+try{
+  const {id} = req.body;
+  let data = await cityMasterSchema.findByIdAndRemove(id);
+  res
+  .status(200)
+  .json({ Message: "City Master Deleted!", Data: 1, IsSuccess: true });
+
+}catch (err) {
+  res.json({
+    Message: err.message,
+    Data: 0,
+    IsdSuccess: false,
+  });
+}
+});
+
+
+router.post('/addCityBusinessCategory', async function(req,res,next){
+  try{
+    const {id,businessCategoryId,startDate} = req.body;
+    if(id == "0"){
+      var citybusinesscategory = new cityBusinessCategorySchema ({
+        _id: new config.mongoose.Types.ObjectId,
+        businessCategoryId:businessCategoryId,
+        startDate:startDate
+      });
+      await citybusinesscategory.save(); 
+    }else{
+      var citybusinesscategory =({
+        businessCategoryId:businessCategoryId,
+        startDate:startDate
+      });
+      let data = await cityBusinessCategorySchema.findByIdAndUpdate(id,citybusinesscategory);
+    }
+  res
+    .status(200)
+    .json({ Message: "City Business Category Added!", Data: 1, IsSuccess: true });
+ } catch (err) {
+  res.json({
+    Message: err.message,
+    Data: 0,
+    IsdSuccess: false,
+  });
+ } 
+});
+
+router.post('/getCityBusinessCategory',async function(req,res,next){
+  try{
+    let data = await cityBusinessCategorySchema.find().populate('businessCategoryId',' businessCategoryName');
+   res
+   .status(200)
+   .json({ Message: "City Business Category Data!", Data: data, IsSuccess: true });
+ 
+ }catch (err) {
+   res.json({
+     Message: err.message,
+     Data: 0,
+     IsdSuccess: false,
+   });
+ }
+});
+
+router.post('/deleteCityBusinessCategory',async function(req,res,next){
+  try{
+    const {id} = req.body;
+    let data = await cityBusinessCategorySchema.findByIdAndRemove(id);
+    res
+    .status(200)
+    .json({ Message: "City Business Category Deleted!", Data: 1, IsSuccess: true });
+  
+  }catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
+  }
+});
 module.exports = router;
