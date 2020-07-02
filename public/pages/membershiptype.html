@@ -1,0 +1,208 @@
+<div class="MembershipController">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Membership Type</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Membership Type</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Membership Type</h3>
+                            <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg">
+                                Add Membership Type
+                              </button>
+                        </div>
+
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Registration Icon</th>
+                                        <th>Membership Type</th>
+                                        <th>Registration Fee</th>
+                                        <th>CGST Percent</th>
+                                        <th>SGST Percent Fee</th>
+                                        <th>IGST Percent</th>
+                                        <th>Benefit List</th>
+
+                                        <th style="width: 40px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/" target="_blank">
+                                                <img ng-src="{{imageroute}}/" width="50%" />
+                                            </a>
+                                        </td>
+                                        <td>Enterprise</td>
+                                        <td><span class="badge bg-danger">200</span></td>
+                                        <td>5%</td>
+                                        <td>5%</td>
+                                        <td>8%</td>
+                                        <td>List</td>
+                                        <td><i class="fa fa-edit"></i></th>
+                                    </tr>
+                                    <tr>
+                                        <td>2.</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/" target="_blank">
+                                                <img ng-src="{{imageroute}}/" width="50%" />
+                                            </a>
+                                        </td>
+                                        <td>Standard</td>
+                                        <td><span class="badge bg-warning">200</span></td>
+                                        <td>5%</td>
+                                        <td>5%</td>
+                                        <td>8%</td>
+                                        <td>List</td>
+                                        <td><i class="fa fa-edit"></i></th>
+                                    </tr>
+                                    <tr>
+                                        <td>3.</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/" target="_blank">
+                                                <img ng-src="{{imageroute}}/" width="50%" />
+                                            </a>
+                                        </td>
+                                        <td>Free</td>
+                                        <td><span class="badge bg-primary">200</span></td>
+                                        <td>5%</td>
+                                        <td>5%</td>
+                                        <td>8%</td>
+                                        <td>List</td>
+                                        <td><i class="fa fa-edit"></i></th>
+                                    </tr>
+                                    <tr>
+                                        <td>4.</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/" target="_blank">
+                                                <img ng-src="{{imageroute}}/" width="50%" />
+                                            </a>
+                                        </td>
+                                        <td>Enterprise</td>
+                                        <td><span class="badge bg-success">200</span></td>
+                                        <td>5%</td>
+                                        <td>5%</td>
+                                        <td>8%</td>
+                                        <td>List</td>
+                                        <td><i class="fa fa-edit"></i></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer clearfix">
+                            <ul class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Large Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+                <form ng-submit="">
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Member Type</label>
+                                    <select class="form-control" ng-model="MemberType">
+                                        <option selected="selected">Selected</option>
+                                        <option value="Free">Free</option>
+                                        <option value="Standard">Standard</option>
+                                        <option value="Enterprise">Enterprise</option>
+                                      </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Registration Fee</label>
+                                    <input type="text" class="form-control" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>CGST Percent</label>
+                                    <input type="text" class="form-control" required="" ng-model="CGSTPercent" placeholder="CGST Percent" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SGST Percent</label>
+                                    <input type="text" class="form-control" required="" ng-model="SGSTPercent" placeholder="CGST Percent" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>IGST Percent</label>
+                                    <input type="text" class="form-control" required="" ng-model="IGSTPercent" placeholder="SGST Percent" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Registration Icon</label>
+                                    <input type="file" file-input="files">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Benefit List</label>
+                                    <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control" autocomplete="off" required=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+</div>
