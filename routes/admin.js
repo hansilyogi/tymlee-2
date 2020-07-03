@@ -6,8 +6,10 @@ var membershipTypeMstSchema = require('../model/membershiptypemst');
 var cityMasterSchema = require('../model/citymaster');
 var categoryMasterSchema = require('../model/categorymaster');
 var cityBusinessCategorySchema = require('../model/citybusinesscategory');
+var companyMasterSchema = require('../model/companymaster');
 
 const config = require('../config');
+const { populate } = require('../model/companymaster');
 
 //image uploading
 var membershiplocation = multer.diskStorage({
@@ -35,6 +37,40 @@ var businesscategorylocation = multer.diskStorage({
     },
 });
 var uploadbusinesscategory = multer({ storage: businesscategorylocation });
+
+var Documentlocation = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/Document");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+var uploaddocument = multer({ storage: Documentlocation });
+
+
+var filestorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/Document");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    );
+  },
+ });
+ var finalstorage = multer({ storage: filestorage });
+ var fieldset = finalstorage.fields([
+  { name: "personPhoto", maxCount: 1 },
+  { name: "aadharCard", maxCount: 2 },
+  { name: "panCard", maxCount: 2 },
+  { name: "cancelledCheque", maxCount: 1 },
+  { name: "companyLogo", maxCount: 1 },
+ ]);
 
 
 /* GET users listing. */
@@ -379,4 +415,130 @@ router.post('/deleteCityBusinessCategory', async function(req, res, next) {
         });
     }
 });
+<<<<<<< HEAD
 module.exports = router;
+=======
+
+router.post('/addCompanyMaster',fieldset, async function (req, res, next) {
+  const {doj,businessCategoryId,companyName,addressLine1,addressLine2,cityMasterId,zipcode,mapLocation,phone,fax,url,supportEmail,adminEmail,adminMobile,adminPassword,gstinNo,paNo,bankName,bankBranchName,bankAddress
+    ,bankCity,bankState,bankAccountNo,bankIfscCode,companyType,personName,weekStartDay,cancellationPolicy,companyHtmlPage,registrationValidUpto } = req.body;
+    var a = Math.floor(100000 + Math.random() * 900000); 
+    try {
+    var companymaster = new companyMasterSchema({
+      _id: new config.mongoose.Types.ObjectId,
+      companyCode: "comp" + a,
+      doj: doj,
+      businessCategoryId: businessCategoryId,
+      companyName: companyName,
+      addressLine1: addressLine1,
+      addressLine2:addressLine2,
+      cityMasterId:cityMasterId,
+      zipcode:zipcode,
+      mapLocation:mapLocation,
+      phone:phone,
+      fax:fax,
+      url:url,
+      supportEmail:supportEmail,
+      adminEmail:adminEmail,
+      adminMobile:adminMobile,
+      adminPassword:adminPassword,
+      gstinNo:gstinNo,
+      paNo:paNo,
+      bank:{
+          bankName:bankName,
+          bankBranchName:bankBranchName,
+          bankAddress:bankAddress,
+          bankCity:bankCity,
+          bankState:bankState,
+          bankAccountNo:bankAccountNo,
+          bankIfscCode:bankIfscCode,
+      },
+      companyType:companyType,
+      personName:personName,
+      personPhoto: req.files.personPhoto[0].path,
+      aadharCard: req.files.aadharCard[0].path,
+      panCard : req.files.panCard[0].path,
+      cancelledCheque: req.files.cancelledCheque[0].path,
+      weekStartDay:weekStartDay,
+      companyLogo: req.files.companyLogo[0].path,
+      cancellationPolicy:cancellationPolicy,
+      companyHtmlPage:companyHtmlPage,
+      registrationValidUpto:registrationValidUpto
+    });
+     companymaster.save();
+    res
+    .status(200)
+    .json({ Message: "CompanyMaster Added!", Data: req.body, IsSuccess: true });
+  } catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
+  }
+});
+
+router.post('/getCompanyMaster', async function(req,res,next){
+  try{
+    let data = await companyMasterSchema.find().populate('businessCategoryId',' businessCategoryName',populate('cityMasterId','cityName','stateName','stateCode'));
+   res
+   .status(200)
+   .json({ Message: "Company Master Data!", Data: data, IsSuccess: true });
+ 
+ }catch (err) {
+   res.json({
+     Message: err.message,
+     Data: 0,
+     IsdSuccess: false,
+   });
+ }
+});
+
+router.post('/deleteCompanyMaster',async function(req,res,next){
+  try{
+    const {id} = req.body;
+    let data = await companyMasterSchema.findByIdAndRemove(id);
+    res
+    .status(200)
+    .json({ Message: "Company Master Deleted!", Data: 1, IsSuccess: true });
+  
+  }catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
+  }
+});
+
+router.post('/updateCategoryMaster',async function(req,res,next){
+  try{
+    const {id,doj,businessCategoryId,companyName,addressLine1,addressLine2,cityMasterId,zipcode,mapLocation,phone,fax,url,supportEmail,adminEmail,adminMobile,adminPassword,gstinNo,paNo,bankName,bankBranchName,bankAddress
+      ,bankCity,bankState,bankAccountNo,bankIfscCode,companyType,personName,weekStartDay,cancellationPolicy,companyHtmlPage,registrationValidUpto } = req.body;
+    
+      var data = ({
+        businessCategoryName:businessCategoryName,
+        startDate:startDate,
+        bookingAmt:bookingAmt,
+        clientAmt:clientAmt,
+        refundAmt:refundAmt,
+        csgtPercent:csgtPercent,
+        sgstPercent:sgstPercent,
+        igstPercent:igstPercent
+       });
+       let datas = await companyMasterSchema.findByIdAndUpdate(id,data);
+    res
+    .status(200)
+    .json({ Message: "Company Master Updated !", Data: 1, IsSuccess: true });
+  
+  }catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
+  }
+  });
+
+module.exports = router;
+>>>>>>> f424b9075edceb7526a93e9fe8e5cde88e09a5b9
