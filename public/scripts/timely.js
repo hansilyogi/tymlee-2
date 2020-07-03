@@ -13,6 +13,14 @@ app.config(function($routeProvider) {
         .when("/membershiptype", {
             templateUrl: "pages/membershiptype.html",
             controller: "MembershipController",
+        })
+        .when("/businesscategory", {
+            templateUrl: "pages/businesscategory.html",
+            controller: "BusinessCategoryController",
+        })
+        .when("/city", {
+            templateUrl: "pages/city.html",
+            controller: "CityController",
         });
 });
 

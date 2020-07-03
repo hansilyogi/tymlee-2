@@ -1,22 +1,21 @@
-<div class="MembershipController">
-    <!-- Content Header (Page header) -->
+<div class="BusinessCategoryController">
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Membership Type</h1>
+                    <h1>Business Category</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Membership Type</li>
+                        <li class="breadcrumb-item active">Business Category</li>
                     </ol>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -25,7 +24,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Membership Type</h3>
                             <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
-                                Add Membership Type
+                                Add Business Category
                               </button>
                         </div>
 
@@ -34,13 +33,15 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Registration Icon</th>
-                                        <th>Membership Type</th>
-                                        <th>Registration Fee</th>
+                                        <th>Business Icon</th>
+                                        <th>Category Name</th>
+                                        <th>Start Date</th>
+                                        <th>Booking Amt</th>
+                                        <th>Client Amt</th>
+                                        <th>Refund Amt</th>
                                         <th>CGST Percent</th>
                                         <th>SGST Percent Fee</th>
                                         <th>IGST Percent</th>
-                                        <th width=10%>Benefit List</th>
 
                                         <th style="width: 40px">Actions</th>
                                     </tr>
@@ -49,16 +50,18 @@
                                     <tr ng-repeat="data in DataList">
                                         <td>{{$index+1}}</td>
                                         <td>
-                                            <a ng-href="{{imageroute}}/{{data.registrationIcon}}" target="_blank">
-                                                <img ng-src="{{imageroute}}/{{data.registrationIcon}}" style="width: 100px;height: 100px;" />
+                                            <a ng-href="{{imageroute}}/{{data.businessIcon}}" target="_blank">
+                                                <img ng-src="{{imageroute}}/{{data.businessIcon}}" style="width: 100px;height: 100px;" />
                                             </a>
                                         </td>
-                                        <td>{{data.membershipType}}</td>
-                                        <td>{{data.registrationFee}}</td>
+                                        <td>{{data.businessCategoryName}}</td>
+                                        <td>{{data.startDate}}</td>
+                                        <td>{{data.bookingAmt}}</td>
+                                        <td>{{data.clientAmt}}</td>
+                                        <td>{{data.refundAmt}}</td>
                                         <td>{{data.csgtPercent}}</td>
                                         <td>{{data.sgstPercent}}</td>
                                         <td>{{data.igstPercent}}</td>
-                                        <td>{{data.benefitList}}</td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm " data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -101,25 +104,46 @@
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
-                <form ng-submit="submitMemberShipType()">
+                <form ng-submit="submitBusinessCategory()">
                     <div class="modal-body">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Member Type</label>
-                                    <select class="form-control" ng-model="MemberType" required>
+                                    <label>Category Name</label>
+                                    <select class="form-control" ng-model="BusinessCategory" required>
                                         <option value="" selected="selected">~ SELECT ~</option>
                                             <option ng-repeat="sel in MessageList"
-                                                ng-selected="MemberType == sel" value="{{sel}}">
+                                                ng-selected="BusinessCategory == sel" value="{{sel}}">
                                                 {{sel}}</option>
                                       </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Registration Fee</label>
-                                    <input type="text" class="form-control" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
+                                    <label>Start Date</label>
+                                    <input type="date" class="form-control" ng-model="StartDate" required="" placeholder="Start Date" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Booking Amount</label>
+                                    <input type="text" class="form-control" required="" ng-model="BookingAmount" placeholder="Booking Amount" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Client Amount</label>
+                                    <input type="text" class="form-control" required="" ng-model="ClientAmount" placeholder="Client Amount" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Refund Amount</label>
+                                    <input type="text" class="form-control" required="" ng-model="RefundAmount" placeholder="Refund Amount" autocomplete="off">
 
                                 </div>
                             </div>
@@ -150,12 +174,7 @@
                                     <input type="file" file-input="files">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Benefit List</label>
-                                    <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control" autocomplete="off" required=""></textarea>
-                                </div>
-                            </div>
+
                         </div>
                         <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
                     </div>
@@ -166,5 +185,5 @@
         </div>
         <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
+
 </div>

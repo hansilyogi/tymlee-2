@@ -1,15 +1,15 @@
-<div class="MembershipController">
+<div class="CityController">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Membership Type</h1>
+                    <h1>City</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Membership Type</li>
+                        <li class="breadcrumb-item active">City</li>
                     </ol>
                 </div>
             </div>
@@ -23,9 +23,9 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Membership Type</h3>
+                            <h3 class="card-title">City</h3>
                             <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
-                                Add Membership Type
+                                Add City
                               </button>
                         </div>
 
@@ -34,31 +34,20 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Registration Icon</th>
-                                        <th>Membership Type</th>
-                                        <th>Registration Fee</th>
-                                        <th>CGST Percent</th>
-                                        <th>SGST Percent Fee</th>
-                                        <th>IGST Percent</th>
-                                        <th width=10%>Benefit List</th>
-
+                                        <th>City Code</th>
+                                        <th>City Name</th>
+                                        <th>State Name</th>
+                                        <th>State Code</th>
                                         <th style="width: 40px">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="data in DataList">
                                         <td>{{$index+1}}</td>
-                                        <td>
-                                            <a ng-href="{{imageroute}}/{{data.registrationIcon}}" target="_blank">
-                                                <img ng-src="{{imageroute}}/{{data.registrationIcon}}" style="width: 100px;height: 100px;" />
-                                            </a>
-                                        </td>
-                                        <td>{{data.membershipType}}</td>
-                                        <td>{{data.registrationFee}}</td>
-                                        <td>{{data.csgtPercent}}</td>
-                                        <td>{{data.sgstPercent}}</td>
-                                        <td>{{data.igstPercent}}</td>
-                                        <td>{{data.benefitList}}</td>
+                                        <td>{{data.cityCode}}</td>
+                                        <td>{{data.cityName}}</td>
+                                        <td>{{data.stateName}}</td>
+                                        <td>{{data.stateCode}}</td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm " data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -101,59 +90,36 @@
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
-                <form ng-submit="submitMemberShipType()">
+                <form ng-submit="submitCity()">
                     <div class="modal-body">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Member Type</label>
-                                    <select class="form-control" ng-model="MemberType" required>
-                                        <option value="" selected="selected">~ SELECT ~</option>
-                                            <option ng-repeat="sel in MessageList"
-                                                ng-selected="MemberType == sel" value="{{sel}}">
-                                                {{sel}}</option>
-                                      </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Registration Fee</label>
-                                    <input type="text" class="form-control" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
+                                    <label>City Code</label>
+                                    <input type="text" class="form-control" ng-model="CityCode" required="" placeholder="City Code" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>CGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="CGSTPercent" placeholder="CGST Percent" autocomplete="off">
+                                    <label>City Name</label>
+                                    <input type="text" class="form-control" required="" ng-model="CityName" placeholder="City Name" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>SGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="SGSTPercent" placeholder="SGST Percent" autocomplete="off">
+                                    <label>State Code</label>
+                                    <input type="text" class="form-control" required="" ng-model="StateCode" placeholder="State Code" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>IGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="IGSTPercent" placeholder="IGST Percent" autocomplete="off">
+                                    <label>State Name</label>
+                                    <input type="text" class="form-control" required="" ng-model="StateName" placeholder="State Name" autocomplete="off">
 
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Registration Icon</label>
-                                    <input type="file" file-input="files">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Benefit List</label>
-                                    <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control" autocomplete="off" required=""></textarea>
                                 </div>
                             </div>
                         </div>
