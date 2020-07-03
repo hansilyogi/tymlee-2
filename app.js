@@ -6,6 +6,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
+var customerRouter = require('./routes/customer');
 
 
 var app = express();
@@ -20,5 +21,6 @@ app.use("/uploads", express.static(__dirname+"/uploads"));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/customer', customerRouter);
 
 module.exports = app;

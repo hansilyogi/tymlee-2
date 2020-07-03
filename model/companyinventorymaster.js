@@ -1,0 +1,61 @@
+const mongoose = require('mongoose');
+
+var companyInventoryMasterSchema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
+    companyId:{
+        type:mongoose.Types.ObjectId,
+        ref:'companyMaster'
+    },
+    inventoryName:{
+        type:String,
+        required:true
+    },
+    inventoryDescription:{
+        type:String,
+        required:true
+    },
+    appointmentMinutes:{
+        type:Number,
+        required:true
+    },
+    multipleServiceProviderRequired:{
+        type:Boolean
+    },
+    rateType:{
+        type:String,
+        required:true
+    },
+    rateAmt:{
+        type:Number,
+        required:true
+    },
+    inventoryNotes1Name:{
+        type:String,
+        required:true
+    },
+    inventoryNotes1:{
+        type:String,
+        required:true
+    },
+    inventoryNotes2Name:{
+        type:String,
+        required:true
+    },
+    inventoryNotes2:{
+        type:String,
+        required:true
+    },
+    inventoryNotes3Name:{
+        type:String,
+        required:true
+    },
+    inventoryNotes3:{
+        type:String,
+        required:true
+    },
+    inventoryAvailable:{
+        type:Boolean
+    }
+});
+
+module.exports = mongoose.model('companyInventoryMaster',companyInventoryMasterSchema);

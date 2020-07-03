@@ -9,7 +9,7 @@ var cityBusinessCategorySchema = require('../model/citybusinesscategory');
 var companyMasterSchema = require('../model/companymaster');
 
 const config = require('../config');
-const { populate } = require('../model/companymaster');
+const { populate, model } = require('../model/companymaster');
 
 //image uploading
 var membershiplocation = multer.diskStorage({
@@ -507,7 +507,7 @@ router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
 
 router.post('/getCompanyMaster', async function(req, res, next) {
     try {
-        let data = await companyMasterSchema.find().populate('businessCategoryId', ' businessCategoryName', populate('cityMasterId', 'cityName', 'stateName', 'stateCode'));
+        let data = await companyMasterSchema.find().populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId');
         res
             .status(200)
             .json({ Message: "Company Master Data!", Data: data, IsSuccess: true });
@@ -538,64 +538,6 @@ router.post('/deleteCompanyMaster', async function(req, res, next) {
     }
 });
 
-router.post('/updateCategoryMaster', async function(req, res, next) {
-    try {
-        const {
-            id,
-            doj,
-            businessCategoryId,
-            companyName,
-            addressLine1,
-            addressLine2,
-            cityMasterId,
-            zipcode,
-            mapLocation,
-            phone,
-            fax,
-            url,
-            supportEmail,
-            adminEmail,
-            adminMobile,
-            adminPassword,
-            gstinNo,
-            paNo,
-            bankName,
-            bankBranchName,
-            bankAddress,
-            bankCity,
-            bankState,
-            bankAccountNo,
-            bankIfscCode,
-            companyType,
-            personName,
-            weekStartDay,
-            cancellationPolicy,
-            companyHtmlPage,
-            registrationValidUpto
-        } = req.body;
 
-        var data = ({
-            businessCategoryName: businessCategoryName,
-            startDate: startDate,
-            bookingAmt: bookingAmt,
-            clientAmt: clientAmt,
-            refundAmt: refundAmt,
-            csgtPercent: csgtPercent,
-            sgstPercent: sgstPercent,
-            igstPercent: igstPercent
-        });
-        let datas = await companyMasterSchema.findByIdAndUpdate(id, data);
-        res
-            .status(200)
-            .json({ Message: "Company Master Updated !", Data: 1, IsSuccess: true });
-
-    } catch (err) {
-        res.json({
-            Message: err.message,
-            Data: 0,
-            IsdSuccess: false,
-        });
-    }
-});
 
 module.exports = router;
