@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Membership Type</h3>
-                            <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg">
+                            <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
                                 Add Membership Type
                               </button>
                         </div>
@@ -40,72 +40,35 @@
                                         <th>CGST Percent</th>
                                         <th>SGST Percent Fee</th>
                                         <th>IGST Percent</th>
-                                        <th>Benefit List</th>
+                                        <th width=10%>Benefit List</th>
 
                                         <th style="width: 40px">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1.</td>
+                                    <tr ng-repeat="data in DataList">
+                                        <td>{{$index+1}}</td>
                                         <td>
-                                            <a ng-href="{{imageroute}}/" target="_blank">
-                                                <img ng-src="{{imageroute}}/" width="50%" />
+                                            <a ng-href="{{imageroute}}/{{data.registrationIcon}}" target="_blank">
+                                                <img ng-src="{{imageroute}}/{{data.registrationIcon}}" style="width: 100px;height: 100px;" />
                                             </a>
                                         </td>
-                                        <td>Enterprise</td>
-                                        <td><span class="badge bg-danger">200</span></td>
-                                        <td>5%</td>
-                                        <td>5%</td>
-                                        <td>8%</td>
-                                        <td>List</td>
-                                        <td><i class="fa fa-edit"></i></th>
-                                    </tr>
-                                    <tr>
-                                        <td>2.</td>
-                                        <td>
-                                            <a ng-href="{{imageroute}}/" target="_blank">
-                                                <img ng-src="{{imageroute}}/" width="50%" />
-                                            </a>
+                                        <td>{{data.membershipType}}</td>
+                                        <td><span class="badge bg-danger">{{data.registrationFee}}</span></td>
+                                        <td>{{data.csgtPercent}}</td>
+                                        <td>{{data.sgstPercent}}</td>
+                                        <td>{{data.igstPercent}}</td>
+                                        <td>{{data.benefitList}}</td>
+                                        <td width=10%>
+
+                                            <button type="button" class="btn btn-info btn-sm " data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
+                                        </button>
+
+                                            <button type="button" class="btn btn-info btn-sm " data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                        </button>
                                         </td>
-                                        <td>Standard</td>
-                                        <td><span class="badge bg-warning">200</span></td>
-                                        <td>5%</td>
-                                        <td>5%</td>
-                                        <td>8%</td>
-                                        <td>List</td>
-                                        <td><i class="fa fa-edit"></i></th>
                                     </tr>
-                                    <tr>
-                                        <td>3.</td>
-                                        <td>
-                                            <a ng-href="{{imageroute}}/" target="_blank">
-                                                <img ng-src="{{imageroute}}/" width="50%" />
-                                            </a>
-                                        </td>
-                                        <td>Free</td>
-                                        <td><span class="badge bg-primary">200</span></td>
-                                        <td>5%</td>
-                                        <td>5%</td>
-                                        <td>8%</td>
-                                        <td>List</td>
-                                        <td><i class="fa fa-edit"></i></th>
-                                    </tr>
-                                    <tr>
-                                        <td>4.</td>
-                                        <td>
-                                            <a ng-href="{{imageroute}}/" target="_blank">
-                                                <img ng-src="{{imageroute}}/" width="50%" />
-                                            </a>
-                                        </td>
-                                        <td>Enterprise</td>
-                                        <td><span class="badge bg-success">200</span></td>
-                                        <td>5%</td>
-                                        <td>5%</td>
-                                        <td>8%</td>
-                                        <td>List</td>
-                                        <td><i class="fa fa-edit"></i></th>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -138,18 +101,18 @@
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
-                <form ng-submit="">
+                <form ng-submit="submitMemberShipType()">
                     <div class="modal-body">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Member Type</label>
-                                    <select class="form-control" ng-model="MemberType">
-                                        <option selected="selected">Selected</option>
-                                        <option value="Free">Free</option>
-                                        <option value="Standard">Standard</option>
-                                        <option value="Enterprise">Enterprise</option>
+                                    <select class="form-control" ng-model="MemberType" required>
+                                        <option value="">~ SELECT ~</option>
+                                            <option ng-repeat="sel in MessageList"
+                                                ng-selected="MemberType == sel" value="{{sel}}">
+                                                {{sel}}</option>
                                       </select>
                                 </div>
                             </div>
@@ -187,14 +150,14 @@
                                     <input type="file" file-input="files">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Benefit List</label>
                                     <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control" autocomplete="off" required=""></textarea>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
                     </div>
 
                 </form>
