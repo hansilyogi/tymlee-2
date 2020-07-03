@@ -2,8 +2,8 @@ app.controller('MembershipController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
-    $scope.MemberType = "";
     $scope.MessageList = ['Free', 'Standard', 'Enterprise'];
+    $scope.MemberType = $scope.MessageList[0];
     $scope.submitMemberShipType = function() {
         var preForm = new FormData();
         angular.forEach($scope.files, function(file) {
@@ -130,7 +130,7 @@ app.controller('MembershipController', function($scope, $http) {
 
     $scope.Clear = function() {
         $scope.Id = 0;
-        $scope.MemberType = 0;
+        $scope.MemberType = "";
         $scope.RegistrationFee = "";
         $scope.CGSTPercent = "";
         $scope.SGSTPercent = "";

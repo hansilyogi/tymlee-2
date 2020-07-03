@@ -1,15 +1,15 @@
-<div class="MembershipController">
+<div class="MembershipController" style="padding:10px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Membership Type</h1>
+                    <h1>Membership type</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Membership Type</li>
+                        <li class="breadcrumb-item"><a href="#">Master</a></li>
+                        <li class="breadcrumb-item active">Membership type</li>
                     </ol>
                 </div>
             </div>
@@ -23,26 +23,25 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Membership Type</h3>
-                            <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
-                                Add Membership Type
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
+                                <i class="fa fa-plus"></i> &nbsp;Add membership type
                               </button>
                         </div>
 
-                        <div class="card-body">
-                            <table class="table table-bordered">
+                        <div class="card-body table-responsive">
+                            <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Registration Icon</th>
-                                        <th>Membership Type</th>
-                                        <th>Registration Fee</th>
-                                        <th>CGST Percent</th>
-                                        <th>SGST Percent Fee</th>
-                                        <th>IGST Percent</th>
-                                        <th width=10%>Benefit List</th>
+                                        <th>Icon</th>
+                                        <th>Membership type</th>
+                                        <th>Registration fee</th>
+                                        <th>CGST %</th>
+                                        <th>SGST %</th>
+                                        <th>IGST %</th>
+                                        <th>Benefit list</th>
 
-                                        <th style="width: 40px">Actions</th>
+                                        <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -50,21 +49,21 @@
                                         <td>{{$index+1}}</td>
                                         <td>
                                             <a ng-href="{{imageroute}}/{{data.registrationIcon}}" target="_blank">
-                                                <img ng-src="{{imageroute}}/{{data.registrationIcon}}" style="width: 100px;height: 100px;" />
+                                                <img ng-src="{{imageroute}}/{{data.registrationIcon}}" style="width: 90px;height: 80px;" />
                                             </a>
                                         </td>
                                         <td>{{data.membershipType}}</td>
                                         <td>{{data.registrationFee}}</td>
-                                        <td>{{data.csgtPercent}}</td>
-                                        <td>{{data.sgstPercent}}</td>
-                                        <td>{{data.igstPercent}}</td>
+                                        <td>{{data.csgtPercent}}%</td>
+                                        <td>{{data.sgstPercent}}%</td>
+                                        <td>{{data.igstPercent}}%</td>
                                         <td>{{data.benefitList}}</td>
                                         <td width=10%>
 
-                                            <button type="button" class="btn btn-info btn-sm " data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
+                                            <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
                                         </button>
 
-                                            <button type="button" class="btn btn-info btn-sm " data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                            <button type="button" class="btn btn-danger btn-flat btn-sm " data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                         </button>
                                         </td>
                                     </tr>
@@ -72,23 +71,9 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="card-footer clearfix">
-                            <ul class="pagination pagination-sm m-0 float-right">
-                                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                            </ul>
-                        </div>
                     </div>
-
                 </div>
-
-
             </div>
-
         </div>
     </section>
 
@@ -96,20 +81,19 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Large Modal</h4>
+                    <h4 class="modal-title text-lg">Membership type</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
                 <form ng-submit="submitMemberShipType()">
                     <div class="modal-body">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Member Type</label>
-                                    <select class="form-control" ng-model="MemberType" required>
-                                        <option value="" selected="selected">~ SELECT ~</option>
+                                    <label>Member type</label>
+                                    <select class="form-control" ng-init="" ng-model="MemberType" required>
+                                        <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in MessageList"
                                                 ng-selected="MemberType == sel" value="{{sel}}">
                                                 {{sel}}</option>
@@ -118,36 +102,36 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Registration Fee</label>
+                                    <label>Registration fee</label>
                                     <input type="text" class="form-control" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>CGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="CGSTPercent" placeholder="CGST Percent" autocomplete="off">
+                                    <label>CGST %</label>
+                                    <input type="text" class="form-control" required="" ng-model="CGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>SGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="SGSTPercent" placeholder="SGST Percent" autocomplete="off">
+                                    <label>SGST %</label>
+                                    <input type="text" class="form-control" required="" ng-model="SGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>IGST Percent</label>
-                                    <input type="text" class="form-control" required="" ng-model="IGSTPercent" placeholder="IGST Percent" autocomplete="off">
+                                    <label>IGST %</label>
+                                    <input type="text" class="form-control" required="" ng-model="IGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Registration Icon</label>
-                                    <input type="file" file-input="files">
+                                    <input type="file" class="form-control btn-sm" file-input="files" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -159,10 +143,8 @@
                         </div>
                         <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
                     </div>
-
                 </form>
             </div>
-
         </div>
         <!-- /.modal-content -->
     </div>

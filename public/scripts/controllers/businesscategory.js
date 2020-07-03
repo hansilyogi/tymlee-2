@@ -2,7 +2,6 @@ app.controller('BusinessCategoryController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
-    $scope.MemberType = "";
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
 
     $scope.submitBusinessCategory = function() {
@@ -123,7 +122,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
         console.log(data);
         $scope.Id = data._id;
         $scope.BusinessCategory = data.businessCategoryName;
-        $scope.StartDate = data.startDate;
+        $scope.StartDate = new Date(data.startDate);
         $scope.BookingAmount = data.bookingAmt;
         $scope.ClientAmount = data.clientAmt;
         $scope.RefundAmount = data.refundAmt;
@@ -135,7 +134,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
 
     $scope.Clear = function() {
         $scope.Id = 0;
-        $scope.BusinessCategory = 0;
+        $scope.BusinessCategory = "";
         $scope.StartDate = "";
         $scope.BookingAmount = "";
         $scope.ClientAmount = "";

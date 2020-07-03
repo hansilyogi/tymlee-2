@@ -1,5 +1,5 @@
 var imageroute = window.location.origin;
-var app = angular.module("TimelyModule", ["ngRoute"]);
+var app = angular.module("TimelyModule", ["ngRoute", "datatables"]);
 app.config(function($routeProvider) {
     $routeProvider
         .when("/", {
