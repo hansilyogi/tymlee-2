@@ -92,27 +92,29 @@ app.controller('MembershipController', function($scope, $http) {
 
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
-        $http({
-            url: imageroute + "/admin/DeleteMembershipType",
-            method: "POST",
-            cache: false,
-            data: { id: id },
-            headers: { "Content-Type": "application/json; charset=UTF-8" },
-        }).then(
-            function(response) {
-                if (response.data.Data == 1) {
-                    alert("Delete Successfully !");
-                    $scope.GetMembershipType();
+        if (result) {
+            $http({
+                url: imageroute + "/admin/DeleteMembershipType",
+                method: "POST",
+                cache: false,
+                data: { id: id },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.Data == 1) {
+                        alert("Delete Successfully !");
+                        $scope.GetMembershipType();
 
-                } else {
-                    alert("Data Not deleted !");
-                    $scope.GetMembershipType();
+                    } else {
+                        alert("Data Not deleted !");
+                        $scope.GetMembershipType();
+                    }
+                },
+                function(error) {
+                    console.log("Insternal Server");
                 }
-            },
-            function(error) {
-                console.log("Insternal Server");
-            }
-        );
+            );
+        }
     }
 
     $scope.EditData = function(data) {

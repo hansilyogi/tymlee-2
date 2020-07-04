@@ -32,15 +32,15 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Icon</th>
-                                        <th>Category Name</th>
-                                        <th>Start Date</th>
-                                        <th>Booking Amt</th>
-                                        <th>Client Amt</th>
-                                        <th>Refund Amt</th>
+                                        <th>Category name</th>
+                                        <th>Start date</th>
+                                        <th>Booking amt</th>
+                                        <th>Client amt</th>
+                                        <th>Refund amt</th>
                                         <th>CGST %</th>
                                         <th>SGST %</th>
                                         <th>IGST %</th>
-                                        <th style="width: 40px">Actions</th>
+                                        <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,12 +53,12 @@
                                         </td>
                                         <td>{{data.businessCategoryName}}</td>
                                         <td>{{data.startDate | date:"MM/dd/yyyy"}}</td>
-                                        <td>{{data.bookingAmt}}</td>
-                                        <td>{{data.clientAmt}}</td>
-                                        <td>{{data.refundAmt}}</td>
-                                        <td>{{data.csgtPercent}}</td>
-                                        <td>{{data.sgstPercent}}</td>
-                                        <td>{{data.igstPercent}}</td>
+                                        <td>₹{{data.bookingAmt}}</td>
+                                        <td>₹{{data.clientAmt}}</td>
+                                        <td>₹{{data.refundAmt}}</td>
+                                        <td>{{data.csgtPercent}}%</td>
+                                        <td>{{data.sgstPercent}}%</td>
+                                        <td>{{data.igstPercent}}%</td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -94,7 +94,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Category Name</label>
-                                    <select class="form-control" ng-model="BusinessCategory" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-model="BusinessCategory" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in MessageList"
                                                 ng-selected="BusinessCategory == sel" value="{{sel}}">
@@ -105,56 +105,56 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Start Date</label>
-                                    <input type="date" class="form-control" ng-model="StartDate" required="" placeholder="Start Date" autocomplete="off">
+                                    <input type="date" class="form-control form-control-sm" ng-model="StartDate" required="" placeholder="Start Date" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Booking Amount</label>
-                                    <input type="number" class="form-control" required="" ng-model="BookingAmount" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="BookingAmount" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Client Amount</label>
-                                    <input type="number" class="form-control" required="" ng-model="ClientAmount" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="ClientAmount" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Refund Amount</label>
-                                    <input type="number" class="form-control" required="" ng-model="RefundAmount" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="RefundAmount" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>CGST %</label>
-                                    <input type="number" class="form-control" required="" ng-model="CGSTPercent" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="CGSTPercent" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>SGST %</label>
-                                    <input type="number" class="form-control" required="" ng-model="SGSTPercent" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="SGSTPercent" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>IGST %</label>
-                                    <input type="number" class="form-control" required="" ng-model="IGSTPercent" placeholder="0" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="IGSTPercent" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Registration Icon</label>
-                                    <input type="file" file-input="files" class="form-control btn-sm">
+                                    <label>Registration Icon</label><br>
+                                    <input type="file" file-input="files" class="btn-sm form-control-sm">
                                 </div>
                             </div>
 

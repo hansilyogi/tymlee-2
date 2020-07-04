@@ -53,7 +53,7 @@
                                             </a>
                                         </td>
                                         <td>{{data.membershipType}}</td>
-                                        <td>{{data.registrationFee}}</td>
+                                        <td>₹{{data.registrationFee}}</td>
                                         <td>{{data.csgtPercent}}%</td>
                                         <td>{{data.sgstPercent}}%</td>
                                         <td>{{data.igstPercent}}%</td>
@@ -92,7 +92,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Member type</label>
-                                    <select class="form-control" ng-init="" ng-model="MemberType" required>
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="MemberType" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in MessageList"
                                                 ng-selected="MemberType == sel" value="{{sel}}">
@@ -103,41 +103,41 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Registration fee</label>
-                                    <input type="text" class="form-control" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm" ng-model="RegistrationFee" required="" placeholder="Registration Fee" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>CGST %</label>
-                                    <input type="text" class="form-control" required="" ng-model="CGSTPercent" placeholder="0%" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="CGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>SGST %</label>
-                                    <input type="text" class="form-control" required="" ng-model="SGSTPercent" placeholder="0%" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="SGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>IGST %</label>
-                                    <input type="text" class="form-control" required="" ng-model="IGSTPercent" placeholder="0%" autocomplete="off">
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="IGSTPercent" placeholder="0%" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Registration Icon</label>
-                                    <input type="file" class="form-control btn-sm" file-input="files" required>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="files" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Benefit List</label>
-                                    <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control" autocomplete="off" required=""></textarea>
+                                    <textarea rows="2" cols="20" ng-model="BenefitList" name="basic" class="form-control form-control-sm" autocomplete="off" required=""></textarea>
                                 </div>
                             </div>
                         </div>

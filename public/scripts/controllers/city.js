@@ -62,27 +62,29 @@ app.controller('CityController', function($scope, $http) {
 
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
-        $http({
-            url: imageroute + "/admin/deleteCityMaster",
-            method: "POST",
-            cache: false,
-            data: { id: id },
-            headers: { "Content-Type": "application/json; charset=UTF-8" },
-        }).then(
-            function(response) {
-                if (response.data.Data == 1) {
-                    alert("Delete Successfully !");
-                    $scope.GetCity();
+        if (result) {
+            $http({
+                url: imageroute + "/admin/deleteCityMaster",
+                method: "POST",
+                cache: false,
+                data: { id: id },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.Data == 1) {
+                        alert("Delete Successfully !");
+                        $scope.GetCity();
 
-                } else {
-                    alert("Data Not deleted !");
-                    $scope.GetCity();
+                    } else {
+                        alert("Data Not deleted !");
+                        $scope.GetCity();
+                    }
+                },
+                function(error) {
+                    console.log("Insternal Server");
                 }
-            },
-            function(error) {
-                console.log("Insternal Server");
-            }
-        );
+            );
+        }
     }
 
     $scope.EditData = function(data) {

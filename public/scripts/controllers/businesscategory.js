@@ -94,27 +94,29 @@ app.controller('BusinessCategoryController', function($scope, $http) {
 
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
-        $http({
-            url: imageroute + "/admin/deleteCategoryMaster",
-            method: "POST",
-            cache: false,
-            data: { id: id },
-            headers: { "Content-Type": "application/json; charset=UTF-8" },
-        }).then(
-            function(response) {
-                if (response.data.Data == 1) {
-                    alert("Delete Successfully !");
-                    $scope.GetBusinessCategoryType();
+        if (result) {
+            $http({
+                url: imageroute + "/admin/deleteCategoryMaster",
+                method: "POST",
+                cache: false,
+                data: { id: id },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.Data == 1) {
+                        alert("Delete Successfully !");
+                        $scope.GetBusinessCategoryType();
 
-                } else {
-                    alert("Data Not deleted !");
-                    $scope.GetBusinessCategoryType();
+                    } else {
+                        alert("Data Not deleted !");
+                        $scope.GetBusinessCategoryType();
+                    }
+                },
+                function(error) {
+                    console.log("Insternal Server");
                 }
-            },
-            function(error) {
-                console.log("Insternal Server");
-            }
-        );
+            );
+        }
     }
 
     $scope.EditData = function(data) {
