@@ -8,7 +8,7 @@ var customerMasterSchema = require('../model/customermaster');
 
 /* GET home page. */
 router.post('/customerSignUp', async function(req, res, next) {
-    const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode,} = req.body;
+    const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;
     try {
       let existCustomer = await customerMasterSchema.find({ mobileNo: mobileNo });
       if (existCustomer.length == 1) {

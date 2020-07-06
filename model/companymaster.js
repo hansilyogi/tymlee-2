@@ -33,8 +33,7 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     mapLocation:{
-        type:String,
-        required:true
+        type:String
     },
     phone:{
         type:String,
@@ -44,8 +43,7 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     url:{
-        type:String,
-        required:true
+        type:String
     },
     supportEmail:{
         type:String,
@@ -71,32 +69,25 @@ var companyMasterSchema = new mongoose.Schema({
     },
     bank:{
         bankName:{
-            type:String,
-            required:true
+            type:String
         },
         bankBranchName:{
-            type:String,
-            required:true
+            type:String
         },
         bankAddress:{
-            type:String,
-            required:true
+            type:String
         },
         bankCity:{
-            type:String,
-            required:true
+            type:String
         },
         bankState:{
-            type:String,
-            required:true
+            type:String
         },
         bankAccountNo:{
-            type:String,
-            required:true
+            type:String
         },
         bankIfscCode:{
-            type:String,
-            required:true
+            type:String
         }
     },
     companyType:{
@@ -108,24 +99,19 @@ var companyMasterSchema = new mongoose.Schema({
         required:true
     },
     personPhoto:{
-        type:String,
-        required:true
+        type:String
     },
     aadharCard:{
-        type:String,
-        required:true
+        type:String
     },
     panCard:{
-        type:String,
-        required:true
+        type:String
     },
     cancelledCheque:{
-        type:String,
-        required:true
+        type:String
     },
     weekStartDay:{
-        type:String,
-        required:true
+        type:String
     },
     companyLogo:{
         type:String,
@@ -135,8 +121,7 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     companyHtmlPage:{
-        type:String,
-        required:true
+        type:String
     },
     registrationValidUpto:{
         type:Date,

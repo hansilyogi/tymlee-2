@@ -7,6 +7,8 @@ var cityMasterSchema = require('../model/citymaster');
 var categoryMasterSchema = require('../model/categorymaster');
 var cityBusinessCategorySchema = require('../model/citybusinesscategory');
 var companyMasterSchema = require('../model/companymaster');
+var bannerSchema = require('../model/banner');
+var customerMasterSchema = require('../model/customermaster');
 
 const config = require('../config');
 const { populate, model } = require('../model/companymaster');
@@ -25,6 +27,19 @@ var membershiplocation = multer.diskStorage({
 });
 var uploadmembership = multer({ storage: membershiplocation });
 
+var bannerlocation = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "uploads/banner");
+    },
+    filename: function(req, file, cb) {
+        cb(
+            null,
+            file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+        );
+    },
+});
+var uploadbanner = multer({ storage: bannerlocation });
+
 var businesscategorylocation = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, "uploads/businesscategory");
@@ -37,20 +52,6 @@ var businesscategorylocation = multer.diskStorage({
     },
 });
 var uploadbusinesscategory = multer({ storage: businesscategorylocation });
-
-var Documentlocation = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, "uploads/Document");
-    },
-    filename: function(req, file, cb) {
-        cb(
-            null,
-            file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-        );
-    },
-});
-var uploaddocument = multer({ storage: Documentlocation });
-
 
 var filestorage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -101,10 +102,8 @@ router.post('/addMembershipType', uploadmembership.single("registrationIcon"), a
     }
 });
 
-
 router.post('/MembershipType', async function(req, res, next) {
     try {
-        const { membershipType, registrationFee, csgtPercent, sgstPercent, igstPercent, benefitList } = req.body;
         let data = await membershipTypeMstSchema.find();
         res
             .status(200)
@@ -118,7 +117,6 @@ router.post('/MembershipType', async function(req, res, next) {
         });
     }
 });
-
 
 router.post('/UpdateMembershipType', uploadmembership.single("registrationIcon"), async function(req, res, next) {
     try {
@@ -178,7 +176,6 @@ router.post('/DeleteMembershipType', async function(req, res, next) {
     }
 });
 
-
 router.post('/addCategoryMaster', uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
     const { businessCategoryName, startDate, bookingAmt, clientAmt, refundAmt, csgtPercent, sgstPercent, igstPercent } = req.body;
     try {
@@ -207,7 +204,6 @@ router.post('/addCategoryMaster', uploadbusinesscategory.single("businessIcon"),
         });
     }
 });
-
 
 router.post('/CategoryMaster', async function(req, res, next) {
     try {
@@ -285,7 +281,6 @@ router.post('/deleteCategoryMaster', async function(req, res, next) {
     }
 });
 
-
 router.post('/addCityMaster', async function(req, res, next) {
     try {
         const { id, cityCode, cityName, stateName, stateCode } = req.body;
@@ -319,7 +314,6 @@ router.post('/addCityMaster', async function(req, res, next) {
     }
 });
 
-
 router.post('/getCityMaster', async function(req, res, next) {
     try {
         let data = await cityMasterSchema.find();
@@ -352,7 +346,6 @@ router.post('/deleteCityMaster', async function(req, res, next) {
         });
     }
 });
-
 
 router.post('/addCityBusinessCategory', async function(req, res, next) {
     try {
@@ -451,48 +444,182 @@ router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
     } = req.body;
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
-        var companymaster = new companyMasterSchema({
-            _id: new config.mongoose.Types.ObjectId,
-            companyCode: "comp" + a,
-            doj: doj,
-            businessCategoryId: businessCategoryId,
-            companyName: companyName,
-            addressLine1: addressLine1,
-            addressLine2: addressLine2,
-            cityMasterId: cityMasterId,
-            zipcode: zipcode,
-            mapLocation: mapLocation,
-            phone: phone,
-            fax: fax,
-            url: url,
-            supportEmail: supportEmail,
-            adminEmail: adminEmail,
-            adminMobile: adminMobile,
-            adminPassword: adminPassword,
-            gstinNo: gstinNo,
-            paNo: paNo,
-            bank: {
-                bankName: bankName,
-                bankBranchName: bankBranchName,
-                bankAddress: bankAddress,
-                bankCity: bankCity,
-                bankState: bankState,
-                bankAccountNo: bankAccountNo,
-                bankIfscCode: bankIfscCode,
-            },
-            companyType: companyType,
-            personName: personName,
-            personPhoto: req.files.personPhoto[0].path,
-            aadharCard: req.files.aadharCard[0].path,
-            panCard: req.files.panCard[0].path,
-            cancelledCheque: req.files.cancelledCheque[0].path,
-            weekStartDay: weekStartDay,
-            companyLogo: req.files.companyLogo[0].path,
-            cancellationPolicy: cancellationPolicy,
-            companyHtmlPage: companyHtmlPage,
-            registrationValidUpto: registrationValidUpto
+        let existCompany = await companyMasterSchema.find({ companyName: companyName });
+        if (existCompany.length == 1) {
+          res.status(200).json({
+            Message: "Company Name Already Registered!",
+            Data: 0,
+            IsSuccess: true,
+          });
+        }else{
+            var companymaster = new companyMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyCode: "comp" + a,
+                doj: doj,
+                businessCategoryId: businessCategoryId,
+                companyName: companyName,
+                addressLine1: addressLine1,
+                addressLine2: addressLine2,
+                cityMasterId: cityMasterId,
+                zipcode: zipcode,
+                mapLocation: mapLocation,
+                phone: phone,
+                fax: fax,
+                url: url,
+                supportEmail: supportEmail,
+                adminEmail: adminEmail,
+                adminMobile: adminMobile,
+                adminPassword: adminPassword,
+                gstinNo: gstinNo,
+                paNo: paNo,
+                bank: {
+                    bankName: bankName,
+                    bankBranchName: bankBranchName,
+                    bankAddress: bankAddress,
+                    bankCity: bankCity,
+                    bankState: bankState,
+                    bankAccountNo: bankAccountNo,
+                    bankIfscCode: bankIfscCode,
+                },
+                companyType: companyType,
+                personName: personName,
+                personPhoto: files == undefined ? null :  req.files.personPhoto[0].path,
+                aadharCard: files == undefined ? null : req.files.aadharCard[0].path,
+                panCard: files == undefined ? null : req.files.panCard[0].path,
+                cancelledCheque: files == undefined ? null : req.files.cancelledCheque[0].path,
+                weekStartDay: weekStartDay,
+                companyLogo: files == undefined ? null : req.files.companyLogo[0].path,
+                cancellationPolicy: cancellationPolicy,
+                companyHtmlPage: companyHtmlPage,
+                registrationValidUpto: registrationValidUpto
+            });
+            companymaster.save();
+            res
+                .status(200)
+                .json({ Message: "Company Master Added!", Data: req.body, IsSuccess: true });
+        }
+        
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
         });
-        companymaster.save();
+    }
+});
+
+router.post('/updateCompanyMaster', fieldset, async function(req, res, next) {
+    const {
+        id,
+        doj,
+        businessCategoryId,
+        companyName,
+        addressLine1,
+        addressLine2,
+        cityMasterId,
+        zipcode,
+        mapLocation,
+        phone,
+        fax,
+        url,
+        supportEmail,
+        adminEmail,
+        adminMobile,
+        adminPassword,
+        gstinNo,
+        paNo,
+        bankName,
+        bankBranchName,
+        bankAddress,
+        bankCity,
+        bankState,
+        bankAccountNo,
+        bankIfscCode,
+        companyType,
+        personName,
+        weekStartDay,
+        cancellationPolicy,
+        companyHtmlPage,
+        registrationValidUpto
+    } = req.body;
+    try {
+        if(fieldset == undefined){
+            var datas =({
+                doj: doj,
+                businessCategoryId: businessCategoryId,
+                companyName: companyName,
+                addressLine1: addressLine1,
+                addressLine2: addressLine2,
+                cityMasterId: cityMasterId,
+                zipcode: zipcode,
+                mapLocation: mapLocation,
+                phone: phone,
+                fax: fax,
+                url: url,
+                supportEmail: supportEmail,
+                adminEmail: adminEmail,
+                adminMobile: adminMobile,
+                adminPassword: adminPassword,
+                gstinNo: gstinNo,
+                paNo: paNo,
+                bank: {
+                    bankName: bankName,
+                    bankBranchName: bankBranchName,
+                    bankAddress: bankAddress,
+                    bankCity: bankCity,
+                    bankState: bankState,
+                    bankAccountNo: bankAccountNo,
+                    bankIfscCode: bankIfscCode,
+                },
+                companyType: companyType,
+                personName: personName,
+                weekStartDay: weekStartDay,
+                cancellationPolicy: cancellationPolicy,
+                companyHtmlPage: companyHtmlPage,
+                registrationValidUpto: registrationValidUpto
+            });
+        }else{
+            var datas =({
+                doj: doj,
+                businessCategoryId: businessCategoryId,
+                companyName: companyName,
+                addressLine1: addressLine1,
+                addressLine2: addressLine2,
+                cityMasterId: cityMasterId,
+                zipcode: zipcode,
+                mapLocation: mapLocation,
+                phone: phone,
+                fax: fax,
+                url: url,
+                supportEmail: supportEmail,
+                adminEmail: adminEmail,
+                adminMobile: adminMobile,
+                adminPassword: adminPassword,
+                gstinNo: gstinNo,
+                paNo: paNo,
+                bank: {
+                    bankName: bankName,
+                    bankBranchName: bankBranchName,
+                    bankAddress: bankAddress,
+                    bankCity: bankCity,
+                    bankState: bankState,
+                    bankAccountNo: bankAccountNo,
+                    bankIfscCode: bankIfscCode,
+                },
+                companyType: companyType,
+                personName: personName,
+                personPhoto: req.files.personPhoto[0].path,
+                aadharCard: req.files.aadharCard[0].path,
+                panCard: req.files.panCard[0].path,
+                cancelledCheque: req.files.cancelledCheque[0].path,
+                weekStartDay: weekStartDay,
+                companyLogo: req.files.companyLogo[0].path,
+                cancellationPolicy: cancellationPolicy,
+                companyHtmlPage: companyHtmlPage,
+                registrationValidUpto: registrationValidUpto
+            });
+        }
+        
         res
             .status(200)
             .json({ Message: "CompanyMaster Added!", Data: req.body, IsSuccess: true });
@@ -538,6 +665,94 @@ router.post('/deleteCompanyMaster', async function(req, res, next) {
     }
 });
 
+router.post('/addbanner', uploadbanner.single("image"), async function(req, res, next) {
+    const { id, title, description } = req.body;
+    try {
+        const file = req.file;
+        if (id == "0") {
+            var banner = new bannerSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                title: title,
+                description: description,
+                image: file == undefined ? null : file.path
+            });
+            banner.save();
+        } else {
+            if (file == undefined) {
+                var data = {
+                    title: title,
+                    description: description
+                }
+                let datas = await bannerSchema.findByIdAndUpdate(id, data);
+            } else {
+                var data = {
+                    title: title,
+                    description: description,
+                    image: file.path
+                }
+                let datas = await bannerSchema.findByIdAndUpdate(id, data);
+            }
+        }
+        res
+            .status(200)
+            .json({ Message: "Banner Added!", Data:1, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
 
+router.post('/getbanner', async function(req, res, next) {
+    try {
+        let data = await bannerSchema.find();
+        res
+            .status(200)
+            .json({ Message: "Banner Data!", Data: data, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/deletebanner', async function(req, res, next) {
+    try {
+        const { id } = req.body;
+        let data = await bannerSchema.findOneAndRemove(id);
+        res
+            .status(200)
+            .json({ Message: "Banner Deleted!", Data: 1, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/getcustomer', async function(req, res, next) {
+    try {
+        let data = await customerMasterSchema.find();
+        console.log(data);
+        res
+            .status(200)
+            .json({ Message: "customer Data!", Data: data, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
 
 module.exports = router;
