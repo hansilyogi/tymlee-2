@@ -12,7 +12,8 @@ var bannerSchema = require('../model/banner');
 var customerMasterSchema = require('../model/customermaster');
 var companyUserMasterSchema = require('../model/companyusermaster');
 var adminLoginSchema = require('../model/adminlogin');
-
+var companyInventoryMasterSchema = require('../model/companyinventorymaster');
+var companyServicesProviderSchema = require('../model/companyservicesprovider');
 
 const config = require('../config');
 
@@ -547,7 +548,7 @@ router.post('/addCompanyMaster', fieldset, async function (req, res, next) {
             companymaster.save();
             res
                 .status(200)
-                .json({ Message: "Company Master Added!", Data: req.body, IsSuccess: true });
+                .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
         }
 
     } catch (err) {
@@ -718,7 +719,7 @@ router.post('/deleteCompanyMaster', async function (req, res, next) {
     }
 });
 
-router.post('/addbanner', uploadbanner.single("image"), async function (req, res, next) {
+router.post('/addBanner', uploadbanner.single("image"), async function (req, res, next) {
     const { id, title, description } = req.body;
     try {
         const file = req.file;
@@ -758,7 +759,7 @@ router.post('/addbanner', uploadbanner.single("image"), async function (req, res
     }
 });
 
-router.post('/getbanner', async function (req, res, next) {
+router.post('/getBanner', async function (req, res, next) {
     try {
         let data = await bannerSchema.find();
         res
@@ -774,7 +775,7 @@ router.post('/getbanner', async function (req, res, next) {
     }
 });
 
-router.post('/deletebanner', async function (req, res, next) {
+router.post('/deleteBanner', async function (req, res, next) {
     try {
         const { id } = req.body;
         let data = await bannerSchema.findOneAndRemove(id);
@@ -852,7 +853,7 @@ router.post('/addCompanyUserMaster', async function (req, res, next) {
         }
         res
             .status(200)
-            .json({ Message: "Company User Added!", Data: req.body, IsSuccess: true });
+            .json({ Message: "Company User Added!", Data: 1, IsSuccess: true });
 
     } catch{
         res.json({
@@ -864,7 +865,141 @@ router.post('/addCompanyUserMaster', async function (req, res, next) {
 
 });
 
-router.post('/deletecompanyUser', async function (req, res, next) {
+router.post('/deleteCompanyUser', async function (req, res, next) {
+    try {
+        const { id } = req.body;
+        let data = await companyUserMasterSchema.findOneAndRemove(id);
+        res
+            .status(200)
+            .json({ Message: "Company User Deleted!", Data: 1, IsSuccess: true });
 
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
+    const { id, companyId, inventoryName, inventoryDescription, appointmentMinutes, rateType, rateAmt,inventoryNotes1Name,inventoryNotes1 ,inventoryNotes2Name,inventoryNotes2 ,inventoryNotes3Name,inventoryNotes3,inventoryAvailable } = req.body;
+    const {inventoryId, serviceProviderName,serviceProviderDescription,serviceProviderAvailable} = req.body;
+    try {
+        if (id == "0") {
+            if(multipleServiceProviderRequired == "false"){
+                var companyInventory = new companyInventoryMasterSchema({
+                    _id: new config.mongoose.Types.ObjectId,
+                    companyId: companyId,
+                    inventoryName: inventoryName,
+                    inventoryDescription: inventoryDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    multipleServiceProviderRequired:multipleServiceProviderRequired,
+                    rateType: rateType,
+                    rateAmt: rateAmt,
+                    inventoryNotes1Name:inventoryNotes1Name,
+                    inventoryNotes1:inventoryNotes1,
+                    inventoryNotes2Name:inventoryNotes2Name,
+                    inventoryNotes2:inventoryNotes2,
+                    inventoryNotes3Name:inventoryNotes3Name,
+                    inventoryNotes3:inventoryNotes3,
+                    inventoryAvailable:inventoryAvailable
+                });
+                companyInventory.save();
+            }else{
+                var companyInventory = new companyInventoryMasterSchema({
+                    _id: new config.mongoose.Types.ObjectId,
+                    companyId: companyId,
+                    inventoryId:inventoryId,
+                    inventoryName: inventoryName,
+                    inventoryDescription: inventoryDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    multipleServiceProviderRequired:multipleServiceProviderRequired
+                });
+                companyInventory.save();
+                var companyServicesProvider = new companyServicesProviderSchema({
+                    _id: new config.mongoose.Types.ObjectId,
+                    companyId: companyId,
+                    serviceProviderName: serviceProviderName,
+                    serviceProviderDescription: serviceProviderDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    rateType: rateType,
+                    rateAmt: rateAmt,
+                    serviceProviderAvailable:serviceProviderAvailable
+                });
+                companyServicesProvider.save();
+            }
+            
+        } else {
+            if(multipleServiceProviderRequired == "false"){
+                var companyInventory = ({
+                    companyId: companyId,
+                    inventoryName: inventoryName,
+                    inventoryDescription: inventoryDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    multipleServiceProviderRequired:multipleServiceProviderRequired,
+                    rateType: rateType,
+                    rateAmt: rateAmt,
+                    inventoryNotes1Name:inventoryNotes1Name,
+                    inventoryNotes1:inventoryNotes1,
+                    inventoryNotes2Name:inventoryNotes2Name,
+                    inventoryNotes2:inventoryNotes2,
+                    inventoryNotes3Name:inventoryNotes3Name,
+                    inventoryNotes3:inventoryNotes3,
+                    inventoryAvailable:inventoryAvailable
+                });
+                let datas = await companyInventoryMasterSchema.findByIdAndUpdate(id, companyInventory)
+            }else{
+                var companyInventory = ({
+                    companyId: companyId,
+                    inventoryId:inventoryId,
+                    inventoryName: inventoryName,
+                    inventoryDescription: inventoryDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    multipleServiceProviderRequired:multipleServiceProviderRequired
+                });
+                let datas = await companyInventoryMasterSchema.findByIdAndUpdate(id, companyInventory)
+                var companyServicesProvider = ({
+                    companyId: companyId,
+                    serviceProviderName: serviceProviderName,
+                    serviceProviderDescription: serviceProviderDescription,
+                    appointmentMinutes: appointmentMinutes,
+                    rateType: rateType,
+                    rateAmt: rateAmt,
+                    serviceProviderAvailable:serviceProviderAvailable
+                });
+                let data = await companyServicesProviderSchema.findByIdAndUpdate(id, companyServicesProvider)
+            }
+        }
+        res
+            .status(200)
+            .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });
+
+    } catch (err){
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+
+});
+
+router.post('/deleteInventoryAndServiceProvider', async function (req, res, next) {
+    try {
+            const {id,multipleServiceProviderRequired} = req.body;
+            let data = await companyInventoryMasterSchema.find(id,companyInventoryMaster).where(multipleServiceProviderRequired,"true")
+           
+            res 
+                .status(200)
+                .json({ Message: "Data Deleted!", Data: data, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
 });
 module.exports = router;

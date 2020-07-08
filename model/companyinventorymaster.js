@@ -22,36 +22,28 @@ var companyInventoryMasterSchema = new mongoose.Schema({
         type:Boolean
     },
     rateType:{
-        type:String,
-        required:true
+        type:String
     },
     rateAmt:{
-        type:Number,
-        required:true
+        type:Number
     },
     inventoryNotes1Name:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryNotes1:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryNotes2Name:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryNotes2:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryNotes3Name:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryNotes3:{
-        type:String,
-        required:true
+        type:String
     },
     inventoryAvailable:{
         type:Boolean
