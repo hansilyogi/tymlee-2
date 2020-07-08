@@ -835,6 +835,46 @@ router.post('/getCompanyUserMaster', async function(req, res, next) {
     }
 });
 
-router.post('/addCompanyUserMaster')
+router.post('/addCompanyUserMaster', async function(req,res,next){
+    const {id,companyId,userName,emailId,userPassword,userPin,userCategory} = req.body;
+    const saltRounds = 10; 
+    try{
+        var hash = await bcrypt.hash(userPassword, saltRounds);
+        if(id == "0")
+        {
+            var companyUser = new companyUserMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId:companyId,
+                userName:userName,
+                emailId:emailId,
+                userPassword:hash,
+                userPin:userPin,
+                userCategory:userCategory
+            });
+            companyUser.save();
+        }else{
+            var companyUser = ({
+                companyId:companyId,
+                userName:userName,
+                emailId:emailId,
+                userPassword:hash,
+                userPin:userPin,
+                userCategory:userCategory
+            });
+            let data = await companyUserMasterSchema.findByIdAndUpdate(id,companyUser)
+        }
+        res
+                .status(200)
+                .json({ Message: "Company User Added!", Data:req.body, IsSuccess: true });
+        
+    }catch{
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+
+});
 
 module.exports = router;
