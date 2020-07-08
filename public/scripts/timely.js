@@ -21,6 +21,22 @@ app.config(function($routeProvider) {
         .when("/city", {
             templateUrl: "pages/city.html",
             controller: "CityController",
+        })
+        .when("/addcompany", {
+            templateUrl: "pages/addcompany.html",
+            controller: "AddCompanyController",
+        })
+        .when("/viewcompany", {
+            templateUrl: "pages/viewcompany.html",
+            controller: "AddCompanyController",
+        })
+        .when("/viewcustomer", {
+            templateUrl: "pages/viewcustomer.html",
+            controller: "ViewCustomerController",
+        })
+        .when("/vendor", {
+            templateUrl: "pages/vendor.html",
+            controller: "VendorController",
         });
 });
 
