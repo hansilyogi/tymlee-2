@@ -3,7 +3,7 @@ var router = express.Router();
 var multer = require("multer");
 var path = require("path");
 var config = require('../config');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 var companyUserMasterSchema = require('../model/companyusermaster');
 
 
