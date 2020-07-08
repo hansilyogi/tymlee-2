@@ -877,4 +877,7 @@ router.post('/addCompanyUserMaster', async function(req,res,next){
 
 });
 
+router.post('/deletecompanyUser', async function(req,res,next){
+
+});
 module.exports = router;
