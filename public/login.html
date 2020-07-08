@@ -16,6 +16,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
     <script src="scripts/timely.js"></script>
 
+    <script>
+        function show() {
+            var p = document.getElementById('pwd');
+            p.setAttribute('type', 'text');
+        }
+
+        function hide() {
+            var p = document.getElementById('pwd');
+            p.setAttribute('type', 'password');
+        }
+
+        var pwShown = 0;
+
+        document.getElementById("eye").addEventListener("click", function() {
+            if (pwShown == 0) {
+                pwShown = 1;
+                show();
+            } else {
+                pwShown = 0;
+                hide();
+            }
+        }, false);
+    </script>
+
 </head>
 
 <body class="hold-transition login-page">
@@ -40,19 +64,19 @@
                         <input type="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                                <i class="fa fa-eye" id="eye"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember"> Remember Me </label>
+                    <div class=" row ">
+                        <div class="col-8 ">
+                            <div class="icheck-primary ">
+                                <input type="checkbox " id="remember ">
+                                <label for="remember "> Remember Me </label>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        <div class="col-4 ">
+                            <button type="submit " class="btn btn-primary btn-block ">Sign In</button>
                         </div>
                     </div>
                 </form>
@@ -62,8 +86,8 @@
         </div>
     </div>
 
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="dist/js/adminlte.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js "></script>
+    <script src="dist/js/adminlte.min.js "></script>
 
 </body>
 
