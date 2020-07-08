@@ -3,13 +3,15 @@ var router = express.Router();
 var multer = require("multer");
 var path = require("path");
 var config = require('../config');
+const bcrypt = require('bcrypt');
 var customerMasterSchema = require('../model/customermaster');
 
 
 /* GET home page. */
 router.post('/customerSignUp', async function(req, res, next) {
-    const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;
-    try {
+   const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;
+   const saltRounds = 10; 
+   try {
       let existCustomer = await customerMasterSchema.find({ mobileNo: mobileNo });
       if (existCustomer.length == 1) {
         res.status(200).json({
@@ -18,23 +20,24 @@ router.post('/customerSignUp', async function(req, res, next) {
           IsSuccess: true,
         });
       } else {
-        let newCustomer = new customerMasterSchema({
-          _id: new config.mongoose.Types.ObjectId(),
-          firstName: firstName,
-          lastName: lastName,
-          mobileNo: mobileNo,
-          emailID: emailID,
-          password: password,
-          address1:address1,
-          address2:address2,
-          city:city,
-          state:state,
-          zipcode:zipcode
-        });
-        newCustomer.save();
-        res
-          .status(200)
-          .json({ Message: "Customer Registered!", Data: 1, IsSuccess: true });
+              var hash = await bcrypt.hash(password, saltRounds);
+               let newCustomer = new customerMasterSchema({
+                _id: new config.mongoose.Types.ObjectId(),
+                firstName: firstName,
+                lastName: lastName,
+                mobileNo: mobileNo,
+                emailID: emailID,
+                password: hash,
+                address1:address1,
+                address2:address2,
+                city:city,
+                state:state,
+                zipcode:zipcode
+               });
+              newCustomer.save();
+              res
+              .status(200)
+              .json({ Message: "Customer Registered!", Data: 1, IsSuccess: true });
       }
     } catch (err) {
       res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
@@ -42,21 +45,32 @@ router.post('/customerSignUp', async function(req, res, next) {
 });
 
 router.post("/customerSignIn", async function (req, res, next) {
-  const { emailID,password } = req.body;
+  const { emailID,password } = req.body; 
+  const saltRounds = 10;
   try {
-    let Customer = await customerMasterSchema.find({
-      emailID: emailID,
-      password:password,
-      isVerified: true,
-      isActive: true,
-    });
+       
+        let Customer = await customerMasterSchema.find({
+          emailID: emailID,
+          isVerified: true,
+          isActive: true,
+        });
     if (Customer.length == 1) {
-      res.status(200).json({
-        Message: "Customer  Login!",
-        Data: Customer,
-        IsSuccess: true,
-      });
-    } else {
+    var result = await bcrypt.compare(password, Customer[0].password);
+      if(result){
+          res.status(200).json({
+            Message: "Customer  Login!",
+            Data: Customer,
+            IsSuccess: true,
+          });
+      }else{
+        res.status(200).json({
+          Message: "invalid Password!",
+          Data: Customer,
+          IsSuccess: true,
+        });
+      }
+  } 
+  else {
       res.status(200).json({
         Message: "invalid Data!",
         Data: Customer,

@@ -3,12 +3,10 @@ const mongoose = require('mongoose');
 var companyMasterSchema = new mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     companyCode:{
-        type:String,
-        required:true
+        type:String
     },
     doj:{
-        type:Date,
-        required:true
+        type:Date
     },
     businessCategoryId:{
         type:mongoose.Types.ObjectId,
@@ -46,8 +44,7 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     supportEmail:{
-        type:String,
-        required:true
+        type:String
     },
     adminEmail:{
         type:String,
@@ -99,23 +96,27 @@ var companyMasterSchema = new mongoose.Schema({
         required:true
     },
     personPhoto:{
-        type:String
+        type:String,
+        default:null
     },
     aadharCard:{
-        type:String
+        type:String,
+        default:null
     },
     panCard:{
-        type:String
+        type:String,
+        default:null
     },
     cancelledCheque:{
-        type:String
+        type:String,
+        default:null
     },
     weekStartDay:{
         type:String
     },
     companyLogo:{
         type:String,
-        required:true
+        default:null
     },
     cancellationPolicy:{
         type:String
@@ -124,15 +125,12 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     registrationValidUpto:{
-        type:Date,
-        required:true
+        type:Date
     },
     active:{
         type:Boolean,
         default:true
     }
-
-
 });
 
 module.exports = mongoose.model('companyMaster',companyMasterSchema);

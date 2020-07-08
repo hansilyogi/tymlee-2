@@ -25,6 +25,10 @@ var companyUserMasterSchema = new mongoose.Schema({
     userCategory:{
         type:String,
         required:true
+    },
+    isActive:{
+        type:Boolean,
+        default:true
     }
 });
 
