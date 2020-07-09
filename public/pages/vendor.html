@@ -21,11 +21,26 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
-                                <i class="fa fa-plus"></i> &nbsp;Add Vendor
-                              </button>
-                        </div>
+                            <div class="row">
 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
+                                        <i class="fa fa-plus"></i> &nbsp;Add Vendor
+                                      </button>
+                                </div>
+                                <div class="col-md-6" style="padding-bottom:15px;">
+                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in CompanyList"
+                                                ng-selected="CompanyId == sel" value="{{sel}}">
+                                                {{sel.companyName}}</option>
+                                      </select>
+                                </div>
+
+                            </div>
+                        </div>
                         <div class="card-body table-responsive">
                             <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
                                 <thead>
@@ -70,19 +85,19 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-lg">Business Category</h4>
+                    <h4 class="modal-title text-lg">Add Vendor</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                         <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
-                <form ng-submit="submitBusinessCategory()">
+                <form ng-submit="submitVendor()">
                     <div class="modal-body">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-change="GetVendor()" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in CompanyList"
                                                 ng-selected="CompanyId == sel" value="{{sel}}">
@@ -106,6 +121,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label>User Pin</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="UserPin" placeholder="User Pin" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label>User Password</label>
                                     <input type="password" class="form-control form-control-sm" required="" ng-model="UserPassword" placeholder="User Password" autocomplete="off">
 
@@ -116,7 +138,8 @@
                                     <label>User Category</label>
                                     <select class="form-control form-control-sm" ng-model="UserCategory" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
-                                        <option ng-repeat="sel in MessageList" ng-selected="UserCategory == sel" value="{{sel}}">
+                                        <option ng-repeat="sel in MessageList" 
+                                        ng-selected="UserCategory == sel" value="{{sel}}">
                                             {{sel}}</option>
                                         </select>
 

@@ -9,51 +9,31 @@
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.0.5/css/adminlte.min.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <script src="plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="dist/js/angular-datatables.min.js"></script>
     <script src="scripts/timely.js"></script>
-
-    <script>
-        function show() {
-            var p = document.getElementById('pwd');
-            p.setAttribute('type', 'text');
-        }
-
-        function hide() {
-            var p = document.getElementById('pwd');
-            p.setAttribute('type', 'password');
-        }
-
-        var pwShown = 0;
-
-        document.getElementById("eye").addEventListener("click", function() {
-            if (pwShown == 0) {
-                pwShown = 1;
-                show();
-            } else {
-                pwShown = 0;
-                hide();
-            }
-        }, false);
-    </script>
 
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" ng-app="TimelyModule" ng-controller="LoginController">
     <div class="login-box">
         <div class="login-logo">
             <a href="index.html"><b style="font-size:50px;">Tymlee</b></a>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">{{errormessages}}</p>
 
-                <form method="post">
+                <form ng-submit="login()">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -61,7 +41,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <i class="fa fa-eye" id="eye"></i>
@@ -87,7 +67,7 @@
     </div>
 
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js "></script>
-    <script src="dist/js/adminlte.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.0.5/js/adminlte.min.js"></script>
 
 </body>
 

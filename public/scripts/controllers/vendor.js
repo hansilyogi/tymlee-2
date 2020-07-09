@@ -42,7 +42,7 @@ app.controller('VendorController', function($scope, $http) {
             "userCategory": $scope.UserCategory
         };
         $http({
-            url: imageroute + "/admin/addCityMaster",
+            url: imageroute + "/admin/addCompanyUserMaster",
             method: "POST",
             data: json,
             cache: false,
@@ -66,9 +66,9 @@ app.controller('VendorController', function($scope, $http) {
 
     }
 
-    $scope.GetVendor = function() {
+    $scope.GetVendor = function(companyId) {
         $http({
-            url: imageroute + "/admin/CategoryMaster",
+            url: imageroute + "/admin/getCompanyUserMaster?companyId=" + companyId,
             method: "POST",
             cache: false,
             data: {},
@@ -94,7 +94,7 @@ app.controller('VendorController', function($scope, $http) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
             $http({
-                url: imageroute + "/admin/deleteCategoryMaster",
+                url: imageroute + "/admin/deleteCompanyUser",
                 method: "POST",
                 cache: false,
                 data: { id: id },

@@ -76,7 +76,7 @@
         </nav>
 
         <aside class="main-sidebar sidebar-dark-primary elevation-2">
-            <a href="#!/dashboard" class="brand-link">
+            <a href="./dashboard" class="brand-link">
                 <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />
                 <span class="brand-text font-weight-light text-md"><b>Tymlee</b></span>
                         </a>
@@ -94,7 +94,7 @@
                                     <li class="nav-item has-treeview menu-open">
                                         <ul class="nav nav-treeview">
                                             <li class="nav-item">
-                                                <a href="#!/dashboard" class="nav-link active">
+                                                <a href="./dashboard" class="nav-link active">
                                                     <i class="fas fa-tachometer-alt nav-icon"></i>
                                                     <p>Dashboard</p>
                                                 </a>
@@ -102,7 +102,7 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item has-treeview">
-                                        <a href="javascript(0);" class="nav-link">
+                                        <a href="#" class="nav-link">
                                             <i class="nav-icon fas fa-table"></i>
                                             <p>
                                                 Master
@@ -110,32 +110,32 @@
                                             </p>
                                         </a>
                                         <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="#!/membershiptype" class="nav-link">
+                                            <li class="nav-item" ng-show="IsAdmin">
+                                                <a href="./membershiptype" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>
                                                     <p>Membership type</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="#!/businesscategory" class="nav-link">
+                                                <a href="./businesscategory" class="nav-link">
                                                     <i class="fa fa-briefcase nav-icon"></i>
                                                     <p>Bussiness category</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="#!/city" class="nav-link">
+                                                <a href="./city" class="nav-link">
                                                     <i class="fa fa-map-marker-alt nav-icon"></i>
                                                     <p>City</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="#!/addcompany" class="nav-link">
+                                                <a href="./addcompany" class="nav-link">
                                                     <i class="fa fa-university nav-icon"></i>
                                                     <p>Add Company</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a href="#!/vendor" class="nav-link">
+                                            <li class="nav-item" ng-hide="IsAdmin">
+                                                <a href="./vendor" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>
                                                     <p>Add Vendor</p>
                                                 </a>
@@ -144,7 +144,7 @@
                                     </li>
 
                                     <li class="nav-item has-treeview">
-                                        <a href="javascript(0);" class="nav-link">
+                                        <a href="#" class="nav-link">
                                             <i class="nav-icon far fa-envelope"></i>
                                             <p>
                                                 View report
@@ -153,13 +153,13 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                             <li class="nav-item">
-                                                <a href="#!/viewcompany" class="nav-link">
+                                                <a href="./viewcompany" class="nav-link">
                                                     <i class="fa fa-eye nav-icon"></i>
                                                     <p>View Company</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="#!/viewcustomer" class="nav-link">
+                                                <a href="./viewcustomer" class="nav-link">
                                                     <i class="fa fa-eye nav-icon"></i>
                                                     <p>View Customer</p>
                                                 </a>
