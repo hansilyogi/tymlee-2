@@ -9,8 +9,11 @@ var adminRouter = require('./routes/admin');
 var customerRouter = require('./routes/customer');
 var companyAdminRouter = require('./routes/companyadmin');
 
-
 var app = express();
+ 
+app.get('/*', function(req, res) {
+    res.sendFile(__dirname + '/public/index.html');
+});
 
 app.use(cors());
 app.use(logger('dev'));

@@ -661,12 +661,12 @@ router.post('/updateCompanyMaster', fieldset, async function (req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files.personPhoto[0].path,
-                aadharCard: req.files.aadharCard[0].path,
-                panCard: req.files.panCard[0].path,
-                cancelledCheque: req.files.cancelledCheque[0].path,
+                personPhoto: req.files.personPhoto == undefined ? req.files.personPhoto: req.files.personPhoto[0].path,
+                aadharCard: req.files.aadharCard == undefined ? req.files.aadharCard : req.files.aadharCard[0].path,
+                panCard: req.files.panCard == undefined ? req.files.panCard : req.files.panCard[0].path,
+                cancelledCheque: req.files.cancelledCheque == undefined ? files.cancelledCheque : req.files.cancelledCheque[0].path,
                 weekStartDay: weekStartDay,
-                companyLogo: req.files.companyLogo[0].path,
+                companyLogo: req.files.companyLogo == undefined ? req.files.companyLogo : req.files.companyLogo[0].path,
                 cancellationPolicy: cancellationPolicy,
                 companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto
@@ -883,11 +883,12 @@ router.post('/deleteCompanyUser', async function (req, res, next) {
 });
 
 router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
-    const { id, companyId, inventoryName, inventoryDescription, appointmentMinutes, rateType, rateAmt,inventoryNotes1Name,inventoryNotes1 ,inventoryNotes2Name,inventoryNotes2 ,inventoryNotes3Name,inventoryNotes3,inventoryAvailable } = req.body;
-    const {inventoryId, serviceProviderName,serviceProviderDescription,serviceProviderAvailable} = req.body;
+    const { id, companyId, inventoryName, inventoryDescription, appointmentMinutes, multipleServiceProviderRequired, rateType, rateAmt,inventoryNotes1Name,inventoryNotes1 ,inventoryNotes2Name,inventoryNotes2 ,inventoryNotes3Name,inventoryNotes3,inventoryAvailable } = req.body;
+    const {inventoryId,serviceProviderName,serviceProviderDescription,serviceProviderAvailable} = req.body;
+    console.log(req.body);
     try {
         if (id == "0") {
-            if(multipleServiceProviderRequired == "false"){
+            if( multipleServiceProviderRequired == false){
                 var companyInventory = new companyInventoryMasterSchema({
                     _id: new config.mongoose.Types.ObjectId,
                     companyId: companyId,
@@ -910,16 +911,15 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
                 var companyInventory = new companyInventoryMasterSchema({
                     _id: new config.mongoose.Types.ObjectId,
                     companyId: companyId,
-                    inventoryId:inventoryId,
                     inventoryName: inventoryName,
                     inventoryDescription: inventoryDescription,
-                    appointmentMinutes: appointmentMinutes,
                     multipleServiceProviderRequired:multipleServiceProviderRequired
                 });
                 companyInventory.save();
                 var companyServicesProvider = new companyServicesProviderSchema({
                     _id: new config.mongoose.Types.ObjectId,
                     companyId: companyId,
+                    inventoryId:companyInventory.id,
                     serviceProviderName: serviceProviderName,
                     serviceProviderDescription: serviceProviderDescription,
                     appointmentMinutes: appointmentMinutes,
@@ -929,8 +929,7 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
                 });
                 companyServicesProvider.save();
             }
-            
-        } else {
+        }else {
             if(multipleServiceProviderRequired == "false"){
                 var companyInventory = ({
                     companyId: companyId,
@@ -952,15 +951,14 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
             }else{
                 var companyInventory = ({
                     companyId: companyId,
-                    inventoryId:inventoryId,
                     inventoryName: inventoryName,
                     inventoryDescription: inventoryDescription,
-                    appointmentMinutes: appointmentMinutes,
                     multipleServiceProviderRequired:multipleServiceProviderRequired
                 });
                 let datas = await companyInventoryMasterSchema.findByIdAndUpdate(id, companyInventory)
                 var companyServicesProvider = ({
                     companyId: companyId,
+                    inventoryId:companyInventory._id,
                     serviceProviderName: serviceProviderName,
                     serviceProviderDescription: serviceProviderDescription,
                     appointmentMinutes: appointmentMinutes,
@@ -970,7 +968,7 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
                 });
                 let data = await companyServicesProviderSchema.findByIdAndUpdate(id, companyServicesProvider)
             }
-        }
+        } 
         res
             .status(200)
             .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });

@@ -71,4 +71,60 @@ router.post("/customerSignIn", async function (req, res, next) {
   }
 });
 
+router.post('/getBanner', async function (req, res, next) {
+  try {
+      let data = await bannerSchema.find();
+      res
+          .status(200)
+          .json({ Message: "Banner Data!", Data: data, IsSuccess: true });
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
+
+router.post('/getCityMaster', async function (req, res, next) {
+  try {
+      let data = await cityMasterSchema.find();
+      res
+          .status(200)
+          .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
+
+router.post('/updateCustomer', async function (req, res, next) {
+  const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
+  try {
+        let data = ({
+          firstName: firstName,
+          lastName: lastName,
+          mobileNo: mobileNo,
+          emailID: emailID,
+          password: password,
+          address1: address1,
+          address2: address2,
+          city: city,
+          state: state,
+          zipcode: zipcode
+        });
+        let datas = await customerMasterSchema.findByIdAndUpdate(id, customerMaster);
+        res
+          .status(200)
+          .json({ Message: "Customer Detail Updated!", Data: 1, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
 module.exports = router;

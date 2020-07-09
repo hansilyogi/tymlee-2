@@ -15,11 +15,11 @@ var companyInventoryMasterSchema = new mongoose.Schema({
         required:true
     },
     appointmentMinutes:{
-        type:Number,
-        required:true
+        type:Number
     },
     multipleServiceProviderRequired:{
-        type:Boolean
+        type:Boolean,
+        default:false
     },
     rateType:{
         type:String

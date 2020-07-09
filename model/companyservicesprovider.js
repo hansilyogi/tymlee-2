@@ -11,24 +11,19 @@ var companyServicesProviderSchema = new mongoose.Schema({
         ref:'companyInventoryMaster'
     },
     serviceProviderName:{
-        type:String,
-        required:true
+        type:String
     },
     serviceProviderDescription:{
-        type:String,
-        required:true
+        type:String
     },
     appointmentMinutes:{
-        type:Number,
-        required:true
+        type:Number
     },
     rateType:{
-        type:String,
-        required:true
+        type:String
     },
     rateAmt:{
-        type:Number,
-        required:true
+        type:Number
     },
     serviceProviderAvailable:{
         type:Boolean
