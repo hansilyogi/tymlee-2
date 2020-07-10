@@ -42,13 +42,16 @@ var customerMasterSchema = new mongoose.Schema({
         required:true
     },
     oTP:{
-        type:String
+        type:String,
+        default:null
     },
     oTPSentOn:{
-        type:String
+        type:String,
+        default:null
     },
     oTPVerifiedOn:{
-        type:String
+        type:String,
+        default:null
     },
     isVerified:{
         type:Boolean,

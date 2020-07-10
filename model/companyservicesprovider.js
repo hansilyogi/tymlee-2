@@ -26,7 +26,8 @@ var companyServicesProviderSchema = new mongoose.Schema({
         type:Number
     },
     serviceProviderAvailable:{
-        type:Boolean
+        type:Boolean,
+        default:true
     }
 });
 
