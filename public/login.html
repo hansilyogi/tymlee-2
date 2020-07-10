@@ -19,6 +19,29 @@
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <script src="dist/js/angular-datatables.min.js"></script>
     <script src="scripts/timely.js"></script>
+    <!-- <script>
+        function show() {
+            var p = document.getElementById('pwd');
+            p.setAttribute('type', 'text');
+        }
+
+        function hide() {
+            var p = document.getElementById('pwd');
+            p.setAttribute('type', 'password');
+        }
+
+        var pwShown = 0;
+
+        document.getElementById("eye").addEventListener("click", function() {
+            if (pwShown == 0) {
+                pwShown = 1;
+                show();
+            } else {
+                pwShown = 0;
+                hide();
+            }
+        }, false);
+    </script> -->
 </head>
 
 <body class="hold-transition login-page" ng-app="TimelyModule" ng-controller="LoginController">

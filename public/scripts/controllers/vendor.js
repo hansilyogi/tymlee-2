@@ -6,6 +6,19 @@ app.controller('VendorController', function($scope, $http) {
     $scope.CompanyList = [];
 
 
+    var LoginUser = sessionStorage.getItem("SessionId");
+    var LoginRole = sessionStorage.getItem("Role");
+    var LoginName = sessionStorage.getItem("Username");
+
+    if (LoginUser != null && LoginUser != undefined) {
+        if (LoginRole == "Company") {
+            $scope.CompanyId = LoginUser;
+            $scope.LoginName = LoginName;
+        } else {
+            $scope.IsAdmin = true;
+            $scope.LoginName = LoginName;
+        }
+    }
 
     $scope.GetCompany = function() {
         $http({

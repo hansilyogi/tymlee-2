@@ -106,6 +106,28 @@ app.config(function($routeProvider, $locationProvider) {
             },
             templateUrl: "./pages/vendor.html",
             controller: "VendorController",
+        })
+        .when("/banner", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/banner.html",
+            controller: "BannerController",
+        })
+        .when("/addcompanyinventory", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/addcompanyinventory.html",
+            controller: "AddCompanyInventoryController",
         });
     $locationProvider.html5Mode({
         enabled: true,

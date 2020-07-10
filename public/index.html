@@ -28,6 +28,8 @@
     <script src="scripts/controllers/addcompany.js"></script>
     <script src="scripts/controllers/viewcustomer.js"></script>
     <script src="scripts/controllers/vendor.js"></script>
+    <script src="scripts/controllers/banner.js"></script>
+    <script src="scripts/controllers/companyinventory.js"></script>
 
 </head>
 
@@ -138,6 +140,20 @@
                                                 <a href="./vendor" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>
                                                     <p>Add Vendor</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item" ng-hide="IsAdmin">
+                                                <a href="./banner" class="nav-link">
+                                                    <i class="nav-icon far fa-image"></i>
+
+                                                    <p>Add Banner</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item" ng-hide="IsAdmin">
+                                                <a href="./addcompanyinventory" class="nav-link">
+                                                    <i class="nav-icon fa fa-check-circle"></i>
+
+                                                    <p>Add Company Inventory</p>
                                                 </a>
                                             </li>
                                         </ul>

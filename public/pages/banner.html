@@ -1,0 +1,113 @@
+<div class="BannerController" style="padding:10px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Banner</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Master</a></li>
+                        <li class="breadcrumb-item active">Banner</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
+                                <i class="fa fa-plus"></i> &nbsp;Add Banner
+                              </button>
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Image</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+
+                                        <th style="width: 40px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="data in DataList">
+                                        <td>{{$index+1}}</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/{{data.image}}" target="_blank">
+                                                <img ng-src="{{imageroute}}/{{data.image}}" style="width: 90px;height: 80px;" />
+                                            </a>
+                                        </td>
+                                        <td>{{data.title}}</td>
+                                        <td>{{data.description}}</td>
+                                        <td width=10%>
+
+                                            <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
+                                        </button>
+
+                                            <button type="button" class="btn btn-danger btn-flat btn-sm " data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                        </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Membership type</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+                <form ng-submit="submitBanner()">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="Title" required="" placeholder="Title" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="Description" placeholder="Description" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Banner Image</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="files" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
