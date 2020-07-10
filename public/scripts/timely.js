@@ -8,7 +8,7 @@ app.config(function($routeProvider, $locationProvider) {
                 if (sessionStorage.getItem("SessionId") == null) {
                     window.location.href = "./login.html";
                 } else {
-                    window.location.href = "pages/dashboard.html";
+                    window.location.href = "/dashboard";
                 }
             }
         })
@@ -31,31 +31,80 @@ app.config(function($routeProvider, $locationProvider) {
             controller: "DashboardController",
         })
         .when("/membershiptype", {
-            templateUrl: "pages/membershiptype.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/membershiptype.html",
             controller: "MembershipController",
         })
         .when("/businesscategory", {
-            templateUrl: "pages/businesscategory.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/businesscategory.html",
             controller: "BusinessCategoryController",
         })
         .when("/city", {
-            templateUrl: "pages/city.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/city.html",
             controller: "CityController",
         })
         .when("/addcompany", {
-            templateUrl: "pages/addcompany.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/addcompany.html",
             controller: "AddCompanyController",
         })
         .when("/viewcompany", {
-            templateUrl: "pages/viewcompany.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/viewcompany.html",
             controller: "AddCompanyController",
         })
         .when("/viewcustomer", {
-            templateUrl: "pages/viewcustomer.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/viewcustomer.html",
             controller: "ViewCustomerController",
         })
         .when("/vendor", {
-            templateUrl: "pages/vendor.html",
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/vendor.html",
             controller: "VendorController",
         });
     $locationProvider.html5Mode({
