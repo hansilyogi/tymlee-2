@@ -10,10 +10,7 @@ var customerRouter = require('./routes/customer');
 var companyAdminRouter = require('./routes/companyadmin');
 
 var app = express();
- 
-app.get('/*', function(req, res) {
-    res.sendFile(__dirname + '/public/index.html');
-});
+
 
 app.use(cors());
 app.use(logger('dev'));
@@ -21,11 +18,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("/uploads", express.static(__dirname+"/uploads"));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/customer', customerRouter);
 app.use('/companyadmin', companyAdminRouter);
+
+app.get('/*', function(req, res) {
+    res.sendFile(__dirname + '/public/index.html');
+});
 
 module.exports = app;
