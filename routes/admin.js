@@ -940,7 +940,7 @@ router.post('/addInventoryAndServiceProvider', async function(req, res, next) {
         }
         res
             .status(200)
-            .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });
+            .json({ Message: "Data Added!", Data: 1, IsSuccess: true });
 
     } catch (err) {
         res.json({
