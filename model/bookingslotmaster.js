@@ -24,11 +24,11 @@ serviceProviderId:{
      required:true
  },
  fromTime:{
-     type:TimeRanges,
+     type:String,
      required:true
  },
  toTime:{
-     type:TimeRanges,
+     type:String,
      required:true
  },
  appointmentCount:{
@@ -40,7 +40,8 @@ serviceProviderId:{
      required:true
  },
  slotAvailable:{
-     type:Boolean
+     type:Boolean,
+     default:true
  }
 });
 

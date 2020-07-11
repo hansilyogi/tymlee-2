@@ -5,7 +5,6 @@ var path = require("path");
 var config = require('../config');
 // const bcrypt = require('bcrypt');
 var customerMasterSchema = require('../model/customermaster');
-
 var customerlocation = multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, "uploads/customer");

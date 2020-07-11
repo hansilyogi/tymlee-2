@@ -15,6 +15,8 @@ var adminLoginSchema = require('../model/adminlogin');
 var companyInventoryMasterSchema = require('../model/companyinventorymaster');
 var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var termnconditionSchema = require('../model/termncondition');
+var bookingSlotMasterSchema = require('../model/bookingslotmaster');
+
 const config = require('../config');
 
 //image uploading
@@ -125,7 +127,6 @@ router.post("/adminSignIn", async function (req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-
 
 router.post('/addMembershipType', uploadmembership.single("registrationIcon"), async function (req, res, next) {
     const { membershipType, registrationFee, csgtPercent, sgstPercent, igstPercent, benefitList } = req.body;
@@ -941,7 +942,7 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
             }
         res
             .status(200)
-            .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });
+            .json({ Message: "Data Added!", Data: 1, IsSuccess: true });
 
     } catch (err){
         res.json({
@@ -976,12 +977,19 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
 //     }
 // });
 router.post('/getCompanyInventory', async function (req, res, next) {
-    const { id } = req.body
     try {
         let data = await companyInventoryMasterSchema.find();
+        a=[];
+        b=[];
+        for (let i = 0; i < data.length; i++){
+            if(data[i].multipleServiceProviderRequired == true){
+                var datas = await companyServicesProviderSchema.find({inventoryId:data[i].id});
+            }
+            a.push({data:data[i],datas:b})
+        }
         res
             .status(200)
-            .json({ Message: "Company Inventory Data!", Data: data, IsSuccess: true });
+            .json({ Message: "Data!", Data: a, IsSuccess: true });
 
     } catch (err) {
         res.json({
@@ -1044,6 +1052,87 @@ router.post('/deleteTermNCondition', async function (req, res, next) {
         res
             .status(200)
             .json({ Message: "Term N Condition Deleted!", Data: 1, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/getBookingSlot', async function (req, res, next) {
+    const { companyId } = req.body
+    try {
+        let data = await bookingSlotMasterSchema.find({ companyId: companyId });
+        res
+            .status(200)
+            .json({ Message: "Booking Slot Data!", Data: data, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/addBookingSlot', async function (req, res, next) {
+    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, fromTime, toTime ,appointmentCount, rate, slotAvailable} = req.body;
+    try {
+        if (id == "0") {
+            var slot = new bookingSlotMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryId: inventoryId,
+                serviceProviderId: serviceProviderId,
+                dayName: dayName,
+                slotName: slotName,
+                fromTime: fromTime,
+                toTime:toTime,
+                appointmentCount:appointmentCount,
+                rate:rate,
+                slotAvailable:slotAvailable
+            });
+            slot.save();
+        } else {
+            var slot = ({
+                companyId: companyId,
+                inventoryId: inventoryId,
+                serviceProviderId: serviceProviderId,
+                dayName: dayName,
+                slotName: slotName,
+                fromTime: fromTime,
+                toTime:toTime,
+                appointmentCount:appointmentCount,
+                rate:rate,
+                slotAvailable:slotAvailable
+            });
+            let data = await bookingSlotMasterSchema.findByIdAndUpdate(id, slot)
+        }
+        res
+            .status(200)
+            .json({ Message: "Booking Slot Added!", Data: 1, IsSuccess: true });
+
+    } catch{
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+
+});
+
+router.post('/deleteBookingSlot', async function (req, res, next) {
+    try {
+        const { id } = req.body;
+        let data = await bookingSlotMasterSchema.findOneAndRemove(id);
+        res
+            .status(200)
+            .json({ Message: " Slot Deleted!", Data: 1, IsSuccess: true });
 
     } catch (err) {
         res.json({
