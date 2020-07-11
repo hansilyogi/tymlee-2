@@ -15,16 +15,14 @@ var adminLoginSchema = require('../model/adminlogin');
 var companyInventoryMasterSchema = require('../model/companyinventorymaster');
 var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var termnconditionSchema = require('../model/termncondition');
-var bookingSlotMasterSchema = require('../model/bookingslotmaster');
-
 const config = require('../config');
 
 //image uploading
 var membershiplocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/membership");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -34,10 +32,10 @@ var membershiplocation = multer.diskStorage({
 var uploadmembership = multer({ storage: membershiplocation });
 
 var bannerlocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/banner");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -47,10 +45,10 @@ var bannerlocation = multer.diskStorage({
 var uploadbanner = multer({ storage: bannerlocation });
 
 var businesscategorylocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/businesscategory");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -60,10 +58,10 @@ var businesscategorylocation = multer.diskStorage({
 var uploadbusinesscategory = multer({ storage: businesscategorylocation });
 
 var filestorage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/Document");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -82,7 +80,7 @@ var fieldset = finalstorage.fields([
 
 /* GET users listing. */
 
-router.post('/adminSignUp', async function (req, res, next) {
+router.post('/adminSignUp', async function(req, res, next) {
     const { userName, password, role } = req.body;
     try {
         let newadmin = new adminLoginSchema({
@@ -100,7 +98,7 @@ router.post('/adminSignUp', async function (req, res, next) {
     }
 });
 
-router.post("/adminSignIn", async function (req, res, next) {
+router.post("/adminSignIn", async function(req, res, next) {
     const { userName, password, role } = req.body;
     try {
         let admin = await adminLoginSchema.find({
@@ -115,8 +113,7 @@ router.post("/adminSignIn", async function (req, res, next) {
                 Data: admin,
                 IsSuccess: true,
             });
-        }
-        else {
+        } else {
             res.status(200).json({
                 Message: "invalid Data!",
                 Data: admin,
@@ -128,7 +125,8 @@ router.post("/adminSignIn", async function (req, res, next) {
     }
 });
 
-router.post('/addMembershipType', uploadmembership.single("registrationIcon"), async function (req, res, next) {
+
+router.post('/addMembershipType', uploadmembership.single("registrationIcon"), async function(req, res, next) {
     const { membershipType, registrationFee, csgtPercent, sgstPercent, igstPercent, benefitList } = req.body;
     try {
         const file = req.file;
@@ -155,7 +153,7 @@ router.post('/addMembershipType', uploadmembership.single("registrationIcon"), a
     }
 });
 
-router.post('/MembershipType', async function (req, res, next) {
+router.post('/MembershipType', async function(req, res, next) {
     try {
         let data = await membershipTypeMstSchema.find();
         res
@@ -171,7 +169,7 @@ router.post('/MembershipType', async function (req, res, next) {
     }
 });
 
-router.post('/UpdateMembershipType', uploadmembership.single("registrationIcon"), async function (req, res, next) {
+router.post('/UpdateMembershipType', uploadmembership.single("registrationIcon"), async function(req, res, next) {
     try {
         const { id, membershipType, registrationFee, csgtPercent, sgstPercent, igstPercent, benefitList } = req.body;
         const file = req.file;
@@ -212,7 +210,7 @@ router.post('/UpdateMembershipType', uploadmembership.single("registrationIcon")
 
 });
 
-router.post('/DeleteMembershipType', async function (req, res, next) {
+router.post('/DeleteMembershipType', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await membershipTypeMstSchema.findOneAndRemove(id);
@@ -229,7 +227,7 @@ router.post('/DeleteMembershipType', async function (req, res, next) {
     }
 });
 
-router.post('/addCategoryMaster', uploadbusinesscategory.single("businessIcon"), async function (req, res, next) {
+router.post('/addCategoryMaster', uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
     const { businessCategoryName, startDate, bookingAmt, clientAmt, refundAmt, csgtPercent, sgstPercent, igstPercent } = req.body;
     try {
         const file = req.file;
@@ -259,7 +257,7 @@ router.post('/addCategoryMaster', uploadbusinesscategory.single("businessIcon"),
     }
 });
 
-router.post('/CategoryMaster', async function (req, res, next) {
+router.post('/CategoryMaster', async function(req, res, next) {
     try {
         let data = await categoryMasterSchema.find();
         res
@@ -275,7 +273,7 @@ router.post('/CategoryMaster', async function (req, res, next) {
     }
 });
 
-router.post('/updateCategoryMaster', uploadbusinesscategory.single("businessIcon"), async function (req, res, next) {
+router.post('/updateCategoryMaster', uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
     try {
         const { id, businessCategoryName, startDate, bookingAmt, clientAmt, refundAmt, csgtPercent, sgstPercent, igstPercent } = req.body;
         const file = req.file;
@@ -318,7 +316,7 @@ router.post('/updateCategoryMaster', uploadbusinesscategory.single("businessIcon
     }
 });
 
-router.post('/deleteCategoryMaster', async function (req, res, next) {
+router.post('/deleteCategoryMaster', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await categoryMasterSchema.findOneAndRemove(id);
@@ -335,7 +333,7 @@ router.post('/deleteCategoryMaster', async function (req, res, next) {
     }
 });
 
-router.post('/addCityMaster', async function (req, res, next) {
+router.post('/addCityMaster', async function(req, res, next) {
     try {
         const { id, cityCode, cityName, stateName, stateCode } = req.body;
         if (id == "0") {
@@ -368,7 +366,7 @@ router.post('/addCityMaster', async function (req, res, next) {
     }
 });
 
-router.post('/getCityMaster', async function (req, res, next) {
+router.post('/getCityMaster', async function(req, res, next) {
     try {
         let data = await cityMasterSchema.find();
         res
@@ -384,7 +382,7 @@ router.post('/getCityMaster', async function (req, res, next) {
     }
 });
 
-router.post('/deleteCityMaster', async function (req, res, next) {
+router.post('/deleteCityMaster', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await cityMasterSchema.findByIdAndRemove(id);
@@ -401,7 +399,7 @@ router.post('/deleteCityMaster', async function (req, res, next) {
     }
 });
 
-router.post('/addCityBusinessCategory', async function (req, res, next) {
+router.post('/addCityBusinessCategory', async function(req, res, next) {
     try {
         const { id, businessCategoryId, startDate } = req.body;
         if (id == "0") {
@@ -430,7 +428,7 @@ router.post('/addCityBusinessCategory', async function (req, res, next) {
     }
 });
 
-router.post('/getCityBusinessCategory', async function (req, res, next) {
+router.post('/getCityBusinessCategory', async function(req, res, next) {
     try {
         let data = await cityBusinessCategorySchema.find().populate('businessCategoryId', ' businessCategoryName');
         res
@@ -446,7 +444,7 @@ router.post('/getCityBusinessCategory', async function (req, res, next) {
     }
 });
 
-router.post('/deleteCityBusinessCategory', async function (req, res, next) {
+router.post('/deleteCityBusinessCategory', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await cityBusinessCategorySchema.findByIdAndRemove(id);
@@ -463,7 +461,7 @@ router.post('/deleteCityBusinessCategory', async function (req, res, next) {
     }
 });
 
-router.post('/addCompanyMaster', fieldset, async function (req, res, next) {
+router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
     const {
         doj,
         businessCategoryId,
@@ -562,7 +560,7 @@ router.post('/addCompanyMaster', fieldset, async function (req, res, next) {
     }
 });
 
-router.post('/updateCompanyMaster', fieldset, async function (req, res, next) {
+router.post('/updateCompanyMaster', fieldset, async function(req, res, next) {
     const {
         id,
         doj,
@@ -663,7 +661,7 @@ router.post('/updateCompanyMaster', fieldset, async function (req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files.personPhoto == undefined ? req.files.personPhoto: req.files.personPhoto[0].path,
+                personPhoto: req.files.personPhoto == undefined ? req.files.personPhoto : req.files.personPhoto[0].path,
                 aadharCard: req.files.aadharCard == undefined ? req.files.aadharCard : req.files.aadharCard[0].path,
                 panCard: req.files.panCard == undefined ? req.files.panCard : req.files.panCard[0].path,
                 cancelledCheque: req.files.cancelledCheque == undefined ? files.cancelledCheque : req.files.cancelledCheque[0].path,
@@ -688,7 +686,7 @@ router.post('/updateCompanyMaster', fieldset, async function (req, res, next) {
     }
 });
 
-router.post('/getCompanyMaster', async function (req, res, next) {
+router.post('/getCompanyMaster', async function(req, res, next) {
     try {
         let data = await companyMasterSchema.find().populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId');
         res
@@ -704,7 +702,7 @@ router.post('/getCompanyMaster', async function (req, res, next) {
     }
 });
 
-router.post('/deleteCompanyMaster', async function (req, res, next) {
+router.post('/deleteCompanyMaster', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await companyMasterSchema.findByIdAndRemove(id);
@@ -721,7 +719,7 @@ router.post('/deleteCompanyMaster', async function (req, res, next) {
     }
 });
 
-router.post('/addBanner', uploadbanner.single("image"), async function (req, res, next) {
+router.post('/addBanner', uploadbanner.single("image"), async function(req, res, next) {
     const { id, title, description } = req.body;
     try {
         const file = req.file;
@@ -761,7 +759,7 @@ router.post('/addBanner', uploadbanner.single("image"), async function (req, res
     }
 });
 
-router.post('/getBanner', async function (req, res, next) {
+router.post('/getBanner', async function(req, res, next) {
     try {
         let data = await bannerSchema.find();
         res
@@ -777,7 +775,7 @@ router.post('/getBanner', async function (req, res, next) {
     }
 });
 
-router.post('/deleteBanner', async function (req, res, next) {
+router.post('/deleteBanner', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await bannerSchema.findOneAndRemove(id);
@@ -794,7 +792,7 @@ router.post('/deleteBanner', async function (req, res, next) {
     }
 });
 
-router.post('/getcustomer', async function (req, res, next) {
+router.post('/getcustomer', async function(req, res, next) {
     try {
         let data = await customerMasterSchema.find();
         console.log(data);
@@ -811,7 +809,7 @@ router.post('/getcustomer', async function (req, res, next) {
     }
 });
 
-router.post('/getCompanyUserMaster', async function (req, res, next) {
+router.post('/getCompanyUserMaster', async function(req, res, next) {
     const { companyId } = req.body
     try {
         let data = await companyUserMasterSchema.find({ companyId: companyId });
@@ -828,7 +826,7 @@ router.post('/getCompanyUserMaster', async function (req, res, next) {
     }
 });
 
-router.post('/addCompanyUserMaster', async function (req, res, next) {
+router.post('/addCompanyUserMaster', async function(req, res, next) {
     const { id, companyId, userName, emailId, userPassword, userPin, userCategory } = req.body;
     try {
         if (id == "0") {
@@ -857,7 +855,7 @@ router.post('/addCompanyUserMaster', async function (req, res, next) {
             .status(200)
             .json({ Message: "Company User Added!", Data: 1, IsSuccess: true });
 
-    } catch{
+    } catch {
         res.json({
             Message: err.message,
             Data: 0,
@@ -867,7 +865,7 @@ router.post('/addCompanyUserMaster', async function (req, res, next) {
 
 });
 
-router.post('/deleteCompanyUser', async function (req, res, next) {
+router.post('/deleteCompanyUser', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await companyUserMasterSchema.findOneAndRemove(id);
@@ -884,67 +882,67 @@ router.post('/deleteCompanyUser', async function (req, res, next) {
     }
 });
 
-router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
-    const { companyId, inventoryName, inventoryDescription, appointmentMinutes, multipleServiceProviderRequired, rateType, rateAmt,inventoryNotes1Name,inventoryNotes1 ,inventoryNotes2Name,inventoryNotes2 ,inventoryNotes3Name,inventoryNotes3,inventoryAvailable } = req.body;
-    const { serviceProviderName,serviceProviderDescription,serviceProviderAvailable} = req.body;
+router.post('/addInventoryAndServiceProvider', async function(req, res, next) {
+    const { companyId, inventoryName, inventoryDescription, appointmentMinutes, multipleServiceProviderRequired, rateType, rateAmt, inventoryNotes1Name, inventoryNotes1, inventoryNotes2Name, inventoryNotes2, inventoryNotes3Name, inventoryNotes3, inventoryAvailable } = req.body;
+    const { serviceProviderName, serviceProviderDescription, serviceProviderAvailable } = req.body;
     console.log(req.body);
     try {
-            if( multipleServiceProviderRequired == false){
-                var companyInventory = new companyInventoryMasterSchema({
-                    _id: new config.mongoose.Types.ObjectId,
-                    companyId: companyId,
-                    inventoryName: inventoryName,
-                    inventoryDescription: inventoryDescription,
-                    appointmentMinutes: appointmentMinutes,
-                    multipleServiceProviderRequired:multipleServiceProviderRequired,
-                    rateType: rateType,
-                    rateAmt: rateAmt,
-                    inventoryNotes1Name:inventoryNotes1Name,
-                    inventoryNotes1:inventoryNotes1,
-                    inventoryNotes2Name:inventoryNotes2Name,
-                    inventoryNotes2:inventoryNotes2,
-                    inventoryNotes3Name:inventoryNotes3Name,
-                    inventoryNotes3:inventoryNotes3,
-                    inventoryAvailable:true
-                });
-                companyInventory.save();
-            }else{
-                var companyInventory = new companyInventoryMasterSchema({
-                    _id: new config.mongoose.Types.ObjectId,
-                    companyId: companyId,
-                    inventoryName: inventoryName,
-                    inventoryDescription: inventoryDescription,
-                    appointmentMinutes: multipleServiceProviderRequired == true ? null : appointmentMinutes,
-                    multipleServiceProviderRequired:multipleServiceProviderRequired,
-                    rateType: multipleServiceProviderRequired == true ? null : rateType,
-                    rateAmt: multipleServiceProviderRequired == true ? null : rateAmt,
-                    inventoryNotes1Name: multipleServiceProviderRequired == true ? null : inventoryNotes1Name,
-                    inventoryNotes1: multipleServiceProviderRequired == true ? null : inventoryNotes1,
-                    inventoryNotes2Name: multipleServiceProviderRequired == true ? null : inventoryNotes2Name,
-                    inventoryNotes2: multipleServiceProviderRequired == true ? null : inventoryNotes2,
-                    inventoryNotes3Name: multipleServiceProviderRequired == true ? null : inventoryNotes3Name,
-                    inventoryNotes3: multipleServiceProviderRequired == true ? null : inventoryNotes3,
-                    inventoryAvailable: multipleServiceProviderRequired == true ? null : inventoryAvailable
-                });
-                companyInventory.save();
-                var companyServicesProvider = new companyServicesProviderSchema({
-                    _id: new config.mongoose.Types.ObjectId,
-                    companyId: companyId,
-                    inventoryId:companyInventory._id,
-                    serviceProviderName: serviceProviderName,
-                    serviceProviderDescription: serviceProviderDescription,
-                    appointmentMinutes: appointmentMinutes,
-                    rateType: rateType,
-                    rateAmt: rateAmt,
-                    serviceProviderAvailable:serviceProviderAvailable
-                });
-                companyServicesProvider.save();
-            }
+        if (multipleServiceProviderRequired == false) {
+            var companyInventory = new companyInventoryMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryName: inventoryName,
+                inventoryDescription: inventoryDescription,
+                appointmentMinutes: appointmentMinutes,
+                multipleServiceProviderRequired: multipleServiceProviderRequired,
+                rateType: rateType,
+                rateAmt: rateAmt,
+                inventoryNotes1Name: inventoryNotes1Name,
+                inventoryNotes1: inventoryNotes1,
+                inventoryNotes2Name: inventoryNotes2Name,
+                inventoryNotes2: inventoryNotes2,
+                inventoryNotes3Name: inventoryNotes3Name,
+                inventoryNotes3: inventoryNotes3,
+                inventoryAvailable: true
+            });
+            companyInventory.save();
+        } else {
+            var companyInventory = new companyInventoryMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryName: inventoryName,
+                inventoryDescription: inventoryDescription,
+                appointmentMinutes: multipleServiceProviderRequired == true ? null : appointmentMinutes,
+                multipleServiceProviderRequired: multipleServiceProviderRequired,
+                rateType: multipleServiceProviderRequired == true ? null : rateType,
+                rateAmt: multipleServiceProviderRequired == true ? null : rateAmt,
+                inventoryNotes1Name: multipleServiceProviderRequired == true ? null : inventoryNotes1Name,
+                inventoryNotes1: multipleServiceProviderRequired == true ? null : inventoryNotes1,
+                inventoryNotes2Name: multipleServiceProviderRequired == true ? null : inventoryNotes2Name,
+                inventoryNotes2: multipleServiceProviderRequired == true ? null : inventoryNotes2,
+                inventoryNotes3Name: multipleServiceProviderRequired == true ? null : inventoryNotes3Name,
+                inventoryNotes3: multipleServiceProviderRequired == true ? null : inventoryNotes3,
+                inventoryAvailable: multipleServiceProviderRequired == true ? null : inventoryAvailable
+            });
+            companyInventory.save();
+            var companyServicesProvider = new companyServicesProviderSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryId: companyInventory._id,
+                serviceProviderName: serviceProviderName,
+                serviceProviderDescription: serviceProviderDescription,
+                appointmentMinutes: appointmentMinutes,
+                rateType: rateType,
+                rateAmt: rateAmt,
+                serviceProviderAvailable: serviceProviderAvailable
+            });
+            companyServicesProvider.save();
+        }
         res
             .status(200)
-            .json({ Message: "Data Added!", Data: 1, IsSuccess: true });
+            .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });
 
-    } catch (err){
+    } catch (err) {
         res.json({
             Message: err.message,
             Data: 0,
@@ -976,20 +974,13 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
 //         });
 //     }
 // });
-router.post('/getCompanyInventory', async function (req, res, next) {
+router.post('/getCompanyInventory', async function(req, res, next) {
+    const { id } = req.body
     try {
         let data = await companyInventoryMasterSchema.find();
-        a=[];
-        b=[];
-        for (let i = 0; i < data.length; i++){
-            if(data[i].multipleServiceProviderRequired == true){
-                var datas = await companyServicesProviderSchema.find({inventoryId:data[i].id});
-            }
-            a.push({data:data[i],datas:b})
-        }
         res
             .status(200)
-            .json({ Message: "Data!", Data: a, IsSuccess: true });
+            .json({ Message: "Company Inventory Data!", Data: data, IsSuccess: true });
 
     } catch (err) {
         res.json({
@@ -1000,7 +991,7 @@ router.post('/getCompanyInventory', async function (req, res, next) {
     }
 });
 
-router.post('/addTermNCondition', async function (req, res, next) {
+router.post('/addTermNCondition', async function(req, res, next) {
     const { id, title, description } = req.body;
     try {
         if (id == "0") {
@@ -1011,11 +1002,11 @@ router.post('/addTermNCondition', async function (req, res, next) {
             });
             banner.save();
         } else {
-                var data = {
-                    title: title,
-                    description: description
-                }
-                let datas = await termnconditionSchema.findByIdAndUpdate(id, data);
+            var data = {
+                title: title,
+                description: description
+            }
+            let datas = await termnconditionSchema.findByIdAndUpdate(id, data);
         }
         res
             .status(200)
@@ -1029,7 +1020,7 @@ router.post('/addTermNCondition', async function (req, res, next) {
     }
 });
 
-router.post('/getTermNCondition', async function (req, res, next) {
+router.post('/getTermNCondition', async function(req, res, next) {
     try {
         let data = await termnconditionSchema.find();
         res
@@ -1045,94 +1036,13 @@ router.post('/getTermNCondition', async function (req, res, next) {
     }
 });
 
-router.post('/deleteTermNCondition', async function (req, res, next) {
+router.post('/deleteTermNCondition', async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await termnconditionSchema.findOneAndRemove(id);
         res
             .status(200)
             .json({ Message: "Term N Condition Deleted!", Data: 1, IsSuccess: true });
-
-    } catch (err) {
-        res.json({
-            Message: err.message,
-            Data: 0,
-            IsdSuccess: false,
-        });
-    }
-});
-
-router.post('/getBookingSlot', async function (req, res, next) {
-    const { companyId } = req.body
-    try {
-        let data = await bookingSlotMasterSchema.find({ companyId: companyId });
-        res
-            .status(200)
-            .json({ Message: "Booking Slot Data!", Data: data, IsSuccess: true });
-
-    } catch (err) {
-        res.json({
-            Message: err.message,
-            Data: 0,
-            IsdSuccess: false,
-        });
-    }
-});
-
-router.post('/addBookingSlot', async function (req, res, next) {
-    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, fromTime, toTime ,appointmentCount, rate, slotAvailable} = req.body;
-    try {
-        if (id == "0") {
-            var slot = new bookingSlotMasterSchema({
-                _id: new config.mongoose.Types.ObjectId,
-                companyId: companyId,
-                inventoryId: inventoryId,
-                serviceProviderId: serviceProviderId,
-                dayName: dayName,
-                slotName: slotName,
-                fromTime: fromTime,
-                toTime:toTime,
-                appointmentCount:appointmentCount,
-                rate:rate,
-                slotAvailable:slotAvailable
-            });
-            slot.save();
-        } else {
-            var slot = ({
-                companyId: companyId,
-                inventoryId: inventoryId,
-                serviceProviderId: serviceProviderId,
-                dayName: dayName,
-                slotName: slotName,
-                fromTime: fromTime,
-                toTime:toTime,
-                appointmentCount:appointmentCount,
-                rate:rate,
-                slotAvailable:slotAvailable
-            });
-            let data = await bookingSlotMasterSchema.findByIdAndUpdate(id, slot)
-        }
-        res
-            .status(200)
-            .json({ Message: "Booking Slot Added!", Data: 1, IsSuccess: true });
-
-    } catch{
-        res.json({
-            Message: err.message,
-            Data: 0,
-            IsdSuccess: false,
-        });
-    }
-
-});
-
-router.post('/deleteBookingSlot', async function (req, res, next) {
-    try {
-        const { id } = req.body;
-        let data = await bookingSlotMasterSchema.findOneAndRemove(id);
-        res
-            .status(200)
-            .json({ Message: " Slot Deleted!", Data: 1, IsSuccess: true });
 
     } catch (err) {
         res.json({

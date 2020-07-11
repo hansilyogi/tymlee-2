@@ -7,6 +7,96 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.CityList = [];
     $scope.BankDataList = [];
 
+    // $scope.submitCompany = function() {
+    //     var preForm = new FormData();
+    //     angular.forEach($scope.files, function(file) {
+    //         preForm.append("personPhoto", file);
+    //         preForm.append("aadharCard", file);
+    //         preForm.append("panCard", file);
+    //         preForm.append("cancelledCheque", file);
+    //         preForm.append("companyLogo", file);
+    //     });
+    //     preForm.append("id", $scope.Id);
+    //     preForm.append("doj", $scope.BusinessCategory);
+    //     preForm.append("businessCategoryId", $scope.StartDate);
+    //     preForm.append("companyName", $scope.BookingAmount);
+    //     preForm.append("addressLine1", $scope.ClientAmount);
+    //     preForm.append("addressLine2", $scope.RefundAmount);
+    //     preForm.append("cityMasterId", $scope.CGSTPercent);
+    //     preForm.append("zipcode", $scope.SGSTPercent);
+    //     preForm.append("mapLocation", $scope.IGSTPercent);
+    //     preForm.append("phone", $scope.BusinessCategory);
+    //     preForm.append("fax", $scope.StartDate);
+    //     preForm.append("url", $scope.BookingAmount);
+    //     preForm.append("supportEmail", $scope.ClientAmount);
+    //     preForm.append("adminEmail", $scope.RefundAmount);
+    //     preForm.append("adminMobile", $scope.CGSTPercent);
+    //     preForm.append("adminPassword", $scope.SGSTPercent);
+    //     preForm.append("gstinNo", $scope.IGSTPercent);
+    //     preForm.append("paNo", $scope.ClientAmount);
+    //     preForm.append("bankName", $scope.RefundAmount);
+    //     preForm.append("bankBranchName", $scope.CGSTPercent);
+    //     preForm.append("bankAddress", $scope.SGSTPercent);
+    //     preForm.append("bankCity", $scope.IGSTPercent);
+    //     preForm.append("bankState", $scope.BusinessCategory);
+    //     preForm.append("bankAccountNo", $scope.StartDate);
+    //     preForm.append("bankIfscCode", $scope.BookingAmount);
+    //     preForm.append("companyType", $scope.ClientAmount);
+    //     preForm.append("personName", $scope.RefundAmount);
+    //     preForm.append("weekStartDay", $scope.CGSTPercent);
+    //     preForm.append("cancellationPolicy", $scope.SGSTPercent);
+    //     preForm.append("companyHtmlPage", $scope.IGSTPercent);
+    //     preForm.append("registrationValidUpto", $scope.IGSTPercent);
+    //     if ($scope.Id != "0") {
+
+    //         $http({
+    //             url: imageroute + "/admin/updateCompanyMaster",
+    //             method: "POST",
+    //             data: preForm,
+    //             transformRequest: angular.identity,
+    //             headers: { "Content-Type": undefined, "Process-Data": false },
+    //         }).then(function(response) {
+    //                 if (response.data.Data == 1) {
+    //                     alert("Business Category Saved!");
+    //                     $("#modal-lg").modal("toggle");
+    //                     $scope.GetBusinessCategoryType();
+
+    //                 } else {
+    //                     $scope.btnsave = false;
+    //                     alert("Unable to Save Business Category");
+    //                 }
+    //             },
+    //             function(error) {
+    //                 console.log(error);
+    //                 $scope.btnsave = false;
+    //             }
+    //         );
+    //     } else {
+    //         $http({
+    //             url: imageroute + "/admin/addCompanyMaster",
+    //             method: "POST",
+    //             data: preForm,
+    //             transformRequest: angular.identity,
+    //             headers: { "Content-Type": undefined, "Process-Data": false },
+    //         }).then(function(response) {
+    //                 if (response.data.Data == 1) {
+    //                     alert("Business Category Saved!");
+    //                     $("#modal-lg").modal("toggle");
+    //                     $scope.GetBusinessCategoryType();
+
+    //                 } else {
+    //                     $scope.btnsave = false;
+    //                     alert("Unable to Save Business Category");
+    //                 }
+    //             },
+    //             function(error) {
+    //                 console.log(error);
+    //                 $scope.btnsave = false;
+    //             }
+    //         );
+    //     }
+    // }
+
     $scope.GetBusinessCategoryType = function() {
         $http({
             url: imageroute + "/admin/CategoryMaster",

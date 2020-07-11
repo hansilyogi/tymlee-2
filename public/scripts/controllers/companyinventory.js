@@ -7,15 +7,16 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     $scope.defaultInventory = true;
     $scope.datano = true;
     $scope.toggleyes = false;
+
     $scope.AddData = function() {
-        $scope.SelectedDataList = [];
-        if ($scope.ServiceProviderName != '' && $scope.ServiceProviderDescription != '' && $scope.AppointmentMinutes != '' && $scope.RateAmount != '' && $scope.RateType != '') {
-            // ADD A NEW ELEMENT.
-            $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
+        // $scope.SelectedDataList = [];
+        // $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
+        // console.log($scope.SelectedDataList);
 
-        }
 
+        $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
         console.log($scope.SelectedDataList);
+
 
         $scope.ServiceProviderName = "";
         $scope.ServiceProviderDescription = "";
@@ -33,11 +34,11 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
         if ($scope.toggleyes == false) {
             var json = {
                 "id": $scope.Id,
+                "companyId": "5f04587fdd1ead1304d025ad",
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
-                "stamultipleServiceProviderRequiredteCode": $scope.toggleyes,
                 "appointmentMinutes": $scope.AppointmentMinutes,
-                "multipleServiceProviderRequired": $scope.YesNo,
+                "multipleServiceProviderRequired": $scope.toggleyes,
                 "rateType": $scope.RateType,
                 "rateAmt": $scope.RateAmount,
                 "inventoryNotes1Name": $scope.InventoryNotes1Name,
@@ -46,16 +47,16 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryNotes2": $scope.InventoryNotes2,
                 "inventoryNotes3Name": $scope.InventoryNotes3Name,
                 "inventoryNotes3": $scope.InventoryNotes3
+
             };
             console.log(json);
-        } else {
+        }
+        if ($scope.toggleyes == true) {
             var json = [];
 
             angular.forEach($scope.SelectedDataList, function(value, key) {
                 var data = {
-                    "inventoryName": $scope.SelectedDataList[key]["iventoryName"],
-                    "inventoryDescription": $scope.SelectedDataList[key]["inventorydec"],
-                    "stamultipleServiceProviderRequiredteCode": $scope.toggleyes,
+
                     "serviceProviderName": $scope.SelectedDataList[key]["name"],
                     "serviceProviderDescription": $scope.SelectedDataList[key]["description"],
                     "appointmentMinutes": $scope.SelectedDataList[key]["appointmentmin"],
@@ -64,17 +65,26 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 }
                 json.push(data);
             });
+            var inventory = {
+                "companyId": "5f04587fdd1ead1304d025ad",
+                "inventoryName": $scope.InventoryName,
+                "inventoryDescription": $scope.InventoryDescription,
+                "multipleServiceProviderRequired": $scope.toggleyes,
+                "serviceProvider": json
+            }
         }
         $http({
             url: imageroute + "/admin/addInventoryAndServiceProvider",
             method: "POST",
-            data: json,
+            data: inventory,
             cache: false,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(function(response) {
                 if (response.data.Data == 1) {
                     alert("Company Inventory Saved!");
                     $("#modal-lg").modal("toggle");
+                    $scope.Clear();
+                    $scope.SelectedDataList = [];
                     // $scope.GetCity();
 
                 } else {
@@ -167,17 +177,24 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     // }
 
 
-    // $scope.Clear = function() {
-    //     $scope.Id = 0;
-    //     $scope.BusinessCategory = "";
-    //     $scope.StartDate = "";
-    //     $scope.BookingAmount = "";
-    //     $scope.ClientAmount = "";
-    //     $scope.RefundAmount = "";
-    //     $scope.CGSTPercent = "";
-    //     $scope.SGSTPercent = "";
-    //     $scope.IGSTPercent = "";
-    //     angular.element("input[type='file']").val(null);
-    // }
-    // $scope.Clear();
+    $scope.Clear = function() {
+        $scope.Id = 0;
+        $scope.InventoryName = "";
+        $scope.InventoryDescription = "";
+        $scope.AppointmentMinutes = "";
+        $scope.RateType = "";
+        $scope.RateAmount = "";
+        $scope.InventoryNotes1Name = "";
+        $scope.InventoryNotes1 = "";
+        $scope.InventoryNotes2Name = "";
+        $scope.InventoryNotes2 = "";
+        $scope.InventoryNotes3Name = "";
+        $scope.InventoryNotes3 = "";
+        $scope.ServiceProviderName = "";
+        $scope.ServiceProviderDescription = "";
+        $scope.AppointmentMinutesData = "";
+        $scope.RateTypeData = "";
+        $scope.RateAmountData = "";
+    }
+    $scope.Clear();
 });
