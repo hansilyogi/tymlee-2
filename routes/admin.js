@@ -882,65 +882,65 @@ router.post('/deleteCompanyUser', async function(req, res, next) {
     }
 });
 
-router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
-    const { companyId, inventoryName, inventoryDescription, appointmentMinutes, multipleServiceProviderRequired, rateType, rateAmt,inventoryNotes1Name,inventoryNotes1 ,inventoryNotes2Name,inventoryNotes2 ,inventoryNotes3Name,inventoryNotes3,inventoryAvailable,serviceProvider } = req.body;
+router.post('/addInventoryAndServiceProvider', async function(req, res, next) {
+    const { companyId, inventoryName, inventoryDescription, appointmentMinutes, multipleServiceProviderRequired, rateType, rateAmt, inventoryNotes1Name, inventoryNotes1, inventoryNotes2Name, inventoryNotes2, inventoryNotes3Name, inventoryNotes3, inventoryAvailable, serviceProvider } = req.body;
     try {
-            if( multipleServiceProviderRequired == false){
-                var companyInventory = new companyInventoryMasterSchema({
+        if (multipleServiceProviderRequired == false) {
+            var companyInventory = new companyInventoryMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryName: inventoryName,
+                inventoryDescription: inventoryDescription,
+                appointmentMinutes: appointmentMinutes,
+                multipleServiceProviderRequired: multipleServiceProviderRequired,
+                rateType: rateType,
+                rateAmt: rateAmt,
+                inventoryNotes1Name: inventoryNotes1Name,
+                inventoryNotes1: inventoryNotes1,
+                inventoryNotes2Name: inventoryNotes2Name,
+                inventoryNotes2: inventoryNotes2,
+                inventoryNotes3Name: inventoryNotes3Name,
+                inventoryNotes3: inventoryNotes3,
+                inventoryAvailable: true
+            });
+            companyInventory.save();
+        } else {
+            var companyInventory = new companyInventoryMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryName: inventoryName,
+                inventoryDescription: inventoryDescription,
+                appointmentMinutes: multipleServiceProviderRequired == true ? null : appointmentMinutes,
+                multipleServiceProviderRequired: multipleServiceProviderRequired,
+                rateType: multipleServiceProviderRequired == true ? null : rateType,
+                rateAmt: multipleServiceProviderRequired == true ? null : rateAmt,
+                inventoryNotes1Name: multipleServiceProviderRequired == true ? null : inventoryNotes1Name,
+                inventoryNotes1: multipleServiceProviderRequired == true ? null : inventoryNotes1,
+                inventoryNotes2Name: multipleServiceProviderRequired == true ? null : inventoryNotes2Name,
+                inventoryNotes2: multipleServiceProviderRequired == true ? null : inventoryNotes2,
+                inventoryNotes3Name: multipleServiceProviderRequired == true ? null : inventoryNotes3Name,
+                inventoryNotes3: multipleServiceProviderRequired == true ? null : inventoryNotes3,
+                inventoryAvailable: multipleServiceProviderRequired == true ? null : inventoryAvailable
+            });
+            companyInventory.save();
+
+            for (i = 0; i < serviceProvider.length; i++) {
+                var companyServicesProvider = new companyServicesProviderSchema({
                     _id: new config.mongoose.Types.ObjectId,
-                    companyId: companyId,
-                    inventoryName: inventoryName,
-                    inventoryDescription: inventoryDescription,
-                    appointmentMinutes: appointmentMinutes,
-                    multipleServiceProviderRequired:multipleServiceProviderRequired,
-                    rateType: rateType,
-                    rateAmt: rateAmt,
-                    inventoryNotes1Name:inventoryNotes1Name,
-                    inventoryNotes1:inventoryNotes1,
-                    inventoryNotes2Name:inventoryNotes2Name,
-                    inventoryNotes2:inventoryNotes2,
-                    inventoryNotes3Name:inventoryNotes3Name,
-                    inventoryNotes3:inventoryNotes3,
-                    inventoryAvailable:true
+                    companyId: serviceProvider[i].companyId,
+                    inventoryId: companyInventory._id,
+                    serviceProviderName: serviceProvider[i].serviceProviderName,
+                    serviceProviderDescription: serviceProvider[i].serviceProviderDescription,
+                    appointmentMinutes: serviceProvider[i].appointmentMinutes,
+                    rateType: serviceProvider[i].rateType,
+                    rateAmt: serviceProvider[i].rateAmt
                 });
-                companyInventory.save();
-            }else{
-                var companyInventory = new companyInventoryMasterSchema({
-                    _id: new config.mongoose.Types.ObjectId,
-                    companyId: companyId,
-                    inventoryName: inventoryName,
-                    inventoryDescription: inventoryDescription,
-                    appointmentMinutes: multipleServiceProviderRequired == true ? null : appointmentMinutes,
-                    multipleServiceProviderRequired:multipleServiceProviderRequired,
-                    rateType: multipleServiceProviderRequired == true ? null : rateType,
-                    rateAmt: multipleServiceProviderRequired == true ? null : rateAmt,
-                    inventoryNotes1Name: multipleServiceProviderRequired == true ? null : inventoryNotes1Name,
-                    inventoryNotes1: multipleServiceProviderRequired == true ? null : inventoryNotes1,
-                    inventoryNotes2Name: multipleServiceProviderRequired == true ? null : inventoryNotes2Name,
-                    inventoryNotes2: multipleServiceProviderRequired == true ? null : inventoryNotes2,
-                    inventoryNotes3Name: multipleServiceProviderRequired == true ? null : inventoryNotes3Name,
-                    inventoryNotes3: multipleServiceProviderRequired == true ? null : inventoryNotes3,
-                    inventoryAvailable: multipleServiceProviderRequired == true ? null : inventoryAvailable
-                });
-                companyInventory.save();
-               
-                for(i = 0; i < serviceProvider.length; i++){
-                    var companyServicesProvider = new companyServicesProviderSchema({
-                        _id: new config.mongoose.Types.ObjectId,
-                        companyId: serviceProvider[i].companyId,
-                        inventoryId:companyInventory._id,
-                        serviceProviderName: serviceProvider[i].serviceProviderName,
-                        serviceProviderDescription: serviceProvider[i].serviceProviderDescription,
-                        appointmentMinutes: serviceProvider[i].appointmentMinutes,
-                        rateType: serviceProvider[i].rateType,
-                        rateAmt: serviceProvider[i].rateAmt
-                    });
-                    await companyServicesProvider.save();
-                }
+                await companyServicesProvider.save();
             }
+        }
         res
             .status(200)
-            .json({ Message: "Data Added!", Data:req.body, IsSuccess: true });
+            .json({ Message: "Data Added!", Data: req.body, IsSuccess: true });
 
     } catch (err) {
         res.json({
@@ -952,16 +952,16 @@ router.post('/addInventoryAndServiceProvider', async function (req, res, next) {
 
 });
 
-router.post('/getCompanyInventory', async function (req, res, next) {
+router.post('/getCompanyInventory', async function(req, res, next) {
     try {
         let data = await companyInventoryMasterSchema.find();
-        let  datalist=[];
-        for (let i = 0; i < data.length; i++){
+        let datalist = [];
+        for (let i = 0; i < data.length; i++) {
             var serviceProviders = [];
-            if(data[i].multipleServiceProviderRequired == true){
-                serviceProviders = await companyServicesProviderSchema.find({inventoryId:data[i].id});
+            if (data[i].multipleServiceProviderRequired == true) {
+                serviceProviders = await companyServicesProviderSchema.find({ inventoryId: data[i].id });
             }
-            datalist.push({Inventory:data[i],serviceProviders:serviceProviders});
+            datalist.push({ Inventory: data[i], serviceProviders: serviceProviders });
         }
         res
             .status(200)
