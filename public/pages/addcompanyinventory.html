@@ -1,21 +1,3 @@
-<script>
-    function show1() {
-        document.getElementById('companyes').style.display = 'none';
-        document.getElementById('companno').style.display = 'block';
-        document.getElementById('list').style.display = 'block';
-    }
-
-    function show2() {
-        document.getElementById('companno').style.display = 'none';
-        document.getElementById('companyes').style.display = 'block';
-        document.getElementById('list').style.display = 'none';
-    }
-</script>
-<style>
-    .hide {
-        display: none;
-    }
-</style>
 <div class="AddCompanyInventoryController" style="padding:10px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -39,7 +21,7 @@
                 <div class="col-sm-6">
                     <h5>Add Company Inventory</h5>
                 </div>
-                <form ng-submit="">
+                <form ng-submit="submitCompanyInventory()">
                     <div class="col-12 col-sm-12">
                         <div class="card card-body table-responsive" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
 
@@ -48,29 +30,25 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryName" required="" placeholder="Inventory Name" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryName" placeholder="Inventory Name" autocomplete="off">
 
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Description</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="InventoryDescription" placeholder="Inventory Description" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryDescription" placeholder="Inventory Description" autocomplete="off">
 
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Multiple Service Provider</label> &nbsp;
-                                        <div class="row col-md-6" ng-model="YesNo">
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" onclick="show1();" id="customRadio1" name="customRadio">
-                                                <label for="customRadio1" class="custom-control-label">Yes</label>
-                                            </div> &nbsp;
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" onclick="show2();" id="customRadio2" name="customRadio" checked>
-                                                <label for="customRadio2" class="custom-control-label">No</label>
-                                            </div>
+                                        <div class="row col-md-6">
+                                            <input type="radio" ng-model="toggleyes" ng-click="tooglelistner()" ng-value="true"> &nbsp;
+                                            <div style="margin-top:-4px;">Yes</div> &nbsp;&nbsp;
+                                            <input type="radio" ng-model="toggleyes" ng-click="tooglelistner()" ng-value="false" ng-checked="datano"> &nbsp;
+                                            <div style="margin-top:-4px;">No</div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,20 +57,20 @@
                             <!-- /.card -->
                         </div>
 
-                        <div class="card card-body table-responsive" id="companyes" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
+                        <div class="card card-body table-responsive" id="companyes" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);" ng-show="defaultInventory">
 
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Appointment Minutes</label>
-                                        <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutes" required="" placeholder="Appointment Minutes" autocomplete="off">
+                                        <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutes" placeholder="Appointment Minutes" autocomplete="off">
 
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Rate Type</label>
-                                        <select class="form-control form-control-sm" ng-model="RateType" ng-init="" required>
+                                        <select class="form-control form-control-sm" ng-model="RateType" ng-init="">
                                                 <option value="" disabled>Nothing Selected</option>
                                                     <option ng-repeat="sel in RateTypeList"
                                                         ng-selected="RateType == sel" value="{{sel}}">
@@ -104,133 +82,134 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Rate Amount</label>
-                                        <input type="number" class="form-control form-control-sm" ng-model="RateAmount" required="" placeholder="0" autocomplete="off">
+                                        <input type="number" class="form-control form-control-sm" ng-model="RateAmount" placeholder="0" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes1 Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes1Name" required="" placeholder="Inventory Notes1 Name" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes1Name" placeholder="Inventory Notes1 Name" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes1</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes1" required="" placeholder="Inventory Notes1" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes1" placeholder="Inventory Notes1" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes2 Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes2Name" required="" placeholder="Inventory Notes2 Name" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes2Name" placeholder="Inventory Notes2 Name" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Inventory Notes1</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes2" required="" placeholder="Inventory Notes2" autocomplete="off">
+                                        <label>Inventory Notes2</label>
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes2" placeholder="Inventory Notes2" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes3 Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes3Name" required="" placeholder="Inventory Notes3 Name" autocomplete="off">
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes3Name" placeholder="Inventory Notes3 Name" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Inventory Notes1</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes3" required="" placeholder="Inventory Notes3" autocomplete="off">
+                                        <label>Inventory Notes</label>
+                                        <input type="text" class="form-control form-control-sm" ng-model="InventoryNotes3" placeholder="Inventory Notes3" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
 
                         </div>
+                        <div ng-show="serviceProvider">
+                            <div class="card card-body table-responsive hide" id="companno" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
 
-                        <div class="card card-body table-responsive hide" id="companno" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Service Provider Name</label>
+                                            <input type="text" class="form-control form-control-sm" ng-model="ServiceProviderName" placeholder="Service Provider Name" autocomplete="off">
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Service Provider Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="ServiceProviderName" required="" placeholder="Service Provider Name" autocomplete="off">
-
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Service Provider Description</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="ServiceProviderDescription" required="" placeholder="Service Provider Description" autocomplete="off">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Service Provider Description</label>
+                                            <input type="text" class="form-control form-control-sm" ng-model="ServiceProviderDescription" placeholder="Service Provider Description" autocomplete="off">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Appointment Minutes</label>
-                                        <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutes" required="" placeholder="Appointment Minutes" autocomplete="off">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Appointment Minutes</label>
+                                            <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutesData" placeholder="Appointment Minutes" autocomplete="off">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Rate Amount</label>
-                                        <input type="number" class="form-control form-control-sm" ng-model="RateAmount" required="" placeholder="0" autocomplete="off">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Rate Amount</label>
+                                            <input type="number" class="form-control form-control-sm" ng-model="RateAmountData" placeholder="0" autocomplete="off">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Rate Type</label>
-                                        <select class="form-control form-control-sm" ng-model="RateType" ng-init="" required>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Rate Type</label>
+                                            <select class="form-control form-control-sm" ng-model="RateTypeData" ng-init="">
                                                 <option value="" disabled>Nothing Selected</option>
                                                     <option ng-repeat="sel in RateTypeList"
-                                                        ng-selected="RateType == sel" value="{{sel}}">
+                                                        ng-selected="RateTypeData == sel" value="{{sel}}">
                                                         {{sel}}</option>
                                               </select>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label></label>
-                                        <button type="button" class="btn btn-info btn-sm " style="margin-top: 28px;" ng-click="AddData()"><i class="fa fa-plus"> Add in List</i></button>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label></label>
+                                            <button type="button" class="btn btn-info btn-sm " style="margin-top: 28px;" ng-click="AddData()"><i class="fa fa-plus"> Add in List</i></button>
+                                        </div>
                                     </div>
+
                                 </div>
 
                             </div>
 
-                        </div>
+                            <div class="card card-body table-responsive hide" id="list" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>List</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th>Srno</th>
+                                                    <th>Service Provider Name</th>
+                                                    <th>Service Provider Description</th>
+                                                    <th>Appointment Minutes</th>
+                                                    <th>Rate Type</th>
+                                                    <th>Rate Amount</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                <tr ng-repeat="data in SelectedDataList">
+                                                    <td>{{$index+1}}</td>
+                                                    <td>{{data.name}}</td>
+                                                    <td>{{data.description}}</td>
+                                                    <td>{{data.appointmentmin}}</td>
+                                                    <td>{{data.ratetype}}</td>
+                                                    <td>{{data.rateamount}}</td>
 
-                        <div class="card card-body table-responsive hide" id="list" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>List</label>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <tr>
-                                                <th>Srno</th>
-                                                <th>Service Provider Name</th>
-                                                <th>Service Provider Description</th>
-                                                <th>Appointment Minutes</th>
-                                                <th>Rate Type</th>
-                                                <th>Rate Amount</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            <tr ng-repeat="data in SelectedDataList">
-                                                <td>{{$index+1}}</td>
-                                                <td>{{data.name}}</td>
-                                                <td>{{data.description}}</td>
-                                                <td>{{data.appointmentmin}}</td>
-                                                <td>{{data.ratetype}}</td>
-                                                <td>{{data.rateamount}}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" ng-click="DeleteDataList($index)"><i class="fa fa-plus"></i></button>
+                                                    </td>
 
-                                                <td>
-                                                    <button type="button" class="btn btn-danger" ng-click="DeleteDataList($index)"><i class="fa fa-plus"></i></button>
-                                                </td>
+                                                </tr>
+                                            </table>
+                                        </div>
 
-                                            </tr>
-                                        </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
