@@ -1,0 +1,94 @@
+const mongoose = require('mongoose');
+const { Timestamp } = require('mongodb');
+
+var bookingSlotMasterSchema = new mongoose.Schema({
+ _id: mongoose.Schema.Types.ObjectId,
+ customerId:{
+    type:mongoose.Types.ObjectId,
+    ref:'customerMaster'
+}, 
+bookingDate:{
+    type:Date,
+    default:Date.now
+},
+orderNo:{
+    type:String,
+    required:true
+},
+ companyId:{
+    type:mongoose.Types.ObjectId,
+    ref:'companyMaster'
+},
+inventoryId:{
+    type:mongoose.Types.ObjectId,
+    ref:'companyInventoryMaster'
+},
+serviceProviderId:{
+    type:mongoose.Types.ObjectId,
+    ref:'companyServicesProvider'
+ },
+ bookingSlotId:{
+    type:mongoose.Types.ObjectId,
+    ref:'bookingSlotMaster'
+ },
+ bookingForName:{
+     type:String,
+     required:true
+ },
+ mobileNo:{
+     type:String,
+     required:true
+ },
+ specialRequest:{
+     type:String
+ },
+ sendMeReminderMail:{
+     type:Boolean
+ },
+ amount:{
+     type:Number,
+     required:true
+ },
+ serviceCharge:{
+     type:Number,
+     required:true
+ },
+ totalAmt:{
+     type:Number,
+     required:true
+ },
+ taxableValue:{
+     type:Number,
+     required:true
+ },
+ cgstAmt:{
+     type:Number,
+     required:true
+ },
+ sgstAmt:{
+     type:Number,
+     required:true
+ },
+ igstAmt:{
+     type:Number,
+     required:true
+ },
+ payModeId:{
+     type:Number,
+     required:true
+ },
+ payThrough:{
+     type:String,
+     required:true
+ },
+ cardNumber:{
+     type:String,
+     required:true
+ },
+ payThrough:{
+     type:String,
+     required:true
+ }
+});
+
+module.exports = mongoose.model('bookingSlotMaster',bookingSlotMasterSchema);
