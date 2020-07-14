@@ -15,7 +15,9 @@ var adminLoginSchema = require('../model/adminlogin');
 var companyInventoryMasterSchema = require('../model/companyinventorymaster');
 var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var termnconditionSchema = require('../model/termncondition');
-const config = require('../config');
+var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
+
+config = require('../config');
 
 //image uploading
 var membershiplocation = multer.diskStorage({
@@ -78,7 +80,7 @@ var fieldset = finalstorage.fields([
 ]);
 
 
-/* GET users listing. */
+/* APIS listing. */
 
 router.post('/adminSignUp', async function(req, res, next) {
     const { userName, password, role } = req.body;
@@ -125,6 +127,32 @@ router.post("/adminSignIn", async function(req, res, next) {
     }
 });
 
+router.post("/companySignIn", async function(req, res, next) {
+    const { adminEmail, adminPassword, role,companyCode } = req.body;
+    try {
+        let company = await companyMasterSchema.find({
+            companyCode:companyCode,
+            adminEmail: adminEmail,
+            adminPassword: adminPassword,
+            active: true,
+        });
+        if (company.length == 1) {
+            res.status(200).json({
+                Message: "company  Login!",
+                Data: company,
+                IsSuccess: true,
+            });
+        } else {
+            res.status(200).json({
+                Message: "invalid Data!",
+                Data: 0,
+                IsSuccess: true,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
 
 router.post('/addMembershipType', uploadmembership.single("registrationIcon"), async function(req, res, next) {
     const { membershipType, registrationFee, csgtPercent, sgstPercent, igstPercent, benefitList } = req.body;
@@ -700,7 +728,7 @@ router.post('/getCompanyMaster', async function(req, res, next) {
             IsdSuccess: false,
         });
     }
-});
+});                                                                                                            
 
 router.post('/deleteCompanyMaster', async function(req, res, next) {
     try {
@@ -778,7 +806,7 @@ router.post('/getBanner', async function(req, res, next) {
 router.post('/deleteBanner', async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await bannerSchema.findOneAndRemove(id);
+        let data = await bannerSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Banner Deleted!", Data: 1, IsSuccess: true });
@@ -868,7 +896,7 @@ router.post('/addCompanyUserMaster', async function(req, res, next) {
 router.post('/deleteCompanyUser', async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await companyUserMasterSchema.findOneAndRemove(id);
+        let data = await companyUserMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Company User Deleted!", Data: 1, IsSuccess: true });
@@ -1024,10 +1052,92 @@ router.post('/getTermNCondition', async function(req, res, next) {
 router.post('/deleteTermNCondition', async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await termnconditionSchema.findOneAndRemove(id);
+        let data = await termnconditionSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Term N Condition Deleted!", Data: 1, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/getSlot', async function(req, res, next) {
+    const {companyId, inventoryId, serviceProviderId} = req.body
+    try {
+        let data = await bookingSlotMasterSchema.find({ 
+            companyId: companyId,inventoryId:inventoryId,
+            $or:[{serviceProviderId:serviceProviderId}]
+         });
+        res
+            .status(200)
+            .json({ Message: "Slot Data!", Data: data, IsSuccess: true });
+
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/addSlot', async function(req, res, next) {
+    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, date, fromTime, toTime, appointmentCount, rate} = req.body;
+    try {
+            if(serviceProviderId != null){
+            var slot = new bookingSlotMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryId: inventoryId,
+                serviceProviderId:serviceProviderId,
+                dayName: dayName,
+                slotName: slotName,
+                date:date,
+                fromTime: fromTime,
+                toTime:toTime,
+                appointmentCount:appointmentCount,
+                rate:rate
+            });
+        }else{
+            var slot = new bookingSlotMasterSchema({
+                _id: new config.mongoose.Types.ObjectId,
+                companyId: companyId,
+                inventoryId: inventoryId,
+                dayName: dayName,
+                slotName: slotName,
+                fromTime: fromTime,
+                toTime:toTime,
+                appointmentCount:appointmentCount,
+                rate:rate
+            });
+        }
+            slot.save();
+        res
+            .status(200)
+            .json({ Message: "Slot Added!", Data:1 , IsSuccess: true });
+
+    } catch {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+
+});
+
+router.post('/deleteSlot', async function(req, res, next) {
+    try {
+        const { id } = req.body;
+        let data = await bookingSlotMasterSchema.findByIdAndDelete(id);
+        res
+            .status(200)
+            .json({ Message: "Slot Deleted!", Data: 1, IsSuccess: true });
 
     } catch (err) {
         res.json({

@@ -7,7 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var customerRouter = require('./routes/customer');
-var companyAdminRouter = require('./routes/companyadmin');
+var companyUserRouter = require('./routes/companyuser');
 
 var app = express();
 
@@ -23,7 +23,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/customer', customerRouter);
-app.use('/companyadmin', companyAdminRouter);
+app.use('/companyuser', companyUserRouter);
 
 app.get('/*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');

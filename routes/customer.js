@@ -12,6 +12,7 @@ var categoryMasterSchema = require('../model/categorymaster');
 var companyMasterSchema = require('../model/companymaster');
 var termnconditionSchema = require('../model/termncondition');
 var bannerSchema = require('../model/banner');
+var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
 
 var customerlocation = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,7 +27,7 @@ var customerlocation = multer.diskStorage({
 });
 var uploadcustomer = multer({ storage: customerlocation });
 
-/* GET home page. */
+/* APIS listing. */
 router.post('/customerSignUp', async function (req, res, next) {
   const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
   try {
@@ -179,31 +180,6 @@ router.post('/getTermNCondition', async function (req, res, next) {
   }
 });
 
-router.post('/getInventoryAndServiceListByCompanyId', async function (req, res, next) {
-  try {
-    const {companyId} = req.body;
-      let data = await companyInventoryMasterSchema.find({companyId:companyId});
-      let  datalist=[];
-      for (let i = 0; i < data.length; i++){
-          var serviceProviders = [];
-          if(data[i].multipleServiceProviderRequired == true){
-              serviceProviders = await companyServicesProviderSchema.find({inventoryId:data[i].id});
-          }
-          datalist.push({Inventory:data[i],serviceProviders:serviceProviders});
-      }
-      res
-          .status(200)
-          .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-
-  } catch (err) {
-      res.json({
-          Message: err.message,
-          Data: 0,
-          IsdSuccess: false,
-      });
-  }
-});
-
 router.post('/getCategoryMaster', async function (req, res, next) {
   try {
       let data = await categoryMasterSchema.find();
@@ -252,6 +228,26 @@ router.post('/updateCustomerPassword', async function (req, res, next) {
           .json({ Message: "PASSWORD CHANGED S Updated!", Data: data, IsSuccess: true });
   } catch (err) {
     res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/getSlot', async function(req, res, next) {
+  const { inventoryId, serviceProviderId} = req.body
+  try {
+      let data = await bookingSlotMasterSchema.find({ 
+          inventoryId:inventoryId,
+          $or:[{serviceProviderId:serviceProviderId}]
+       });
+      res
+          .status(200)
+          .json({ Message: "Slot Data!", Data: data, IsSuccess: true });
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
   }
 });
 
