@@ -169,7 +169,42 @@ app.controller('LoginController', function($scope, $http) {
             $scope.errormessages = "Invalid Username or Password!";
         }
     }
+
+    $scope.companyLoginData = function() {
+        window.location.href = "./companylogin.html";
+    }
+
 });
+
+app.controller('CompanyLoginController', function($scope, $http) {
+    $scope.IsAdmin = false;
+    $scope.errormessages = "Sign in to start your session";
+
+    $scope.companylogin = function() {
+        $http({
+            url: imageroute + "/admin/companylogin",
+            method: "POST",
+            cache: false,
+            data: {},
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.DataList = response.data.Data;
+
+                } else {
+                    $scope.DataList = [];
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
+    }
+    $scope.companylogin();
+
+});
+
 
 app.directive("fileInput", function($parse) {
     return {
