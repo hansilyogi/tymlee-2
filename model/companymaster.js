@@ -34,8 +34,7 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     phone:{
-        type:String,
-        required:true
+        type:String
     },
     fax:{
         type:String
@@ -47,16 +46,13 @@ var companyMasterSchema = new mongoose.Schema({
         type:String
     },
     adminEmail:{
-        type:String,
-        required:true
+        type:String
     },
     adminMobile:{
-        type:String,
-        required:true
+        type:String
     },
     adminPassword:{
-        type:String,
-        required:true
+        type:String
     },
     gstinNo:{
         type:String
@@ -88,35 +84,28 @@ var companyMasterSchema = new mongoose.Schema({
         }
     },
     companyType:{
-        type:String,
-        required:true
+        type:String
     },
     personName:{
-        type:String,
-        required:true
+        type:String
     },
     personPhoto:{
-        type:String,
-        default:null
+        type:String
     },
     aadharCard:{
-        type:String,
-        default:null
+        type:String
     },
     panCard:{
-        type:String,
-        default:null
+        type:String
     },
     cancelledCheque:{
-        type:String,
-        default:null
+        type:String
     },
     weekStartDay:{
         type:String
     },
     companyLogo:{
-        type:String,
-        default:null
+        type:String
     },
     cancellationPolicy:{
         type:String

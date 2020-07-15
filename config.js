@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-
-mongoose.connect(process.env.MONGODBURL,{
+console.log(process.env.MONGODBURL);
+mongoose.connect('mongodb+srv://timely:timely2015@cluster0.51it2.mongodb.net/timely',{
     useFindAndModify:false,
     useNewUrlParser:true,
     useUnifiedTopology:true

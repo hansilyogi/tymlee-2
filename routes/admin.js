@@ -522,6 +522,7 @@ router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
         companyHtmlPage,
         registrationValidUpto
     } = req.body;
+    console.log(req.body);
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
         let existCompany = await companyMasterSchema.find({ companyName: companyName });
@@ -573,10 +574,18 @@ router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
                 companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto
             });
-            companymaster.save();
-            res
+            var datas = await companymaster.save();
+            console.log(datas);
+            if(datas){
+                res
                 .status(200)
                 .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
+            }else{
+                res
+                .status(200)
+                .json({ Message: "Company Master Not Added!", Data: 0, IsSuccess: true });
+            }
+            
         }
 
     } catch (err) {
@@ -1072,7 +1081,7 @@ router.post('/getSlot', async function(req, res, next) {
         let data = await bookingSlotMasterSchema.find({ 
             companyId: companyId,inventoryId:inventoryId,
             $or:[{serviceProviderId:serviceProviderId}]
-         });
+         }).populate('inventoryId').populate('serviceProviderId');
         res
             .status(200)
             .json({ Message: "Slot Data!", Data: data, IsSuccess: true });
@@ -1087,7 +1096,7 @@ router.post('/getSlot', async function(req, res, next) {
 });
 
 router.post('/addSlot', async function(req, res, next) {
-    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, date, fromTime, toTime, appointmentCount, rate} = req.body;
+    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, fromTime, toTime, appointmentCount, rate} = req.body;
     try {
             if(serviceProviderId != null){
             var slot = new bookingSlotMasterSchema({
@@ -1097,7 +1106,6 @@ router.post('/addSlot', async function(req, res, next) {
                 serviceProviderId:serviceProviderId,
                 dayName: dayName,
                 slotName: slotName,
-                date:date,
                 fromTime: fromTime,
                 toTime:toTime,
                 appointmentCount:appointmentCount,

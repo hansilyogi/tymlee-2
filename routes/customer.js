@@ -232,12 +232,12 @@ router.post('/updateCustomerPassword', async function (req, res, next) {
 });
 
 router.post('/getSlot', async function(req, res, next) {
-  const { inventoryId, serviceProviderId} = req.body
+ const {  inventoryId, serviceProviderId} = req.body
   try {
       let data = await bookingSlotMasterSchema.find({ 
-          inventoryId:inventoryId,
-          $or:[{serviceProviderId:serviceProviderId}]
-       });
+        inventoryId:inventoryId,
+        $or:[{serviceProviderId:serviceProviderId}]
+       }).populate('inventoryId').populate('serviceProviderId');
       res
           .status(200)
           .json({ Message: "Slot Data!", Data: data, IsSuccess: true });

@@ -23,10 +23,6 @@ serviceProviderId:{
      type:String,
      required:true
  },
- date:{
-    type:Date,
-    required:true
- },
  fromTime:{
      type:String,
      required:true
