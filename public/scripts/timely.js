@@ -181,22 +181,56 @@ app.controller('CompanyLoginController', function($scope, $http) {
     $scope.errormessages = "Sign in to start your session";
 
     $scope.companylogin = function() {
+        var companyEmail = $scope.CompanyEmail;
+        var password = $scope.Password;
+        var companyCode = $scope.CompanyCode;
+        var datalist = {
+            adminEmail: companyEmail,
+            adminPassword: password,
+            role: "company",
+            companyCode: companyCode
+        }
         $http({
-            url: imageroute + "/admin/companylogin",
+            url: imageroute + "/admin/companySignIn",
             method: "POST",
             cache: false,
-            data: {},
+            data: datalist,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
-                if (response.data.Data.length >= 1) {
+                console.log(response.data);
+                if (response.data.Data.length == 1) {
                     $scope.DataList = response.data.Data;
+                    $scope.errorstyle = { color: "green" };
+                    $scope.errormessages = "User Authenticated Successfully";
+                    sessionStorage.setItem("SessionId", $scope.DataList.CompanyId);
+                    sessionStorage.setItem("Username", $scope.DataList.companyName);
+                    sessionStorage.setItem("Role", "company");
+
+                    var LoginUser = sessionStorage.getItem("SessionId");
+                    var LoginRole = sessionStorage.getItem("Role");
+                    var LoginName = sessionStorage.getItem("Username");
+
+                    if (LoginUser != null && LoginUser != undefined) {
+                        if (LoginRole == "Company") {
+                            $scope.CompanyId = LoginUser;
+                            $scope.LoginName = LoginName;
+                        } else {
+                            $scope.IsAdmin = true;
+                            $scope.LoginName = LoginName;
+                        }
+                    }
+
+                    window.location.href = "./#!/dashboard";
 
                 } else {
-                    $scope.DataList = [];
+                    console.log("Internal Server");
+                    $scope.IsAdmin = true;
+                    $scope.LoginName = LoginName;
                 }
             },
             function(error) {
+
                 console.log("Internal Server");
             }
         );
@@ -217,3 +251,20 @@ app.directive("fileInput", function($parse) {
         }
     }
 });
+
+// app.directive('fileModel', ['$parse', function($parse) {
+//     return {
+//         restrict: 'A',
+//         link: function(scope, element, attrs) {
+//             var model = $parse(attrs.fileModel);
+//             var modelSetter = model.assign;
+
+//             element.bind('change', function() {
+//                 scope.$apply(function() {̶
+//                     modelSetter(scope, element[0].files[0]);
+//                 });
+//             });
+
+//         }
+//     };
+// }]);

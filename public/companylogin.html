@@ -54,9 +54,17 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg" ng-style="errorstyle">{{errormessages}}</p>
 
-                <form ng-submit="login()">
+                <form ng-submit="companylogin()">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" ng-model="username">
+                        <input type="text" class="form-control" placeholder="Company Code" ng-model="CompanyCode">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-key"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Company Email" ng-model="CompanyEmail">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
