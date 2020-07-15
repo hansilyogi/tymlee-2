@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const { Timestamp } = require('mongodb');
 
-var bookingSlotMasterSchema = new mongoose.Schema({
+var bookingMasterSchema = new mongoose.Schema({
  _id: mongoose.Schema.Types.ObjectId,
  customerId:{
     type:mongoose.Types.ObjectId,
     ref:'customerMaster'
-}, 
+},   
 bookingDate:{
     type:Date,
     default:Date.now
@@ -31,6 +30,13 @@ serviceProviderId:{
     type:mongoose.Types.ObjectId,
     ref:'bookingSlotMaster'
  },
+ appointmentDate:{
+    type:Date,
+     default:Date.now
+ },
+ appointmentTime:{
+    type:String
+ },
  bookingForName:{
      type:String,
      required:true
@@ -46,49 +52,68 @@ serviceProviderId:{
      type:Boolean
  },
  amount:{
-     type:Number,
-     required:true
+     type:Number
  },
  serviceCharge:{
-     type:Number,
-     required:true
+     type:Number
  },
  totalAmt:{
-     type:Number,
-     required:true
+     type:Number
  },
  taxableValue:{
-     type:Number,
-     required:true
+     type:Number
  },
  cgstAmt:{
-     type:Number,
-     required:true
+     type:Number
  },
  sgstAmt:{
-     type:Number,
-     required:true
+     type:Number
  },
  igstAmt:{
-     type:Number,
-     required:true
- },
- payModeId:{
-     type:Number,
-     required:true
+     type:Number
  },
  payThrough:{
-     type:String,
-     required:true
+     type:String
  },
- cardNumber:{
-     type:String,
-     required:true
+ payDateTime:{
+     type:String
  },
- payThrough:{
-     type:String,
-     required:true
- }
+ transactionNo:{
+     type:String
+ },
+ billNo:{
+     type:String
+ },
+ billEmailed:{
+     type:Boolean
+ },
+ emailDateTime:{
+     type:Date
+ },
+ geoLocationArrival:{
+     type:Date
+ },
+ noShowTime:{
+     type:Date
+ },
+ customerReached:{
+    type:Date
+},
+serviceStartedTime:{
+    type:Date
+},
+serviceCompletedTime:{
+    type:Date
+},
+amtCollectedFromCustomer:{
+    type:Number
+},
+customerFeeback:{
+    type:String
+},
+customerRating:{
+    type:Number
+}
 });
 
-module.exports = mongoose.model('bookingSlotMaster',bookingSlotMasterSchema);
+module.exports = mongoose.model('bookingMaster',bookingMasterSchema);

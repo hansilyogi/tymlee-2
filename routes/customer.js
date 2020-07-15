@@ -13,6 +13,8 @@ var companyMasterSchema = require('../model/companymaster');
 var termnconditionSchema = require('../model/termncondition');
 var bannerSchema = require('../model/banner');
 var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
+var bookingMasterSchema = require('../model/booking');
+var companyTransactionSchema = require('../model/companytransaction');
 
 var customerlocation = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -234,13 +236,121 @@ router.post('/updateCustomerPassword', async function (req, res, next) {
 router.post('/getSlot', async function(req, res, next) {
  const {  inventoryId, serviceProviderId} = req.body
   try {
-      let data = await bookingSlotMasterSchema.find({ 
-        inventoryId:inventoryId,
-        $or:[{serviceProviderId:serviceProviderId}]
-       }).populate('inventoryId').populate('serviceProviderId');
-      res
-          .status(200)
-          .json({ Message: "Slot Data!", Data: data, IsSuccess: true });
+    let data = await companyInventoryMasterSchema.find({ inventoryId: inventoryId });
+    console.log(data)
+        let datalist = [];
+            var serviceProviders = [];
+            if (data.multipleServiceProviderRequired == true) {
+                serviceProviders = await companyServicesProviderSchema.find({ inventoryId: data.id});
+                var Slot = [];
+                if(serviceProviders.length == 1){
+                  Slot = await bookingSlotMasterSchema.find({ 
+                    inventoryId: data.id,
+                    serviceProviderId:serviceProviders.id
+                  });
+                }
+            }else{
+              var Slot = [];
+              Slot = await bookingSlotMasterSchema.find({ inventoryId: data.id});
+            }
+            datalist.push({ Inventory: data, serviceProviders: serviceProviders, Slot: Slot});
+        res
+            .status(200)
+            .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
+
+router.post('/addBookingMaster', async function(req, res, next) {
+  const {
+    customerId,
+    bookingDate,
+    orderNo,
+    companyId,
+    inventoryId,
+    serviceProviderId,
+    bookingSlotId,
+    appointmentDate,
+    appointmentTime,
+    bookingForName,
+    mobileNo,
+    specialRequest,
+    sendMeReminderMail,
+    amount,
+    serviceCharge,
+    totalAmt,
+    taxableValue,
+    cgstAmt,
+    sgstAmt,
+    igstAmt,
+    payThrough,
+    payDateTime,
+    transactionNo,
+    billNo,
+    billEmailed,
+    emailDateTime,
+    geoLocationArrival,
+    noShowTime,
+    customerReached,
+    serviceStartedTime,
+    serviceCompletedTime,
+    amtCollectedFromCustomer,
+    customerFeeback,
+    customerRating
+  } = req.body;
+  try {
+          var bookingMaster = new bookingMasterSchema({
+              _id: new config.mongoose.Types.ObjectId,
+              customerId: customerId,
+              bookingDate: bookingDate,
+              orderNo: orderNo,
+              companyId: companyId,
+              inventoryId: inventoryId,
+              serviceProviderId: serviceProviderId,
+              bookingSlotId: bookingSlotId,
+              appointmentDate: appointmentDate,
+              appointmentTime: appointmentTime,
+              bookingForName: bookingForName,
+              mobileNo: mobileNo,
+              specialRequest: specialRequest,
+              sendMeReminderMail: sendMeReminderMail,
+              amount: amount,
+              serviceCharge: serviceCharge,
+              totalAmt: totalAmt,
+              taxableValue: taxableValue,
+              cgstAmt: cgstAmt,
+              sgstAmt: sgstAmt,
+              igstAmt: igstAmt,
+              payThrough: payThrough,
+              payDateTime: payDateTime,
+              transactionNo: transactionNo,
+              billNo: billNo,
+              billEmailed:billEmailed,
+              emailDateTime: emailDateTime,
+              geoLocationArrival: geoLocationArrival,
+              noShowTime: noShowTime,
+              customerReached:customerReached,
+              serviceStartedTime: serviceStartedTime,
+              serviceCompletedTime: serviceCompletedTime,
+              amtCollectedFromCustomer: amtCollectedFromCustomer,
+              customerFeeback: customerFeeback,
+              customerRating: customerRating
+          });
+          var datas = await bookingMaster.save();
+          if(datas){
+              res
+              .status(200)
+              .json({ Message: "Booking Master Added!", Data: 1, IsSuccess: true });
+          }else{
+              res
+              .status(200)
+              .json({ Message: "Booking Master Not Added!", Data: 0, IsSuccess: true });
+          }
 
   } catch (err) {
       res.json({
@@ -250,5 +360,70 @@ router.post('/getSlot', async function(req, res, next) {
       });
   }
 });
+
+router.post('/addCompanyTransaction', async function(req, res, next) {
+  const {
+    companyId,
+    inventoryId,
+    transactionType,
+    transactionDate,
+    transactionMode,
+    drAmt,
+    crAmt,
+    remark,
+    entryTime,
+    entryBy
+  } = req.body;
+  try {
+          var companyTransaction = new companyTransactionSchema({
+              _id: new config.mongoose.Types.ObjectId,
+              companyId: companyId,
+              inventoryId: inventoryId,
+              transactionType: transactionType,
+              transactionDate: transactionDate,
+              transactionMode: transactionMode,
+              drAmt: drAmt,
+              crAmt: crAmt,
+              remark: remark,
+              entryTime: entryTime,
+              entryBy: entryBy
+          });
+          var datas = await companyTransaction.save();
+          if(datas){
+              res
+              .status(200)
+              .json({ Message: "Company Transaction Save!", Data: req.body, IsSuccess: true });
+          }else{
+              res
+              .status(200)
+              .json({ Message: "Company Transaction Not Save!", Data: 0, IsSuccess: true });
+          }
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
+
+router.post('/getBookingHistory', async function (req, res, next) {
+  try {
+      let data = await bookingMasterSchema.find();
+      res
+          .status(200)
+          .json({ Message: "Booking History Data!", Data: data, IsSuccess: true });
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
+
+
 
 module.exports = router;
