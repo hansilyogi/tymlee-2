@@ -20,6 +20,24 @@
             hide();
         }
     }, false);
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
+    function isAdminNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
 </script>
 <div class="AddCompanyController" style="padding:10px;">
     <!-- Content Header (Page header) -->
@@ -42,564 +60,296 @@
         <div class="col-12 col-sm-12">
             <div class="card card-body table-responsive">
                 <div class="col-sm-6">
-                    <h4>Add Company</h4>
+                    <h4 style="font-weight: bold;">Add Company</h4>
                 </div>
-
-                <div class="card-header p-0 border-bottom-0">
-                    <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#company-detail" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Company Detail</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#bank-detail" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Bank Details</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#id-proof" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Id Proof</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#login-detail" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Login Detail</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <form ng-submit="">
-                        <div class="tab-content" id="custom-tabs-four-tabContent">
-                            <div class="tab-pane fade show active" id="company-detail" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                                <div class="row">
-                                    <div class="col-md-3 ">
-                                        <div class="form-group">
-                                            <label>Business Category</label>
-                                            <select class="form-control form-control-sm" ng-init="" ng-model="BusinessCategoryId" required>
-                                        <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in BusinessCategoryList"
-                                                ng-selected="BusinessCategoryId == sel" value="{{sel}}">
-                                                {{sel.businessCategoryName}}</option>
-                                      </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Company Name</label>
-                                            <input type="text" style="text-transform: uppercase;" class="form-control form-control-sm" ng-model="CompanyName" required="" placeholder="Company Name" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Phone</label>
-                                            <input type="number" class="form-control form-control-sm" required="" maxlength="10" ng-model="Phone" placeholder="Phone" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Address 1</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="Address1" placeholder="Address 1" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Address 2</label>
-                                            <input type="text" class="form-control form-control-sm" ng-model="Address2" placeholder="Address 2" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Date Of Join</label>
-                                            <input type="date" class="form-control form-control-sm" required="" ng-model="DOJ" placeholder="DOJ" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>City</label>
-                                            <select class="form-control form-control-sm" ng-init="" ng-model="CityId" required>
-                                        <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in CityList"
-                                                ng-selected="CityId == sel" value="{{sel}}">
-                                                {{sel.cityName}}</option>
-                                      </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Zipcode</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="Zipcode" placeholder="Zipcode" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Map Location</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="MapLocation" placeholder="Map Location" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Company Type</label>
-                                            <select class="form-control form-control-sm" ng-init="" ng-model="CompanyType" required>
-                                        <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in MessageList"
-                                                ng-selected="CompanyType == sel" value="{{sel}}">
-                                                {{sel}}</option>
-                                      </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Person Name</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="PersonName" placeholder="Person Name" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Company Logo</label>
-                                            <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Fax</label>
-                                            <input type="text" class="form-control form-control-sm" ng-model="Fax" placeholder="Fax" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Url</label>
-                                            <input type="text" class="form-control form-control-sm" ng-model="Url" placeholder="Url" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="bank-detail" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank Name</label>
-                                            <input type="text" class="form-control form-control-sm" ng-model="BankName" required="" placeholder="Bank Name" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank Branch Name</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankBranchName" placeholder="Bank Branch Name" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank Address</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankAddress" placeholder="Bank Address" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank State</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankState" placeholder="Bank State" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank City</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankCity" placeholder="Bank City" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>City</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankCity" placeholder="Bank City" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank Account No</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankAccountNo" placeholder="Bank Account No" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Bank IFSC Code</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="BankIFSCCode" placeholder="Bank IFSC Code" autocomplete="off">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="id-proof" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Person Image</label>
-                                            <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Aadhar Card</label>
-                                            <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Pan Cards</label>
-                                            <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Cancelled Cheque</label>
-                                            <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Gstin No</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="GstinNo" placeholder="Gstin No" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Pancard No</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="PancardNo" placeholder="Pancard No" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="login-detail" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Support Email</label>
-                                            <input type="text" class="form-control form-control-sm" ng-model="SupportEmail" placeholder="Support Email" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Admin Email</label>
-                                            <input type="text" class="form-control form-control-sm" required="" ng-model="AdminEmail" placeholder="Admin Email" autocomplete="off">
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="form-group">
-                                                    <label>Admin Password</label>
-
-                                                    <input type="password" placeholder="Password" id="pwd" ng-model="AdminPassword" class="form-control form-control-sm" name="password" autocomplete="off" />
-
-
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <i class="fa fa-eye" id="eye" style="margin-top: 36px;"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Admin Mobile</label>
-                                            <input type="text" id=pass class="form-control form-control-sm" required="" ng-model="AdminMobile" placeholder="Admin Mobile" autocomplete="off">
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!-- <div class="col-12 col-sm-12">
-                    <div class="card card-body table-responsive" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
-                        <form ng-submit="">
-                            <div class="row">
-                                <div class="col-md-3 ">
-                                    <div class="form-group">
-                                        <label>Business Category</label>
-                                        <select class="form-control form-control-sm" ng-init="" ng-model="BusinessCategoryId" required>
+                <form ng-submit="submitCompany()">
+                    <div class="col-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-3 ">
+                                <div class="form-group">
+                                    <label>Business Category</label>
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="BusinessCategoryId" required>
                                     <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="sel in BusinessCategoryList"
                                             ng-selected="BusinessCategoryId == sel" value="{{sel}}">
                                             {{sel.businessCategoryName}}</option>
                                   </select>
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Company Name</label>
-                                        <input type="text" style="text-transform: uppercase;" class="form-control form-control-sm" ng-model="CompanyName" required="" placeholder="Company Name" autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    <input type="text" style="text-transform: lowercase;" class="form-control form-control-sm" ng-model="CompanyName" required="" placeholder="Company Name" autocomplete="off">
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Phone</label>
-                                        <input type="number" class="form-control form-control-sm" required="" maxlength="10" ng-model="Phone" placeholder="Phone" autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control form-control-sm" required="" onkeypress="return isNumber(event)" maxlength="10" ng-model="Phone" placeholder="Phone" autocomplete="off">
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Address 1</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="Address1" placeholder="Address 1" autocomplete="off">
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Address 1</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="Address1" placeholder="Address 1" autocomplete="off">
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Address 2</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="Address2" placeholder="Address 2" autocomplete="off">
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Address 2</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="Address2" placeholder="Address 2" autocomplete="off">
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Date Of Join</label>
-                                        <input type="date" class="form-control form-control-sm" required="" ng-model="DOJ" placeholder="DOJ" autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Date Of Join</label>
+                                    <input type="date" class="form-control form-control-sm" required="" ng-model="DOJ" placeholder="DOJ" autocomplete="off">
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>City</label>
-                                        <select class="form-control form-control-sm" ng-init="" ng-model="CityId" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="CityId" required>
                                     <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="sel in CityList"
                                             ng-selected="CityId == sel" value="{{sel}}">
                                             {{sel.cityName}}</option>
                                   </select>
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Zipcode</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="Zipcode" placeholder="Zipcode" autocomplete="off">
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Zipcode</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="Zipcode" placeholder="Zipcode" autocomplete="off">
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Map Location</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="MapLocation" placeholder="Map Location" autocomplete="off">
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Map Location</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="MapLocation" placeholder="Map Location" autocomplete="off">
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Company Type</label>
-                                        <select class="form-control form-control-sm" ng-init="" ng-model="CompanyType" required>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Type</label>
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="CompanyType" required>
                                     <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="sel in MessageList"
                                             ng-selected="CompanyType == sel" value="{{sel}}">
                                             {{sel}}</option>
                                   </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Person Name</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="PersonName" placeholder="Person Name" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Company Logo</label>
-                                        <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Fax</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="Fax" placeholder="Fax" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Url</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="Url" placeholder="Url" autocomplete="off">
-                                    </div>
                                 </div>
                             </div>
-                        </form>
-          
-                    </div>
-                </div> -->
-                <!-- <div class="col-sm-6">
-                    <h4>Bank Details</h4>
-                </div>
-                <div class="col-12 col-sm-12">
-                    <div class="card card-body table-responsive" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
-                        <form ng-submit="">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank Name</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="BankName" required="" placeholder="Bank Name" autocomplete="off">
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank Branch Name</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankBranchName" placeholder="Bank Branch Name" autocomplete="off">
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank Address</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankAddress" placeholder="Bank Address" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank State</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankState" placeholder="Bank State" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank City</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankCity" placeholder="Bank City" autocomplete="off">
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>City</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankCity" placeholder="Bank City" autocomplete="off">
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank Account No</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankAccountNo" placeholder="Bank Account No" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Bank IFSC Code</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="BankIFSCCode" placeholder="Bank IFSC Code" autocomplete="off">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                  
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <h4>Id Proof</h4>
-                </div>
-                <div class="col-12 col-sm-12">
-                    <div class="card card-body table-responsive" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
-                        <form ng-submit="">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Person Image</label>
-                                        <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Aadhar Card</label>
-                                        <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Pan Card</label>
-                                        <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cancelled Cheque</label>
-                                        <input type="file" class="btn-sm form-control-sm" file-input="files" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Gstin No</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="GstinNo" placeholder="Gstin No" autocomplete="off">
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Pancard No</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="PancardNo" placeholder="Pancard No" autocomplete="off">
-
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Person Name</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="PersonName" placeholder="Person Name" autocomplete="off">
                                 </div>
                             </div>
-                        </form>
-                    
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Logo</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="CompanyLogo">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Fax</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="Fax" placeholder="Fax" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Url</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="Url" placeholder="Url" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <h4>login Detail</h4>
-                </div>
-                <div class="col-12 col-sm-12">
-                    <div class="card card-body table-responsive" style="box-shadow: 1px 1px 1px rgba(0,0,0,.125), 0px 0px 8px rgba(0,0,0,.2);">
-                        <form ng-submit="">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Support Email</label>
-                                        <input type="text" class="form-control form-control-sm" ng-model="SupportEmail" placeholder="Support Email" autocomplete="off">
+                    <div class="col-sm-6" style="margin-top: 20px;">
+                        <h4 style="font-weight: bold;">Bank Details</h4>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank Name</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="BankName" required="" placeholder="Bank Name" autocomplete="off">
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Admin Email</label>
-                                        <input type="text" class="form-control form-control-sm" required="" ng-model="AdminEmail" placeholder="Admin Email" autocomplete="off">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank Branch Name</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankBranchName" placeholder="Bank Branch Name" autocomplete="off">
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <div class="form-group">
-                                                <label>Admin Password</label>
-                                                
-                                                <input type="password" placeholder="Password" id="pwd" ng-model="AdminPassword" class="form-control form-control-sm" name="password" autocomplete="off" />
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank Address</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankAddress" placeholder="Bank Address" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank State</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankState" placeholder="Bank State" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank City</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankCity" placeholder="Bank City" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank Account No</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankAccountNo" placeholder="Bank Account No" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bank IFSC Code</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="BankIFSCCode" placeholder="Bank IFSC Code" autocomplete="off">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-top: 20px;">
+                        <h4 style="font-weight: bold;">ID Proof</h4>
+                    </div>
+                    <div class="col-12 col-sm-12">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Person Image</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="PersonImage">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Aadhar Card</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="AadharCard">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Pan Card</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="PanCard">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cancelled Cheque</label>
+                                    <input type="file" class="btn-sm form-control-sm" file-input="CancelledCheque">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Gstin No</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="GstinNo" placeholder="Gstin No" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Pancard No</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="PancardNo" placeholder="Pancard No" autocomplete="off">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6" style="margin-top: 20px;">
+                        <h4 style="font-weight: bold;">login Detail</h4>
+                    </div>
+                    <div class="col-12 col-sm-12">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Support Email</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="SupportEmail" placeholder="Support Email" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Admin Email</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="AdminEmail" placeholder="Admin Email" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label>Admin Password</label>
+
+                                            <input type="password" placeholder="Password" id="pwd" ng-model="AdminPassword" class="form-control form-control-sm" name="password" autocomplete="off" />
 
 
-                                            </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label></label>
-                                                <i class="fa fa-eye" id="eye" style="margin-top: 36px;"></i>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label></label>
+                                            <i class="fa fa-eye" id="eye" style="margin-top: 36px;"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Admin Mobile</label>
-                                        <input type="text" id=pass class="form-control form-control-sm" required="" ng-model="AdminMobile" placeholder="Admin Mobile" autocomplete="off">
-
-                                    </div>
-                                </div>
-
                             </div>
-                        </form>
-                       
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Admin Mobile</label>
+                                    <input type="text" id=pass class="form-control form-control-sm" required="" onkeypress="return isAdminNumber(event)" ng-model="AdminMobile" placeholder="Admin Mobile" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Week Start Day</label>
+                                    <input type="date" class="form-control form-control-sm" ng-model="WeekStartDay" placeholder="WeekStartDay" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cancellation Policy</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="CancellationPolicy" placeholder="Cancellation Policy" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Company Html Page</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="CompanyHtmlPage" placeholder="Company Html Page" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>RegistrationValidUpto</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="RegistrationValidUpto" placeholder="Registration Valid Upto" autocomplete="off">
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div> -->
+                    <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
+                </form>
             </div>
         </div>
     </div>
