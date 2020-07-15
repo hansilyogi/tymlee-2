@@ -30,6 +30,8 @@
     <script src="scripts/controllers/vendor.js"></script>
     <script src="scripts/controllers/banner.js"></script>
     <script src="scripts/controllers/companyinventory.js"></script>
+    <script src="scripts/controllers/bookingslotmaster.js"></script>
+
 
 </head>
 
@@ -154,6 +156,13 @@
                                                     <i class="nav-icon fa fa-check-circle"></i>
 
                                                     <p>Add Company Inventory</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item" ng-hide="IsAdmin">
+                                                <a href="./bookingslotmaster" class="nav-link">
+                                                    <i class="nav-icon fa fa-clock"></i>
+
+                                                    <p>Add Booking Slot</p>
                                                 </a>
                                             </li>
                                         </ul>

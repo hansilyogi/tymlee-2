@@ -1,0 +1,180 @@
+<div class="BookingSlotMasterController" style="padding:10px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Add Booking Slot </h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Master</a></li>
+                        <li class="breadcrumb-item active">Add Booking Slot</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
+                                <i class="fa fa-plus"></i> &nbsp;Add Booking Slot 
+                              </button>
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Inventory Name</th>
+                                        <th>Category name</th>
+                                        <th>Service Provider Name</th>
+                                        <th>Day Name</th>
+                                        <th>SlotName</th>
+                                        <th>From Time</th>
+                                        <th>To Time</th>
+                                        <th>Appointment Count</th>
+                                        <th>Rate</th>
+                                        <th style="width: 40px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="data in DataList">
+                                        <td>{{$index+1}}</td>
+                                        <td>
+                                            <a ng-href="{{imageroute}}/{{data.businessIcon}}" target="_blank">
+                                                <img ng-src="{{imageroute}}/{{data.businessIcon}}" style="width: 100px;height: 100px;" />
+                                            </a>
+                                        </td>
+                                        <td>{{data.inventoryName}}</td>
+                                        <td>{{data.serviceProviderName}}</td>
+                                        <td>{{data.bookingAmt}}</td>
+                                        <td>{{data.dayName}}</td>
+                                        <td>{{data.slotName}}</td>
+                                        <td>{{data.fromTime}}%</td>
+                                        <td>{{data.toTime}}%</td>
+                                        <td>{{data.appointmentCount}}</td>
+                                        <td>₹{{data.rate}}</td>
+                                        <td width=10%>
+
+                                            <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
+                                        </button>
+
+                                            <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                        </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Business Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+                <form ng-submit="submitBusinessCategory()">
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in CompanyList"
+                                                ng-selected="CompanyId == sel" value="{{sel}}">
+                                                {{sel.companyName}}</option>
+                                      </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Inventory Name</label>
+                                    <select class="form-control form-control-sm" ng-model="InventoryId" ng-init="" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in InventoryList"
+                                                ng-selected="InventoryId == sel" value="{{sel}}">
+                                                {{sel.inventoryName}}</option>
+                                      </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-hide="Multiple()">
+                                <div class="form-group">
+                                    <label>Service Provider Name</label>
+                                    <select class="form-control form-control-sm" ng-model="ServiceProviderId" ng-init="" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in ServiceProviderList"
+                                                ng-selected="ServiceProviderId == sel" value="{{sel}}">
+                                                {{sel.serviceProviderName}}</option>
+                                      </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Day Name</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="DayName" placeholder="Monday" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Slot Name</label>
+                                    <input type="text" class="form-control form-control-sm" required="" ng-model="SlotName" placeholder="Slot Name" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>From Time</label>
+                                    <input type="time" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="9" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>To Time</label>
+                                    <input type="time" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="9" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Appointment Count</label>
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="AppointmentCount" placeholder="Appointment Count" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Rate/ Price</label><br>
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="Rate" placeholder="Rate/ Price" autocomplete="off">
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

@@ -15,7 +15,7 @@ var adminLoginSchema = require('../model/adminlogin');
 var companyInventoryMasterSchema = require('../model/companyinventorymaster');
 var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var termnconditionSchema = require('../model/termncondition');
-var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
+var bookingSlotMasterSchema = require('../model/bookingslotmaster');
 
 config = require('../config');
 
@@ -128,10 +128,10 @@ router.post("/adminSignIn", async function(req, res, next) {
 });
 
 router.post("/companySignIn", async function(req, res, next) {
-    const { adminEmail, adminPassword, role,companyCode } = req.body;
+    const { adminEmail, adminPassword, companyCode } = req.body;
     try {
         let company = await companyMasterSchema.find({
-            companyCode:companyCode,
+            companyCode: companyCode,
             adminEmail: adminEmail,
             adminPassword: adminPassword,
             active: true,
@@ -576,16 +576,16 @@ router.post('/addCompanyMaster', fieldset, async function(req, res, next) {
             });
             var datas = await companymaster.save();
             console.log(datas);
-            if(datas){
+            if (datas) {
                 res
-                .status(200)
-                .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
-            }else{
+                    .status(200)
+                    .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
+            } else {
                 res
-                .status(200)
-                .json({ Message: "Company Master Not Added!", Data: 0, IsSuccess: true });
+                    .status(200)
+                    .json({ Message: "Company Master Not Added!", Data: 0, IsSuccess: true });
             }
-            
+
         }
 
     } catch (err) {
@@ -737,7 +737,7 @@ router.post('/getCompanyMaster', async function(req, res, next) {
             IsdSuccess: false,
         });
     }
-});                                                                                                            
+});
 
 router.post('/deleteCompanyMaster', async function(req, res, next) {
     try {
@@ -1076,12 +1076,13 @@ router.post('/deleteTermNCondition', async function(req, res, next) {
 });
 
 router.post('/getSlot', async function(req, res, next) {
-    const {companyId, inventoryId, serviceProviderId} = req.body
+    const { companyId, inventoryId, serviceProviderId } = req.body
     try {
-        let data = await bookingSlotMasterSchema.find({ 
-            companyId: companyId,inventoryId:inventoryId,
-            $or:[{serviceProviderId:serviceProviderId}]
-         }).populate('inventoryId').populate('serviceProviderId');
+        let data = await bookingSlotMasterSchema.find({
+            companyId: companyId,
+            inventoryId: inventoryId,
+            $or: [{ serviceProviderId: serviceProviderId }]
+        }).populate('inventoryId').populate('serviceProviderId');
         res
             .status(200)
             .json({ Message: "Slot Data!", Data: data, IsSuccess: true });
@@ -1096,22 +1097,22 @@ router.post('/getSlot', async function(req, res, next) {
 });
 
 router.post('/addSlot', async function(req, res, next) {
-    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, fromTime, toTime, appointmentCount, rate} = req.body;
+    const { id, companyId, inventoryId, serviceProviderId, dayName, slotName, fromTime, toTime, appointmentCount, rate } = req.body;
     try {
-            if(serviceProviderId != null){
+        if (serviceProviderId != null) {
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId,
                 companyId: companyId,
                 inventoryId: inventoryId,
-                serviceProviderId:serviceProviderId,
+                serviceProviderId: serviceProviderId,
                 dayName: dayName,
                 slotName: slotName,
                 fromTime: fromTime,
-                toTime:toTime,
-                appointmentCount:appointmentCount,
-                rate:rate
+                toTime: toTime,
+                appointmentCount: appointmentCount,
+                rate: rate
             });
-        }else{
+        } else {
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId,
                 companyId: companyId,
@@ -1119,15 +1120,15 @@ router.post('/addSlot', async function(req, res, next) {
                 dayName: dayName,
                 slotName: slotName,
                 fromTime: fromTime,
-                toTime:toTime,
-                appointmentCount:appointmentCount,
-                rate:rate
+                toTime: toTime,
+                appointmentCount: appointmentCount,
+                rate: rate
             });
         }
-            slot.save();
+        slot.save();
         res
             .status(200)
-            .json({ Message: "Slot Added!", Data:1 , IsSuccess: true });
+            .json({ Message: "Slot Added!", Data: 1, IsSuccess: true });
 
     } catch {
         res.json({

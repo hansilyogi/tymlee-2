@@ -128,6 +128,17 @@ app.config(function($routeProvider, $locationProvider) {
             },
             templateUrl: "./pages/addcompanyinventory.html",
             controller: "AddCompanyInventoryController",
+        })
+        .when("/bookingslotmaster", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/bookingslotmaster.html",
+            controller: "BookingSlotMasterController",
         });
     $locationProvider.html5Mode({
         enabled: true,
@@ -187,7 +198,6 @@ app.controller('CompanyLoginController', function($scope, $http) {
         var datalist = {
             adminEmail: companyEmail,
             adminPassword: password,
-            role: "company",
             companyCode: companyCode
         }
 
@@ -236,7 +246,7 @@ app.controller('CompanyLoginController', function($scope, $http) {
             }
         );
     }
-    $scope.companylogin();
+
 
 });
 
