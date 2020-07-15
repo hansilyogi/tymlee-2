@@ -190,6 +190,7 @@ app.controller('CompanyLoginController', function($scope, $http) {
             role: "company",
             companyCode: companyCode
         }
+
         $http({
             url: imageroute + "/admin/companySignIn",
             method: "POST",
