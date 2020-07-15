@@ -71,7 +71,7 @@
                                     <select class="form-control form-control-sm" ng-init="" ng-model="BusinessCategoryId" required>
                                     <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="sel in BusinessCategoryList"
-                                            ng-selected="BusinessCategoryId == sel" value="{{sel}}">
+                                            ng-selected="BusinessCategoryId == sel" value="{{sel._id}}">
                                             {{sel.businessCategoryName}}</option>
                                   </select>
                                 </div>
@@ -115,7 +115,7 @@
                                     <select class="form-control form-control-sm" ng-init="" ng-model="CityId" required>
                                     <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="sel in CityList"
-                                            ng-selected="CityId == sel" value="{{sel}}">
+                                            ng-selected="CityId == sel" value="{{sel._id}}">
                                             {{sel.cityName}}</option>
                                   </select>
                                 </div>
@@ -244,7 +244,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Pan Card</label>
+                                    <label>Pan Cards</label>
                                     <input type="file" class="btn-sm form-control-sm" file-input="PanCard">
                                 </div>
                             </div>
@@ -341,7 +341,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>RegistrationValidUpto</label>
-                                    <input type="text" class="form-control form-control-sm" ng-model="RegistrationValidUpto" placeholder="Registration Valid Upto" autocomplete="off">
+                                    <input type="date" class="form-control form-control-sm" ng-model="RegistrationValidUpto" placeholder="Registration Valid Upto" autocomplete="off">
 
                                 </div>
                             </div>
