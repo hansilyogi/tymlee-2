@@ -21,9 +21,49 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
-                                <i class="fa fa-plus"></i> &nbsp;Add Booking Slot 
-                              </button>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-lg" ng-click="Clear()">
+                                        <i class="fa fa-plus"></i> &nbsp;Add Booking Slot 
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Company Name</label>
+                                        <select class="form-control form-control-sm" ng-change="GetInventory()" ng-model="CompanyId" ng-init="" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in CompanyList"
+                                                ng-selected="CompanyId == sel" value="{{sel._id}}">
+                                                {{sel.companyName}}</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Inventory Name</label>
+                                        <select class="form-control form-control-sm" ng-model="InventoryId" ng-init="" required>
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="sel in InventoryList"
+                                                    ng-selected="InventoryId == sel" value="{{sel._id}}">
+                                                    {{sel.Inventory.inventoryName}}</option>
+                                          </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" ng-show="serviceProviderDataList">
+                                    <div class="form-group">
+                                        <label>Service Provider Name</label>
+                                        <select class="form-control form-control-sm" ng-change="GetBookingSlot()" ng-model="ServiceProviderId" ng-init="" required>
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="sel in InventoryList"
+                                                    ng-selected="ServiceProviderId == sel" value="{{sel._id}}">
+                                                    {{sel.serviceProviders['0'].serviceProviderName}}</option>
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-body table-responsive">
@@ -56,14 +96,11 @@
                                         <td>{{data.bookingAmt}}</td>
                                         <td>{{data.dayName}}</td>
                                         <td>{{data.slotName}}</td>
-                                        <td>{{data.fromTime}}%</td>
-                                        <td>{{data.toTime}}%</td>
+                                        <td>{{data.fromTime}}</td>
+                                        <td>{{data.toTime}}</td>
                                         <td>{{data.appointmentCount}}</td>
                                         <td>₹{{data.rate}}</td>
                                         <td width=10%>
-
-                                            <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
-                                        </button>
 
                                             <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                         </button>
@@ -83,22 +120,22 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-lg">Business Category</h4>
+                    <h4 class="modal-title text-lg">Booking Slot</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
-                <form ng-submit="submitBusinessCategory()">
+                <form ng-submit="submitbookingslot()">
                     <div class="modal-body">
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-change="GetInventory()" ng-model="CompanyId" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in CompanyList"
-                                                ng-selected="CompanyId == sel" value="{{sel}}">
+                                                ng-selected="CompanyId == sel" value="{{sel._id}}">
                                                 {{sel.companyName}}</option>
                                       </select>
                                 </div>
@@ -109,19 +146,19 @@
                                     <select class="form-control form-control-sm" ng-model="InventoryId" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in InventoryList"
-                                                ng-selected="InventoryId == sel" value="{{sel}}">
-                                                {{sel.inventoryName}}</option>
+                                                ng-selected="InventoryId == sel" value="{{sel._id}}">
+                                                {{sel.Inventory.inventoryName}}</option>
                                       </select>
                                 </div>
                             </div>
-                            <div class="col-md-6" ng-hide="Multiple()">
+                            <div class="col-md-6" ng-show="serviceProviderDataList">
                                 <div class="form-group">
                                     <label>Service Provider Name</label>
-                                    <select class="form-control form-control-sm" ng-model="ServiceProviderId" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-change="GetBookingSlot" ng-model="ServiceProviderId" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in ServiceProviderList"
-                                                ng-selected="ServiceProviderId == sel" value="{{sel}}">
-                                                {{sel.serviceProviderName}}</option>
+                                            <option ng-repeat="sel in InventoryList"
+                                                ng-selected="ServiceProviderId == sel" value="{{sel._id}}">
+                                                {{sel.serviceProviders['0'].serviceProviderName}}</option>
                                       </select>
                                 </div>
                             </div>
