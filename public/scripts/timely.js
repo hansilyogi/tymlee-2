@@ -174,7 +174,7 @@ app.controller('LoginController', function($scope, $http) {
                 }
             }
 
-            window.location.href = "./#!/dashboard";
+            window.location.href = "/dashboard";
         } else {
             $scope.errorstyle = { color: "red" };
             $scope.errormessages = "Invalid Username or Password!";
@@ -211,10 +211,10 @@ app.controller('CompanyLoginController', function($scope, $http) {
             function(response) {
                 console.log(response.data);
                 if (response.data.Data.length == 1) {
-                    $scope.DataList = response.data.Data;
+                    $scope.DataList = response.data.Data[0];
                     $scope.errorstyle = { color: "green" };
                     $scope.errormessages = "User Authenticated Successfully";
-                    sessionStorage.setItem("SessionId", $scope.DataList.CompanyId);
+                    sessionStorage.setItem("SessionId", $scope.DataList._id);
                     sessionStorage.setItem("Username", $scope.DataList.companyName);
                     sessionStorage.setItem("Role", "company");
 
@@ -235,7 +235,7 @@ app.controller('CompanyLoginController', function($scope, $http) {
                     window.location.href = "./#!/dashboard";
 
                 } else {
-                    console.log("Internal Server");
+
                     $scope.IsAdmin = true;
                     $scope.LoginName = LoginName;
                 }

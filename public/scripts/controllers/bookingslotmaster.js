@@ -4,6 +4,8 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.DataList = [];
     $scope.CompanyList = [];
     $scope.InventoryList = [];
+    $scope.serviceProviderDataList = false;
+    $scope.VisibleData = false;
     $scope.ServiceProviderList = [];
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
 
@@ -25,13 +27,15 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
     $scope.GetCompany();
 
     $scope.GetInventory = function() {
+        $scope.serviceProviderDataList = false;
+        $scope.VisibleData = false;
         var list = {
             companyId: $scope.CompanyId
         }
@@ -45,19 +49,12 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             function(response) {
                 if (response.data.Data.length >= 1) {
                     $scope.InventoryList = response.data.Data;
-                    if ($scope.InventoryList["0"].Inventory.multipleServiceProviderRequired == true) {
-                        $scope.serviceProviderDataList = true;
-                        console.log($scope.InventoryList["0"].serviceProviders["0"].serviceProviderName)
-                    } else {
-                        $scope.serviceProviderDataList = false;
-                    }
-
                 } else {
                     $scope.InventoryList = [];
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -87,7 +84,6 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                     alert("Booking Slot Saved!");
                     $("#modal-lg").modal("toggle");
                     $scope.GetBookingSlot();
-
                 } else {
                     $scope.btnsave = false;
                     alert("Unable to Save Booking Slot");
@@ -99,6 +95,49 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
 
+    }
+
+    $scope.ServiceProvider = function() {
+        console.log($scope.InventoryId);
+        $scope.ServiceProviderList = [];
+        for (let i = 0; i < $scope.InventoryList.length; i++) {
+            if ($scope.InventoryList[i].Inventory._id == $scope.InventoryId) {
+                if ($scope.InventoryList[i].Inventory.multipleServiceProviderRequired == true) {
+                    $scope.serviceProviderDataList = true;
+                    $scope.VisibleData = true;
+                    $scope.ServiceProviderList = $scope.InventoryList[i].serviceProviders;
+                } else {
+                    $scope.serviceProviderDataList = false;
+                    $scope.VisibleData = false;
+                }
+            }
+        }
+        console.log($scope.ServiceProviderList);
+
+
+        var list = {
+            companyId: $scope.CompanyId,
+            inventoryId: $scope.InventoryId,
+        }
+        $http({
+            url: imageroute + "/admin/getSlot",
+            method: "POST",
+            cache: false,
+            data: list,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.DataList = response.data.Data;
+
+                } else {
+                    $scope.DataList = [];
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
     }
 
     $scope.GetBookingSlot = function() {
@@ -123,7 +162,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -151,7 +190,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                     }
                 },
                 function(error) {
-                    console.log("Insternal Server");
+                    console.log("Internal Server");
                 }
             );
         }
