@@ -15,6 +15,8 @@ var bannerSchema = require('../model/banner');
 var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
 var bookingMasterSchema = require('../model/booking');
 var companyTransactionSchema = require('../model/companytransaction');
+const { CANCELLED } = require('dns');
+const { equal } = require('assert');
 
 var customerlocation = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -233,36 +235,39 @@ router.post('/updateCustomerPassword', async function (req, res, next) {
   }
 });
 
-router.post('/getSlot', async function(req, res, next) {
- const {  inventoryId, serviceProviderId} = req.body
-  try {
-    let data = await companyInventoryMasterSchema.find({ inventoryId: inventoryId });
-    console.log(data)
-        let datalist = [];
-            var serviceProviders = [];
-            if (data.multipleServiceProviderRequired == true) {
-                serviceProviders = await companyServicesProviderSchema.find({ inventoryId: data.id});
-                var Slot = [];
-                if(serviceProviders.length == 1){
-                  Slot = await bookingSlotMasterSchema.find({ 
-                    inventoryId: data.id,
-                    serviceProviderId:serviceProviders.id
-                  });
-                }
-            }else{
-              var Slot = [];
-              Slot = await bookingSlotMasterSchema.find({ inventoryId: data.id});
+router.post('/getSlotDetail', async function(req,res,next){
+ const { companyId, inventoryId, serviceProviderId} = req.body
+  try{
+        var data = await companyInventoryMasterSchema.findById({_id:inventoryId,companyId:companyId});
+        var datalist = [];
+        var slot = [];
+        if(data.length == 1){
+          if(data[0].multipleServiceProviderRequired == "true"){
+            var ServiceProvider = [];
+            var ServiceProvider = await companyServicesProviderSchema.findById({_id:serviceProviderId});
+            if(ServiceProvider.length == 1){
+              var slot = await bookingSlotMasterSchema.findById({inventoryId:inventoryId,serviceProviderId:serviceProviderId});
             }
-            datalist.push({ Inventory: data, serviceProviders: serviceProviders, Slot: Slot});
-        res
+          }
+        }else{
+              var slot = await bookingSlotMasterSchema.findById({inventoryId:inventoryId});
+        }
+        var dataa  = datalist.push({ Inventory: datalist, ServiceProvider: ServiceProvider, slot: slot});
+        if(dataa.length == 1){
+          res
             .status(200)
             .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-  } catch (err) {
-      res.json({
-          Message: err.message,
-          Data: 0,
-          IsdSuccess: false,
-      });
+        }else{
+          res
+            .status(200)
+            .json({ Message: "Data Not Found!", Data: 0, IsSuccess: false });
+        }
+  }catch (err) {
+    res.json({
+        Message: err.message,
+        Data: 0,
+        IsSuccess: false,
+    });
   }
 });
 
@@ -408,13 +413,51 @@ router.post('/addCompanyTransaction', async function(req, res, next) {
   }
 });
 
-router.post('/getBookingHistory', async function (req, res, next) {
-  try {
-      let data = await bookingMasterSchema.find();
-      res
-          .status(200)
-          .json({ Message: "Booking History Data!", Data: data, IsSuccess: true });
+router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
+   try {
+    const {customerId} = req.body;
+     let data = await bookingMasterSchema.find({ status: "pending" ,customerId:customerId});
+         let datalist = [];
+              var Complete = [];{
+                Complete = await bookingMasterSchema.find({ status: "complete" ,customerId:customerId});
+             }
+              var Cancelled = [];{
+                Cancelled = await bookingMasterSchema.find({ status: "cancelled",customerId:customerId });
+             }
+           var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled});
+          if(datas != "null"){
+            res
+             .status(200)
+             .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+          }else{
+            res
+              .status(200)
+              .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+            }
+   } catch (err) {
+       res.json({
+           Message: err.message,
+           Data: 0,
+           IsdSuccess: false,
+       });
+   }
+ });
 
+ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
+  try {
+    var  today = new Date();
+    const {customerId} = req.body;
+    var today = new Date();
+    let data = await bookingMasterSchema.find({ customerId:customerId, status: "pending", bookingDate:{$gte: today}});
+         if(data != "null"){
+           res
+            .status(200)
+            .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+         }else{
+           res
+             .status(200)
+             .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+           }
   } catch (err) {
       res.json({
           Message: err.message,
@@ -423,7 +466,6 @@ router.post('/getBookingHistory', async function (req, res, next) {
       });
   }
 });
-
 
 
 module.exports = router;

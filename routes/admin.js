@@ -1159,4 +1159,33 @@ router.post('/deleteSlot', async function(req, res, next) {
     }
 });
 
+router.post('/getBookingHistory', async function(req, res, next) {
+    try {
+      let data = await bookingMasterSchema.find({ status: "pending" });
+          let datalist = [];
+               var Complete = [];{
+                 Complete = await bookingMasterSchema.find({ status: "complete" });
+              }
+               var Cancelled = [];{
+                 Cancelled = await bookingMasterSchema.find({ status: "cancelled" });
+              }
+            var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled});
+           if(datas != "null"){
+             res
+              .status(200)
+              .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+           }else{
+             res
+               .status(200)
+               .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+             }
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
 module.exports = router;

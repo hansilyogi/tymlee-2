@@ -113,6 +113,10 @@ customerFeeback:{
 },
 customerRating:{
     type:Number
+},
+status:{
+    type:String,
+    default:"pending"
 }
 });
 
