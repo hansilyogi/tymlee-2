@@ -1162,13 +1162,13 @@ router.post('/deleteSlot', async function(req, res, next) {
 
 router.post('/getBookingHistory', async function(req, res, next) {
     try {
-        let data = await bookingMasterSchema.find({ status: "pending" });
+        let data = await bookingMasterSchema.find({ status: "pending" }).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
         let datalist = [];
         var Complete = []; {
-            Complete = await bookingMasterSchema.find({ status: "complete" });
+            Complete = await bookingMasterSchema.find({ status: "complete" }).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
         }
         var Cancelled = []; {
-            Cancelled = await bookingMasterSchema.find({ status: "cancelled" });
+            Cancelled = await bookingMasterSchema.find({ status: "cancelled" }).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
         }
         var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled });
         if (datas != "null") {

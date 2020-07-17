@@ -415,15 +415,15 @@ router.post('/addCompanyTransaction', async function(req, res, next) {
 router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
    try {
     const {customerId} = req.body;
-     let data = await bookingMasterSchema.find({ status: "pending" ,customerId:customerId});
+     let data = await bookingMasterSchema.find({ status: "pending" ,customerId:customerId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
          let datalist = [];
               var Complete = [];{
-                Complete = await bookingMasterSchema.find({ status: "complete" ,customerId:customerId});
+                Complete = await bookingMasterSchema.find({ status: "complete" ,customerId:customerId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
              }
               var Cancelled = [];{
-                Cancelled = await bookingMasterSchema.find({ status: "cancelled",customerId:customerId });
+                Cancelled = await bookingMasterSchema.find({ status: "cancelled",customerId:customerId }).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
              }
-           var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled});
+           var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
           if(datas != "null"){
             res
              .status(200)
