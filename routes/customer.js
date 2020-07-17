@@ -15,8 +15,7 @@ var bannerSchema = require('../model/banner');
 var bookingSlotMasterSchema =  require('../model/bookingslotmaster');
 var bookingMasterSchema = require('../model/booking');
 var companyTransactionSchema = require('../model/companytransaction');
-const { CANCELLED } = require('dns');
-const { equal } = require('assert');
+var feedbackSchema = require('../model/feedback');
 
 var customerlocation = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -443,7 +442,7 @@ router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
    }
  });
 
- router.post('/getUpcomingByCustomerID', async function(req, res, next) {
+router.post('/getUpcomingByCustomerID', async function(req, res, next) {
   try {
     var  today = new Date();
     const {customerId} = req.body;
@@ -467,5 +466,43 @@ router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
   }
 });
 
+router.post('/updateBookingCancel', async function (req, res, next) {
+  const { bookingId,customerId, orderNo , status } = req.body;
+  try {
+    let data = await bookingMasterSchema.find({_id:bookingId,customerId:customerId,orderNo:orderNo});
+    if(data.length == 1){
+      var dataa = {
+        status : status
+      };
+        let datas = await bookingMasterSchema.findByIdAndUpdate(bookingId, dataa);
+      }
+        res
+          .status(200)
+          .json({ Message: "Status Updated!", Data: data, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/addFeedback', async function(req, res, next) {
+  const {  customerId, message } = req.body;
+  try {
+         var feedback = new termnconditionSchema({
+              _id: new config.mongoose.Types.ObjectId,
+              customerId: customerId,
+              message: message
+          });
+          feedback.save();
+      res
+          .status(200)
+          .json({ Message: "Feedback Added!", Data: 1, IsSuccess: true });
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
+  }
+});
 
 module.exports = router;
