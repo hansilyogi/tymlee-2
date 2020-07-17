@@ -16,6 +16,7 @@ var companyInventoryMasterSchema = require('../model/companyinventorymaster');
 var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var termnconditionSchema = require('../model/termncondition');
 var bookingSlotMasterSchema = require('../model/bookingslotmaster');
+var bookingMasterSchema = require('../model/booking');
 
 config = require('../config');
 
@@ -989,22 +990,22 @@ router.post('/addInventoryAndServiceProvider', async function(req, res, next) {
 
 });
 
-router.post('/getInventoryAndServiceListByCompanyId', async function (req, res, next) {
+router.post('/getInventoryAndServiceListByCompanyId', async function(req, res, next) {
     try {
-      const {companyId} = req.body;
-        let data = await companyInventoryMasterSchema.find({companyId:companyId});
-        let  datalist=[];
-        for (let i = 0; i < data.length; i++){
+        const { companyId } = req.body;
+        let data = await companyInventoryMasterSchema.find({ companyId: companyId });
+        let datalist = [];
+        for (let i = 0; i < data.length; i++) {
             var serviceProviders = [];
-            if(data[i].multipleServiceProviderRequired == true){
-                serviceProviders = await companyServicesProviderSchema.find({inventoryId:data[i].id});
+            if (data[i].multipleServiceProviderRequired == true) {
+                serviceProviders = await companyServicesProviderSchema.find({ inventoryId: data[i].id });
             }
-            datalist.push({Inventory:data[i],serviceProviders:serviceProviders});
+            datalist.push({ Inventory: data[i], serviceProviders: serviceProviders });
         }
         res
             .status(200)
             .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-  
+
     } catch (err) {
         res.json({
             Message: err.message,
@@ -1118,7 +1119,7 @@ router.post('/addSlot', async function(req, res, next) {
                 _id: new config.mongoose.Types.ObjectId,
                 companyId: companyId,
                 inventoryId: inventoryId,
-                serviceProviderId:null,
+                serviceProviderId: null,
                 dayName: dayName,
                 slotName: slotName,
                 fromTime: fromTime,
@@ -1161,24 +1162,24 @@ router.post('/deleteSlot', async function(req, res, next) {
 
 router.post('/getBookingHistory', async function(req, res, next) {
     try {
-      let data = await bookingMasterSchema.find({ status: "pending" });
-          let datalist = [];
-               var Complete = [];{
-                 Complete = await bookingMasterSchema.find({ status: "complete" });
-              }
-               var Cancelled = [];{
-                 Cancelled = await bookingMasterSchema.find({ status: "cancelled" });
-              }
-            var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled});
-           if(datas != "null"){
-             res
-              .status(200)
-              .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-           }else{
-             res
-               .status(200)
-               .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
-             }
+        let data = await bookingMasterSchema.find({ status: "pending" });
+        let datalist = [];
+        var Complete = []; {
+            Complete = await bookingMasterSchema.find({ status: "complete" });
+        }
+        var Cancelled = []; {
+            Cancelled = await bookingMasterSchema.find({ status: "cancelled" });
+        }
+        var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled });
+        if (datas != "null") {
+            res
+                .status(200)
+                .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+        } else {
+            res
+                .status(200)
+                .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+        }
     } catch (err) {
         res.json({
             Message: err.message,

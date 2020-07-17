@@ -139,6 +139,17 @@ app.config(function($routeProvider, $locationProvider) {
             },
             templateUrl: "./pages/bookingslotmaster.html",
             controller: "BookingSlotMasterController",
+        })
+        .when("/bookinghistory", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/bookinghistory.html",
+            controller: "BookingHistoryController",
         });
     $locationProvider.html5Mode({
         enabled: true,
