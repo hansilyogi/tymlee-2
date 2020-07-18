@@ -346,7 +346,7 @@ router.post('/updateCategoryMaster', uploadbusinesscategory.single("businessIcon
 router.post('/deleteCategoryMaster', async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await categoryMasterSchema.findOneAndRemove(id);
+        let data = await categoryMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Category Master Deleted!", Data: 1, IsSuccess: true });

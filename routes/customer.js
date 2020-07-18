@@ -562,3 +562,4 @@ router.post('/getSlotDetail', async function(req, res, next) {
   }
 });
 module.exports = router;
+
