@@ -1189,4 +1189,44 @@ router.post('/getBookingHistory', async function(req, res, next) {
     }
 });
 
+router.post('/updateBookingCancel', async function (req, res, next) {
+    const { bookingId, status } = req.body;
+    try {
+      let data = await bookingMasterSchema.find({_id:bookingId});
+      if(data.length == 1){
+        var dataa = {
+          status : status
+        };
+          let datas = await bookingMasterSchema.findByIdAndUpdate(bookingId, dataa);
+        }
+          res
+            .status(200)
+            .json({ Message: "Status Updated!", Data: 1, IsSuccess: true });
+    } catch (err) {
+      res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+  });
+
+  router.post('/getCustomerByCompanyId', async function(req, res, next) {
+    const {companyId} = req.body;
+    try {
+        let data = await bookingMasterSchema.find({ companyId: companyId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
+        if (data != "null") {
+            res
+                .status(200)
+                .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+        } else {
+            res
+                .status(200)
+                .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+        }
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
 module.exports = router;

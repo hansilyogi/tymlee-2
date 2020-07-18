@@ -5,7 +5,9 @@ var path = require("path");
 var config = require('../config');
 // const bcrypt = require('bcrypt');
 var companyUserMasterSchema = require('../model/companyusermaster');
-
+var bookingMasterSchema = require('../model/booking');
+var companyInventoryMasterSchema = require('../model/companyinventorymaster');
+var companyServicesProviderSchema = require('../model/companyservicesprovider');
 
 /* APIS listing. */
 
@@ -113,6 +115,59 @@ router.post('/updateCompanyUserPassword', async function (req, res, next) {
         res
           .status(200)
           .json({ Message: "PASSWORD CHANGED  DONE !", Data: data, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/deactivatedAccount', async function (req, res, next) {
+  const { id  } = req.body;
+  try {
+    let data = await companyUserMasterSchema.find({_id:id});
+    if(data.length == 1){
+      var dataa = {isActive: "false"};
+        let datas = await companyUserMasterSchema.findByIdAndUpdate({_id:id}, dataa);
+      }
+        res
+          .status(200)
+          .json({ Message: "Deactivated Account!", Data: 1, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/updateFCMTokenById', async function (req, res, next) {
+  const { id,fcmToken } = req.body;
+  try {
+    let data = await companyUserMasterSchema.find({_id:id});
+    if(data.length == 1){
+      var dataa = {
+        fcmToken : fcmToken
+      };
+        let datas = await companyUserMasterSchema.findByIdAndUpdate(id, dataa);
+      }
+        res
+          .status(200)
+          .json({ Message: "FCMToken Updated!", Data: 1, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/viewFeedbackByOrderNo', async function (req, res, next) {
+  const { orderNo} = req.body;
+  try {
+    let data = await bookingMasterSchema.find({orderNo:orderNo});
+    if(data.length == 1){
+      res
+          .status(200)
+          .json({ Message: "View Feedback Detail !", Data: data, IsSuccess: true });
+      }else{
+        res
+        .status(200)
+        .json({ Message: "Error!", Data: 0, IsSuccess: true });
+      }
+        
   } catch (err) {
     res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
   }
