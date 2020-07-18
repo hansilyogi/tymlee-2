@@ -38,6 +38,37 @@ app.controller('BookingHistoryController', function($scope, $http) {
     }
     $scope.GetBookingHistory();
 
+    $scope.CancelOrder = function(id) {
+        console.log(id);
+        var json = {
+            "bookingId": id,
+            "status": "cancelled"
+        }
+        console.log(json);
+        $http({
+            url: imageroute + "/admin/updateBookingCancel",
+            method: "POST",
+            cache: false,
+            data: json,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data == 1) {
+                    alert("Order Cancel!");
+                    $scope.GetBookingHistory();
+                } else {
+                    $scope.DataList = [];
+                }
+            },
+            function(error) {
+                $scope.btnsave = false;
+                alert("Unable to Update");
+            }
+        );
+
+    }
+
+
     $scope.GetPendingOtherDetails = function(data) {
         $scope.GetPendingOtherDetailList = [];
         $scope.GetPendingOtherDetailList.push(data);

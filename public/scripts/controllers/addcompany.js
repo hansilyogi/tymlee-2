@@ -110,7 +110,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -133,7 +133,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -157,7 +157,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -180,7 +180,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log("Insternal Server");
+                console.log("Internal Server");
             }
         );
     }
@@ -207,7 +207,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                     }
                 },
                 function(error) {
-                    console.log("Insternal Server");
+                    console.log("Internal Server");
                 }
             );
         }

@@ -88,8 +88,8 @@
                                         <td>{{data.serviceProviderId.serviceProviderName}}</td>
                                         <td>{{data.dayName}}</td>
                                         <td>{{data.slotName}}</td>
-                                        <td>{{data.fromTime}}</td>
-                                        <td>{{data.toTime}}</td>
+                                        <td>{{data.fromTime | date: "dd/MM/yyyy"}}</td>
+                                        <td>{{data.toTime | date: "dd/MM/yyyy"}}</td>
                                         <td>{{data.appointmentCount}}</td>
                                         <td>₹{{data.rate}}</td>
                                         <td width=10%>
