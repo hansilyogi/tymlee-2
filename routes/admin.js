@@ -1205,19 +1205,38 @@ router.post('/updateBookingCancel', async function (req, res, next) {
     }
   });
 
-  router.post('/getCustomerByCompanyId', async function(req, res, next) {
-    const {companyId} = req.body;
+  router.post('/getVendorAndCustomerByCompanyId', async function(req, res, next) {
+    const {companyId , type} = req.body;
     try {
-        let data = await bookingMasterSchema.find({ companyId: companyId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
-        if (data != "null") {
+        if(type == "Customer"){
+            let data = await bookingMasterSchema.find({ companyId: companyId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
+                if (data != "null") {
+                    res
+                        .status(200)
+                        .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+                } else {
+                    res
+                        .status(200)
+                        .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
+                }
+        } 
+        else if(type == "Vendor"){
+            let data = await companyUserMasterSchema.find({ companyId: companyId });
+            if (data != "null") {
+                res
+                    .status(200)
+                    .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+            } else {
+                res
+                    .status(200)
+                    .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
+            }
+        }else{
             res
-                .status(200)
-                .json({ Message: "Data Found!", Data: data, IsSuccess: true });
-        } else {
-            res
-                .status(200)
-                .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+               .status(200)
+               .json({ Message: "Invalid Data ", Data: 0, IsSuccess: true });
         }
+        
     } catch (err) {
         res.json({
             Message: err.message,

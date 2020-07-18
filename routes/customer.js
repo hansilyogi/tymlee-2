@@ -234,42 +234,6 @@ router.post('/updateCustomerPassword', async function (req, res, next) {
   }
 });
 
-router.post('/getSlotDetail', async function(req,res,next){
- const { companyId, inventoryId, serviceProviderId} = req.body
-  try{
-        var data = await companyInventoryMasterSchema.findById({_id:inventoryId,companyId:companyId});
-        var datalist = [];
-        var slot = [];
-        if(data.length == 1){
-          if(data[0].multipleServiceProviderRequired == "true"){
-            var ServiceProvider = [];
-            var ServiceProvider = await companyServicesProviderSchema.findById({_id:serviceProviderId});
-            if(ServiceProvider.length == 1){
-              var slot = await bookingSlotMasterSchema.findById({inventoryId:inventoryId,serviceProviderId:serviceProviderId});
-            }
-          }
-        }else{
-              var slot = await bookingSlotMasterSchema.findById({inventoryId:inventoryId});
-        }
-        var dataa  = datalist.push({ Inventory: datalist, ServiceProvider: ServiceProvider, slot: slot});
-        if(dataa.length == 1){
-          res
-            .status(200)
-            .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-        }else{
-          res
-            .status(200)
-            .json({ Message: "Data Not Found!", Data: 0, IsSuccess: false });
-        }
-  }catch (err) {
-    res.json({
-        Message: err.message,
-        Data: 0,
-        IsSuccess: false,
-    });
-  }
-});
-
 router.post('/addBookingMaster', async function(req, res, next) {
   const {
     customerId,
@@ -467,9 +431,9 @@ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
 });
 
 router.post('/updateBookingCancel', async function (req, res, next) {
-  const { bookingId,customerId, orderNo , status } = req.body;
+  const { bookingId, orderNo , status } = req.body;
   try {
-    let data = await bookingMasterSchema.find({_id:bookingId,customerId:customerId,orderNo:orderNo});
+    let data = await bookingMasterSchema.find({_id:bookingId,orderNo:orderNo});
     if(data.length == 1){
       var dataa = {
         status : status
@@ -558,6 +522,43 @@ router.post('/getbillDetailByOrderNo', async function (req, res, next) {
         
   } catch (err) {
     res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/getSlotDetail', async function(req, res, next) {
+  try {
+      const { companyId,inventoryId,serviceProviderId } = req.body;
+      let data = await companyInventoryMasterSchema.find({ companyId: companyId, _id:inventoryId });
+      let datalist = [];
+      if (data.length == 1) {
+          var serviceProviders = [];
+          if (data[0].multipleServiceProviderRequired == true) {
+              serviceProviders = await companyServicesProviderSchema.find({ inventoryId: inventoryId,_id:serviceProviderId });
+              if(serviceProviders.length == 1) {
+                var slot = await bookingSlotMasterSchema.find({
+                  companyId: companyId,
+                  inventoryId: inventoryId,
+                  serviceProviderId:serviceProviderId
+              })
+              }  
+          }else{
+              var slot = await bookingSlotMasterSchema.find({
+                  companyId: companyId,
+                  inventoryId: inventoryId
+              })
+          }
+          datalist.push({ Inventory: data[0], serviceProviders: serviceProviders, slot:slot});
+      }
+      res
+          .status(200)
+          .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+
+  } catch (err) {
+      res.json({
+          Message: err.message,
+          Data: 0,
+          IsdSuccess: false,
+      });
   }
 });
 module.exports = router;
