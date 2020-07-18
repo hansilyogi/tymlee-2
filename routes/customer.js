@@ -415,13 +415,13 @@ router.post('/addCompanyTransaction', async function(req, res, next) {
 router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
    try {
     const {customerId} = req.body;
-     let data = await bookingMasterSchema.find({ status: "pending" ,customerId:customerId});
+     let data = await bookingMasterSchema.find({ status: "pending" ,customerId:customerId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
          let datalist = [];
               var Complete = [];{
-                Complete = await bookingMasterSchema.find({ status: "complete" ,customerId:customerId});
+                Complete = await bookingMasterSchema.find({ status: "complete" ,customerId:customerId}).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
              }
               var Cancelled = [];{
-                Cancelled = await bookingMasterSchema.find({ status: "cancelled",customerId:customerId });
+                Cancelled = await bookingMasterSchema.find({ status: "cancelled",customerId:customerId }).populate('companyId').populate('inventoryId').populate('serviceProviderId').populate('customerId');
              }
            var datas = await datalist.push({ Pending: data, Complete: Complete, Cancelled: Cancelled});
           if(datas != "null"){
@@ -478,7 +478,7 @@ router.post('/updateBookingCancel', async function (req, res, next) {
       }
         res
           .status(200)
-          .json({ Message: "Status Updated!", Data: data, IsSuccess: true });
+          .json({ Message: "Status Updated!", Data: 1, IsSuccess: true });
   } catch (err) {
     res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
   }
@@ -505,4 +505,59 @@ router.post('/addFeedback', async function(req, res, next) {
   }
 });
 
+router.post('/updateFCMTokenById', async function (req, res, next) {
+  const { id,fcmToken } = req.body;
+  try {
+    let data = await customerMasterSchema.find({_id:id});
+    if(data.length == 1){
+      var dataa = {
+        fcmToken : fcmToken
+      };
+        let datas = await customerMasterSchema.findByIdAndUpdate(id, dataa);
+      }
+        res
+          .status(200)
+          .json({ Message: "FCMToken Updated!", Data: 1, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/updateFeedbackByOrderNo', async function (req, res, next) {
+  const { orderNo,customerFeeback,customerRating } = req.body;
+  try {
+    let data = await bookingMasterSchema.find({orderNo:orderNo});
+    if(data.length == 1){
+      var dataa = {
+        customerFeeback : customerFeeback,
+        customerRating:customerRating
+      };
+        let datas = await bookingMasterSchema.findOneAndUpdate({orderNo:orderNo}, dataa);
+      }
+        res
+          .status(200)
+          .json({ Message: "Feedback Updated!", Data: 1, IsSuccess: true });
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post('/getbillDetailByOrderNo', async function (req, res, next) {
+  const { orderNo} = req.body;
+  try {
+    let data = await bookingMasterSchema.find({orderNo:orderNo});
+    if(data.length == 1){
+      res
+          .status(200)
+          .json({ Message: "Bill Detail !", Data: data, IsSuccess: true });
+      }else{
+        res
+        .status(200)
+        .json({ Message: "Error!", Data: 0, IsSuccess: true });
+      }
+        
+  } catch (err) {
+    res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
 module.exports = router;

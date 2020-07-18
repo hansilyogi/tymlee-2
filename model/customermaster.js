@@ -63,6 +63,9 @@ var customerMasterSchema = new mongoose.Schema({
     },
     image:{
         type:String
+    },
+    fcmToken:{
+        type:String
     }
 
 });
