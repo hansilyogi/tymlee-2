@@ -79,12 +79,15 @@ app.controller('VendorController', function($scope, $http) {
 
     }
 
-    $scope.GetVendor = function(companyId) {
+    $scope.GetVendor = function() {
+        var list = {
+            companyId: $scope.CompanyId
+        }
         $http({
-            url: imageroute + "/admin/getCompanyUserMaster?companyId=" + companyId,
+            url: imageroute + "/admin/getCompanyUserMaster",
             method: "POST",
             cache: false,
-            data: {},
+            data: list,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {

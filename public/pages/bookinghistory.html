@@ -44,32 +44,33 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Order No</th>
-                                            <th>Company Name</th>
+                                            <th>bookingForName</th>
                                             <th>Inventory Name</th>
                                             <th>Service Provider Name</th>
                                             <th>Booking Date</th>
                                             <th>Appointment Date</th>
                                             <th>Appointment Time</th>
-                                            <th>bookingForName</th>
                                             <th>mobileNo</th>
                                             <th style="width: 40px">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="data in DataList">
+                                        <tr ng-repeat="data in PendingList">
                                             <td>{{$index+1}}</td>
-                                            <td>{{data.Pending[0].orderNo}}</td>
-                                            <td>{{data.Pending[0].companyName}}</td>
-                                            <td>{{data.Pending[0].inventoryName}}</td>
-                                            <td>{{data.Pending[0].serviceProviderName}}</td>
-                                            <td>{{data.Pending[0].bookingDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Pending[0].appointmentDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Pending[0].appointmentTime}}</td>
-                                            <td>{{data.Pending[0].bookingForName}}</td>
-                                            <td>{{data.Pending[0].mobileNo}}</td>
+                                            <td>{{data.orderNo}}</td>
+                                            <td>{{data.bookingForName}}</td>
+                                            <td>{{data.inventoryName}}</td>
+                                            <td>{{data.serviceProviderName}}</td>
+                                            <td>{{data.bookingDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentTime}}</td>
+                                            <td>{{data.mobileNo}}</td>
                                             <td width=10%>
 
                                                 <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                            </button>
+
+                                                <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Details" ng-click="GetPendingOtherDetails(data)" data-toggle="modal" data-target="#modal-lg"><i class="fa fa-user-plus"></i>
                                             </button>
                                             </td>
                                         </tr>
@@ -77,77 +78,81 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Order No</th>
-                                            <th>Company Name</th>
+                                            <th>bookingForName</th>
                                             <th>Inventory Name</th>
                                             <th>Service Provider Name</th>
                                             <th>Booking Date</th>
                                             <th>Appointment Date</th>
                                             <th>Appointment Time</th>
-                                            <th>bookingForName</th>
                                             <th>mobileNo</th>
                                             <th style="width: 40px">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="data in DataList">
+                                        <tr ng-repeat="data in CompletedList">
                                             <td>{{$index+1}}</td>
-                                            <td>{{data.Complete[0].orderNo}}</td>
-                                            <td>{{data.Complete[0].companyName}}</td>
-                                            <td>{{data.Complete[0].inventoryName}}</td>
-                                            <td>{{data.Complete[0].serviceProviderName}}</td>
-                                            <td>{{data.Complete[0].bookingDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Complete[0].appointmentDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Complete[0].appointmentTime}}</td>
-                                            <td>{{data.Complete[0].bookingForName}}</td>
-                                            <td>{{data.Complete[0].mobileNo}}</td>
+                                            <td>{{data.orderNo}}</td>
+                                            <td>{{data.bookingForName}}</td>
+                                            <td>{{data.inventoryName}}</td>
+                                            <td>{{data.serviceProviderName}}</td>
+                                            <td>{{data.bookingDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentTime}}</td>
+                                            <td>{{data.mobileNo}}</td>
                                             <td width=10%>
 
                                                 <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                             </button>
+                                                <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Completed Details" ng-click="GetCompletedOtherDetails(data)" data-toggle="modal" data-target="#modalComplete-lg"><i class="fa fa-user-plus"></i>
+                                            </button>
+
                                             </td>
                                         </tr>
 
                                     </tbody>
                                 </table>
                             </div>
+
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                 <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Order No</th>
-                                            <th>Company Name</th>
+                                            <th>bookingForName</th>
                                             <th>Inventory Name</th>
                                             <th>Service Provider Name</th>
                                             <th>Booking Date</th>
                                             <th>Appointment Date</th>
                                             <th>Appointment Time</th>
-                                            <th>bookingForName</th>
                                             <th>mobileNo</th>
                                             <th style="width: 40px">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="data in DataList">
+                                        <tr ng-repeat="data in CancelledList">
                                             <td>{{$index+1}}</td>
-                                            <td>{{data.Cancelled[0].orderNo}}</td>
-                                            <td>{{data.Cancelled[0].companyName}}</td>
-                                            <td>{{data.Cancelled[0].inventoryName}}</td>
-                                            <td>{{data.Cancelled[0].serviceProviderName}}</td>
-                                            <td>{{data.Cancelled[0].bookingDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Cancelled[0].appointmentDate | date: "dd/MM/yyyy"}}</td>
-                                            <td>{{data.Cancelled[0].appointmentTime}}</td>
-                                            <td>{{data.Cancelled[0].bookingForName}}</td>
-                                            <td>{{data.Cancelled[0].mobileNo}}</td>
+                                            <td>{{data.orderNo}}</td>
+                                            <td>{{data.bookingForName}}</td>
+                                            <td>{{data.inventoryName}}</td>
+                                            <td>{{data.serviceProviderName}}</td>
+                                            <td>{{data.bookingDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentDate | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.appointmentTime}}</td>
+                                            <td>{{data.mobileNo}}</td>
                                             <td width=10%>
 
                                                 <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                            </button>
+
+                                                <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Cancelled Details" ng-click="GetCancelledOtherDetails(data)" data-toggle="modal" data-target="#modalCancelled-lg"><i class="fa fa-user-plus"></i>
                                             </button>
                                             </td>
                                         </tr>
@@ -162,6 +167,351 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Other Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Amt Collected From Customer</th>
+                                            <th>Customer Feeback</th>
+                                            <th>Customer Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetPendingOtherDetailList">
+                                            <td>{{data.amtCollectedFromCustomer}}</td>
+                                            <td>{{data.customerFeeback}}</td>
+                                            <td>{{data.customerRating}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>CGST Amt</th>
+                                            <th>IGST Amt</th>
+                                            <td>SGST Amt</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetPendingOtherDetailList">
+                                            <td>{{data.cgstAmt}}</td>
+                                            <td>{{data.igstAmt}}</td>
+                                            <td>{{data.sgstAmt}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Reached</th>
+                                            <th>Email Date Time</th>
+                                            <th>Geo Location Arrival</th>
+                                            <th>No Show Time</th>
+                                            <th>Pay DateTime</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetPendingOtherDetailList">
+                                            <td>{{data.customerReached | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.emailDateTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.geoLocationArrival | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.noShowTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.payDateTime | date: "dd/MM/yyyy"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Pay Through</th>
+                                            <th>Service Charge</th>
+                                            <th>Service Started Time</th>
+                                            <th>Service Completed Time</th>
+                                            <th>Special Request</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetPendingOtherDetailList">
+                                            <td>{{data.payThrough}}</td>
+                                            <td>{{data.serviceCharge}}</td>
+                                            <td>{{data.serviceStartedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.serviceCompletedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.specialRequest}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th>Taxable Value </th>
+                                            <th>Total Amt</th>
+                                            <th>Transaction No</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetPendingOtherDetailList">
+                                            <td>{{data.taxableValue}}</td>
+                                            <td>{{data.totalAmt}}</td>
+                                            <td>{{data.transactionNo}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+    <div class="modal fade" id="modalComplete-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Other Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Amt Collected From Customer</th>
+                                            <th>Customer Feeback</th>
+                                            <th>Customer Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCompletedOtherDetailList">
+                                            <td>{{data.amtCollectedFromCustomer}}</td>
+                                            <td>{{data.customerFeeback}}</td>
+                                            <td>{{data.customerRating}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>CGST Amt</th>
+                                            <th>IGST Amt</th>
+                                            <td>SGST Amt</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCompletedOtherDetailList">
+                                            <td>{{data.cgstAmt}}</td>
+                                            <td>{{data.igstAmt}}</td>
+                                            <td>{{data.sgstAmt}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Reached</th>
+                                            <th>Email Date Time</th>
+                                            <th>Geo Location Arrival</th>
+                                            <th>No Show Time</th>
+                                            <th>Pay DateTime</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCompletedOtherDetailList">
+                                            <td>{{data.customerReached | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.emailDateTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.geoLocationArrival | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.noShowTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.payDateTime | date: "dd/MM/yyyy"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Pay Through</th>
+                                            <th>Service Charge</th>
+                                            <th>Service Started Time</th>
+                                            <th>Service Completed Time</th>
+                                            <th>Special Request</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCompletedOtherDetailList">
+                                            <td>{{data.payThrough}}</td>
+                                            <td>{{data.serviceCharge}}</td>
+                                            <td>{{data.serviceStartedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.serviceCompletedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.specialRequest}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th>Taxable Value </th>
+                                            <th>Total Amt</th>
+                                            <th>Transaction No</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCompletedOtherDetailList">
+                                            <td>{{data.taxableValue}}</td>
+                                            <td>{{data.totalAmt}}</td>
+                                            <td>{{data.transactionNo}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+    <div class="modal fade" id="modalCancelled-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Other Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Amt Collected From Customer</th>
+                                            <th>Customer Feeback</th>
+                                            <th>Customer Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCancelledOtherDetailList">
+                                            <td>{{data.amtCollectedFromCustomer}}</td>
+                                            <td>{{data.customerFeeback}}</td>
+                                            <td>{{data.customerRating}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>CGST Amt</th>
+                                            <th>IGST Amt</th>
+                                            <td>SGST Amt</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCancelledOtherDetailList">
+                                            <td>{{data.cgstAmt}}</td>
+                                            <td>{{data.igstAmt}}</td>
+                                            <td>{{data.sgstAmt}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer Reached</th>
+                                            <th>Email Date Time</th>
+                                            <th>Geo Location Arrival</th>
+                                            <th>No Show Time</th>
+                                            <th>Pay DateTime</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCancelledOtherDetailList">
+                                            <td>{{data.customerReached | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.emailDateTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.geoLocationArrival | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.noShowTime | date: "dd/MM/yyyy"}}</td>
+                                            <td>{{data.payDateTime | date: "dd/MM/yyyy"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Pay Through</th>
+                                            <th>Service Charge</th>
+                                            <th>Service Started Time</th>
+                                            <th>Service Completed Time</th>
+                                            <th>Special Request</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCancelledOtherDetailList">
+                                            <td>{{data.payThrough}}</td>
+                                            <td>{{data.serviceCharge}}</td>
+                                            <td>{{data.serviceStartedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.serviceCompletedTime | date: "dd/MM/yyyy "}}</td>
+                                            <td>{{data.specialRequest}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th>Taxable Value </th>
+                                            <th>Total Amt</th>
+                                            <th>Transaction No</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in GetCancelledOtherDetailList">
+                                            <td>{{data.taxableValue}}</td>
+                                            <td>{{data.totalAmt}}</td>
+                                            <td>{{data.transactionNo}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
     </div>
 
 </div>

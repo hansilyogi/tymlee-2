@@ -3,6 +3,8 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.Id = "0";
     $scope.DataList = [];
     $scope.BusinessCategoryList = [];
+    $scope.MemberShipType = [];
+    $scope.PayThrough = ['UPI', 'Credit Card', 'Debit Card', 'NetBanking'];
     $scope.MessageList = ['Prop', 'Patnership', 'Pvt.Ltd', 'LLp', 'LTD'];
     $scope.CityList = [];
     $scope.BankDataList = [];
@@ -136,6 +138,30 @@ app.controller('AddCompanyController', function($scope, $http) {
         );
     }
     $scope.GetCity();
+
+
+    $scope.GetMembershipType = function() {
+        $http({
+            url: imageroute + "/admin/MembershipType",
+            method: "POST",
+            cache: false,
+            data: {},
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.MemberShipType = response.data.Data;
+
+                } else {
+                    $scope.MemberShipType = [];
+                }
+            },
+            function(error) {
+                console.log("Insternal Server");
+            }
+        );
+    }
+    $scope.GetMembershipType();
 
     $scope.GetCompany = function() {
         $http({

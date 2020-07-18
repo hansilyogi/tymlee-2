@@ -84,13 +84,12 @@ var fieldset = finalstorage.fields([
 /* APIS listing. */
 
 router.post('/adminSignUp', async function(req, res, next) {
-    const { userName, password, role } = req.body;
+    const { userName, password } = req.body;
     try {
         let newadmin = new adminLoginSchema({
             _id: new config.mongoose.Types.ObjectId(),
             userName: userName,
-            password: password,
-            role: role,
+            password: password
         });
         newadmin.save();
         res
@@ -102,12 +101,11 @@ router.post('/adminSignUp', async function(req, res, next) {
 });
 
 router.post("/adminSignIn", async function(req, res, next) {
-    const { userName, password, role } = req.body;
+    const { userName, password } = req.body;
     try {
         let admin = await adminLoginSchema.find({
             userName: userName,
             password: password,
-            role: role,
             isActive: true,
         });
         if (admin.length == 1) {

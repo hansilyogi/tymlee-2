@@ -2,6 +2,9 @@ app.controller('BookingHistoryController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
+    $scope.PendingList = [];
+    $scope.CompletedList = [];
+    $scope.CancelledList = [];
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
 
 
@@ -18,7 +21,12 @@ app.controller('BookingHistoryController', function($scope, $http) {
             function(response) {
                 if (response.data.Data.length >= 1) {
                     $scope.DataList = response.data.Data;
-
+                    for (let i = 0; i < $scope.DataList.length; i++) {
+                        $scope.PendingList = $scope.DataList[i].Pending;
+                        $scope.CompletedList = $scope.DataList[i].Complete;
+                        $scope.CancelledList = $scope.DataList[i].Cancelled;
+                    }
+                    console.log($scope.CompletedList);
                 } else {
                     $scope.DataList = [];
                 }
@@ -30,5 +38,21 @@ app.controller('BookingHistoryController', function($scope, $http) {
     }
     $scope.GetBookingHistory();
 
+    $scope.GetPendingOtherDetails = function(data) {
+        $scope.GetPendingOtherDetailList = [];
+        $scope.GetPendingOtherDetailList.push(data);
 
+    }
+
+    $scope.GetCompletedOtherDetails = function(data) {
+        $scope.GetCompletedOtherDetailList = [];
+        $scope.GetCompletedOtherDetailList.push(data);
+
+    }
+
+    $scope.GetCancelledOtherDetails = function(data) {
+        $scope.GetCancelledOtherDetailList = [];
+        $scope.GetCancelledOtherDetailList.push(data);
+
+    }
 });

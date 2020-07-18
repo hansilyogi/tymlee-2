@@ -32,6 +32,7 @@
     <script src="scripts/controllers/companyinventory.js"></script>
     <script src="scripts/controllers/bookingslotmaster.js"></script>
     <script src="scripts/controllers/bookinghistory.js"></script>
+    <script src="scripts/controllers/companytransaction.js"></script>
 
 
 </head>
@@ -80,7 +81,7 @@
             </ul>
         </nav>
 
-        <aside class="main-sidebar sidebar-dark-primary elevation-2" ng-controller="LoginController">
+        <aside class="main-sidebar sidebar-dark-primary elevation-2" ng-controller="IndexController">
             <a href="./dashboard" class="brand-link">
                 <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />
                 <span class="brand-text font-weight-light text-md"><b>Tymlee</b></span>
@@ -115,51 +116,51 @@
                                             </p>
                                         </a>
                                         <ul class="nav nav-treeview">
-                                            <li class="nav-item" ng-hide="IsAdmin">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./membershiptype" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>
                                                     <p>Membership type</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./businesscategory" class="nav-link">
                                                     <i class="fa fa-briefcase nav-icon"></i>
                                                     <p>Bussiness category</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./city" class="nav-link">
                                                     <i class="fa fa-map-marker-alt nav-icon"></i>
                                                     <p>City</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./addcompany" class="nav-link">
                                                     <i class="fa fa-university nav-icon"></i>
                                                     <p>Add Company</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item" ng-show="IsAdmin">
+                                            <li class="nav-item" ng-hide="IsVisible">
                                                 <a href="./vendor" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>
                                                     <p>Add Vendor</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item" ng-hide="IsAdmin">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./banner" class="nav-link">
                                                     <i class="nav-icon far fa-image"></i>
 
                                                     <p>Add Banner</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item" ng-hide="IsAdmin">
+                                            <li class="nav-item" ng-hide="IsVisible">
                                                 <a href="./addcompanyinventory" class="nav-link">
                                                     <i class="nav-icon fa fa-check-circle"></i>
 
                                                     <p>Add Company Inventory</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item" ng-hide="IsAdmin">
+                                            <li class="nav-item" ng-hide="IsVisible">
                                                 <a href="./bookingslotmaster" class="nav-link">
                                                     <i class="nav-icon fa fa-clock"></i>
 
@@ -178,22 +179,28 @@
                                             </p>
                                         </a>
                                         <ul class="nav nav-treeview">
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./viewcompany" class="nav-link">
                                                     <i class="fa fa-eye nav-icon"></i>
                                                     <p>View Company</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-hide="IsVisible">
                                                 <a href="./viewcustomer" class="nav-link">
                                                     <i class="fa fa-eye nav-icon"></i>
                                                     <p>View Customer</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li class="nav-item" ng-hide="IsVisible">
                                                 <a href="./bookinghistory" class="nav-link">
                                                     <i class="fa fa-eye nav-icon"></i>
                                                     <p>View Booking History</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item" ng-hide="IsVisible">
+                                                <a href="./companytransaction" class="nav-link">
+                                                    <i class="fa fa-eye nav-icon"></i>
+                                                    <p>View Company Transaction</p>
                                                 </a>
                                             </li>
                                         </ul>

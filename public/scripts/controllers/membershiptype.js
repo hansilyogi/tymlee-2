@@ -4,6 +4,8 @@ app.controller('MembershipController', function($scope, $http) {
     $scope.DataList = [];
     $scope.MessageList = ['Free', 'Standard', 'Enterprise'];
     $scope.MemberType = $scope.MessageList[0];
+
+
     $scope.submitMemberShipType = function() {
         var preForm = new FormData();
         angular.forEach($scope.files, function(file) {

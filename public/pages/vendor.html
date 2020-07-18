@@ -31,10 +31,10 @@
                                       </button>
                                 </div>
                                 <div class="col-md-6" style="padding-bottom:15px;">
-                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-change="GetVendor()" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in CompanyList"
-                                                ng-selected="CompanyId == sel" value="{{sel}}">
+                                                ng-selected="CompanyId == sel" value="{{sel._id}}">
                                                 {{sel.companyName}}</option>
                                       </select>
                                 </div>
@@ -46,7 +46,6 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Company Name</th>
                                         <th>User name</th>
                                         <th>Email</th>
                                         <th>User Pin</th>
@@ -57,7 +56,6 @@
                                 <tbody>
                                     <tr ng-repeat="data in DataList">
                                         <td>{{$index+1}}</td>
-                                        <td>{{data.companyName}}</td>
                                         <td>{{data.userName}}</td>
                                         <td>{{data.emailId}}</td>
                                         <td>{{data.userPin}}</td>
@@ -97,7 +95,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-change="GetVendor()" ng-init="" required>
+                                    <select class="form-control form-control-sm" ng-model="CompanyId" ng-init="" required>
                                         <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in CompanyList"
                                                 ng-selected="CompanyId == sel" value="{{sel}}">
