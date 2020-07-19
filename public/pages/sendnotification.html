@@ -42,28 +42,16 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Inventory Name</th>
-                                        <th>Service Provider Name</th>
-                                        <th>Day Name</th>
-                                        <th>SlotName</th>
-                                        <th>From Time</th>
-                                        <th>To Time</th>
-                                        <th>Appointment Count</th>
-                                        <th>Rate</th>
+                                        <th> Name</th>
+                                        <th>Email</th>
                                         <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="data in DataList">
                                         <td>{{$index+1}}</td>
-                                        <td>{{data.inventoryId.inventoryName}}</td>
-                                        <td>{{data.serviceProviderId.serviceProviderName}}</td>
-                                        <td>{{data.dayName}}</td>
-                                        <td>{{data.slotName}}</td>
-                                        <td>{{data.fromTime | date: "dd/MM/yyyy"}}</td>
-                                        <td>{{data.toTime | date: "dd/MM/yyyy"}}</td>
-                                        <td>{{data.appointmentCount}}</td>
-                                        <td>₹{{data.rate}}</td>
+                                        <td>{{data.userName}}</td>
+                                        <td>{{data.emailId}}</td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>

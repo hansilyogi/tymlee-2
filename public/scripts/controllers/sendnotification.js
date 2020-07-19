@@ -22,11 +22,15 @@ app.controller('SendNotificationController', function($scope, $http) {
 
 
     $scope.GetDataList = function() {
+        var list = {
+            "companyId": $scope.CompanyId,
+            "type": $scope.Type
+        }
         $http({
-            url: imageroute + "/admin/getcustomer",
+            url: imageroute + "/admin/getVendorAndCustomerByCompanyId",
             method: "POST",
             cache: false,
-            data: {},
+            data: list,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
