@@ -12,13 +12,14 @@ var companyServicesProviderSchema = require('../model/companyservicesprovider');
 /* APIS listing. */
 
 router.post('/companyUserSignup', async function (req, res, next) {
-  const { companyId, userName, emailId, userPassword, userPin, userCategory } = req.body;
+  const { companyId, userName, emailId, userPassword, userPin, userCategory,mobileNo } = req.body;
   try {
     var companyUser = new companyUserMasterSchema({
       _id: new config.mongoose.Types.ObjectId,
       companyId: companyId,
       userName: userName,
       emailId: emailId,
+      mobileNo:mobileNo,
       userPassword: userPassword,
       userPin: userPin,
       userCategory: userCategory

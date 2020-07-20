@@ -32,6 +32,9 @@ var companyUserMasterSchema = new mongoose.Schema({
     },
     fcmToken:{
         type:String
+    },
+    mobileNo:{
+        type:String
     }
 });
 
