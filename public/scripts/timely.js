@@ -294,6 +294,12 @@ app.controller('IndexController', function($scope, $http) {
     }
 
 
+    $scope.logOutUser = function() {
+        sessionStorage.clear();
+        window.location.href = "login.html";
+
+    }
+
 });
 
 app.directive("fileInput", function($parse) {
