@@ -39,18 +39,18 @@
         return true;
     }
 </script>
-<div class="AddCompanyController" style="padding:10px;">
+<div class="AddCompanyController" style="padding:20px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Company</h1>
+                    <h1>Add Company</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Master</a></li>
-                        <li class="breadcrumb-item active">Company</li>
+                        <li class="breadcrumb-item active">Add Company</li>
                     </ol>
                 </div>
             </div>
@@ -58,9 +58,9 @@
     </section>
     <div class="row">
         <div class="col-12 col-sm-12">
-            <div class="card card-body table-responsive">
+            <div class="card card-body mt-3">
                 <div class="col-sm-6">
-                    <h4 style="font-weight: bold;">Add Company</h4>
+                    <h4 style="font-weight: bold;">Company Details</h4>
                 </div>
                 <form ng-submit="submitCompany()">
                     <div class="col-12 col-sm-12">
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6" style="margin-top: 20px;">
+                    <div class="col-sm-6 mt-5">
                         <h4 style="font-weight: bold;">Bank Details</h4>
                     </div>
                     <div class="col-12 col-sm-12">
@@ -222,7 +222,7 @@
 
                         </div>
                     </div>
-                    <div class="col-sm-6" style="margin-top: 20px;">
+                    <div class="col-sm-6 mt-5">
                         <h4 style="font-weight: bold;">ID Proof</h4>
                     </div>
                     <div class="col-12 col-sm-12">
@@ -271,8 +271,8 @@
                         </div>
 
                     </div>
-                    <div class="col-sm-6" style="margin-top: 20px;">
-                        <h4 style="font-weight: bold;">login Detail</h4>
+                    <div class="col-sm-6 mt-5">
+                        <h4 style="font-weight: bold;">Login Detail</h4>
                     </div>
                     <div class="col-12 col-sm-12">
 
@@ -348,115 +348,8 @@
                         </div>
 
                     </div>
-                    <div class="col-sm-6" style="margin-top: 20px;">
-                        <h4 style="font-weight: bold;">Registration Detail</h4>
-                    </div>
-                    <div class="col-12 col-sm-12">
 
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Reg No</label>
-                                    <input type="text" class="form-control form-control-sm" ng-model="RegNo" placeholder="RegNo" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Reg Date</label>
-                                    <input type="date" class="form-control form-control-sm" ng-model="RegDate" placeholder="Reg Date" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>MemberShip Type</label>
-                                    <select class="form-control form-control-sm" ng-init="" ng-model="MemberShipType">
-                                    <option value="" disabled>Nothing Selected</option>
-                                        <option ng-repeat="sel in MemberShipTypeList"
-                                            ng-selected="MemberShipType == sel" value="{{sel}}">
-                                            {{sel}}</option>
-                                  </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Amt Paid</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="AmtPaid" placeholder="Amt Paid" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Taxable Value</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="TaxableValue" placeholder="Taxable Value" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>CGST %</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="CGSTPercent" placeholder="0%" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>SGST %</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="SGSTPercent" placeholder="0%" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>IGST %</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="IGSTPercent" placeholder="0%" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Pay Through</label>
-                                    <select class="form-control form-control-sm" ng-init="" ng-model="PayThrough">
-                                    <option value="" disabled>Nothing Selected</option>
-                                        <option ng-repeat="sel in PayThroughList"
-                                            ng-selected="PayThrough == sel" value="{{sel}}">
-                                            {{sel}}</option>
-                                  </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Pay Date Time</label>
-                                    <input type="date" class="form-control form-control-sm" ng-model="PayDateTime" placeholder="Pay Date Time" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>TransactionNo</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="TransactionNo" placeholder="TransactionNo" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Bill No</label>
-                                    <input type="number" class="form-control form-control-sm" ng-model="BillNo" placeholder="Bill No" autocomplete="off">
-
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>EmailDateTime</label>
-                                    <input type="date" class="form-control form-control-sm" ng-model="EmailDateTime" placeholder="EmailDateTime" autocomplete="off">
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>
+                    <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save changes</button>
                 </form>
             </div>
         </div>

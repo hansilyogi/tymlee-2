@@ -27,7 +27,7 @@ app.controller('SendNotificationController', function($scope, $http) {
             "type": $scope.Type
         }
         $http({
-            url: imageroute + "/admin/getVendorAndCustomerByCompanyId",
+            url: imageroute + "/admin/sendNotification",
             method: "POST",
             cache: false,
             data: list,

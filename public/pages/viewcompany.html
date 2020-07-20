@@ -62,6 +62,10 @@
                                             <button type="button" class="btn btn-info btn-sm btn-flat" title="Id Proof Detail" data-toggle="modal" data-target="#modalProof-lg" ng-click="GetLoginData(data)"><i class="fa fa-id-card"></i>
                                         </button>
 
+                                            <button type="button" style="margin-top:10px;" class="btn btn-info btn-sm btn-flat" title="Add Registration Fees" data-toggle="modal" data-target="#modalRegistrationFees-lg"><ion-icon name="cash" style="margin-bottom:-2px;"></ion-icon>
+                                        </button>
+
+
                                             <button type="button" style="margin-top:10px;" class="btn btn-danger btn-flat btn-sm " data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                         </button>
                                         </td>
@@ -265,4 +269,200 @@
         </div>
         <!-- /.modal-content -->
     </div>
+
+    <div class="modal fade" id="modalRegistrationFees-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Registartion Fees</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#addregistrationFees" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Pending</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#viewregistrationFees" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Completed</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="custom-tabs-four-tabContent">
+                            <div class="tab-pane fade show active" id="addregistrationFees" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                                <form ng-submit="">
+                                    <div class="col-12 col-sm-12">
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Reg No</label>
+                                                    <input type="text" class="form-control form-control-sm" ng-model="RegNo" placeholder="RegNo" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Reg Date</label>
+                                                    <input type="date" class="form-control form-control-sm" ng-model="RegDate" placeholder="Reg Date" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>MemberShip Type</label>
+                                                    <select class="form-control form-control-sm" ng-init="" ng-model="MemberShipType">
+                                                    <option value="" disabled>Nothing Selected</option>
+                                                        <option ng-repeat="sel in MemberShipTypeList"
+                                                            ng-selected="MemberShipType == sel" value="{{sel._id}}">
+                                                            {{sel.membershipType}}</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Amt Paid</label>
+                                                    <input type="number" class="form-control form-control-sm" ng-model="AmtPaid" placeholder="Amt Paid" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Taxable Value</label>
+                                                    <input type="number" class="form-control form-control-sm" ng-model="TaxableValue" placeholder="Taxable Value" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>CGST %</label>
+                                                    <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" ng-model="CGSTPercent" placeholder="0%" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>SGST %</label>
+                                                    <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" ng-model="SGSTPercent" placeholder="0%" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>IGST %</label>
+                                                    <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" ng-model="IGSTPercent" placeholder="0%" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Pay Through</label>
+                                                    <select class="form-control form-control-sm" ng-init="" ng-model="PayThrough">
+                                                <option value="" disabled>Nothing Selected</option>
+                                                    <option ng-repeat="sel in PayThroughList"
+                                                        ng-selected="PayThrough == sel" value="{{sel}}">
+                                                        {{sel}}</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Pay Date Time</label>
+                                                    <input type="date" class="form-control form-control-sm" ng-model="PayDateTime" placeholder="Pay Date Time" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>TransactionNo</label>
+                                                    <input type="number" class="form-control form-control-sm" ng-model="TransactionNo" placeholder="TransactionNo" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Bill No</label>
+                                                    <input type="number" class="form-control form-control-sm" ng-model="BillNo" placeholder="Bill No" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>EmailDateTime</label>
+                                                    <input type="date" class="form-control form-control-sm" ng-model="EmailDateTime" placeholder="EmailDateTime" autocomplete="off">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="viewregistrationFees" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                                <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Reg No</th>
+                                            <th>Bill No</th>
+                                            <th>MemberShip Type</th>
+                                            <th>Amt Paid</th>
+                                            <th>Taxable Value</th>
+                                            <th>Reg Date</th>
+                                            <th>CGST %</th>
+                                            <th>SGST %</th>
+                                            <th>IGST %</th>
+                                            <th>Pay Through</th>
+                                            <th>Pay Date Time</th>
+                                            <th>TransactionNo</th>
+                                            <th>EmailDateTime</th>
+                                            <th style="width: 40px">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in CompletedList">
+                                            <td>{{$index+1}}</td>
+                                            <td>2323</td>
+                                            <td>201</td>
+                                            <td>Standard</td>
+                                            <td>2000</td>
+                                            <td>1800</td>
+                                            <td>20-02-2020</td>
+                                            <td>5%</td>
+                                            <td>10%</td>
+                                            <td>5%/td>
+                                                <td>Cash</td>
+                                                <td>20-02-2020</td>
+                                                <td>2121</td>
+                                                <td>20-02-2020</td>
+                                                <td width=10%>
+
+                                                    <!-- <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                            </button> -->
+                                                    <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Completed Details" ng-click="GetCompletedOtherDetails(data)" data-toggle="modal" data-target="#modalComplete-lg"><i class="fa fa-user-plus"></i>
+                                            </button>
+
+                                                </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+
 </div>
