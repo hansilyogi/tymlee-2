@@ -213,11 +213,15 @@ app.controller('LoginController', function($scope, $http) {
 
                     window.location.href = "./#!/dashboard";
 
+                } else {
+                    $scope.errormessages = "Invalid Data";
+                    alert("Invalid Data");
                 }
             },
             function(error) {
-
+                $scope.errormessages = "Internal Server";
                 console.log("Internal Server");
+                alert("Internal Server");
             }
         );
     }
@@ -262,11 +266,15 @@ app.controller('CompanyLoginController', function($scope, $http) {
 
                     window.location.href = "./#!/dashboard";
 
+                } else {
+                    $scope.errormessages = "Invalid Data";
+                    alert("Invalid Data");
                 }
             },
             function(error) {
-
+                $scope.errormessages = "Internal Server";
                 console.log("Internal Server");
+                alert("Internal Server");
             }
         );
     }

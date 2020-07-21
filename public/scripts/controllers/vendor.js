@@ -45,6 +45,7 @@ app.controller('VendorController', function($scope, $http) {
 
 
     $scope.submitVendor = function() {
+        $scope.CompanyId = sessionStorage.getItem("SessionId");
         var json = {
             "id": $scope.Id,
             "companyId": $scope.CompanyId,
@@ -80,6 +81,7 @@ app.controller('VendorController', function($scope, $http) {
     }
 
     $scope.GetVendor = function() {
+        $scope.CompanyId = sessionStorage.getItem("SessionId");
         var list = {
             companyId: $scope.CompanyId
         }
@@ -140,6 +142,7 @@ app.controller('VendorController', function($scope, $http) {
         $scope.CompanyId = data.companyId;
         $scope.UserName = data.userName;
         $scope.UserPin = data.userPin;
+        $scope.Email = data.emailId;
         $scope.UserCategory = data.userCategory;
         $scope.UserPassword = data.userPassword;
     }
