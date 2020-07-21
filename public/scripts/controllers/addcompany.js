@@ -8,7 +8,11 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.MessageList = ['Prop', 'Patnership', 'Pvt.Ltd', 'LLp', 'LTD'];
     $scope.CityList = [];
     $scope.BankDataList = [];
-
+    $scope.defaultshow = true;
+    $scope.changeshow = false;
+    $scope.color = {
+        'background-color': 'grey'
+    };
 
     $scope.submitCompany = function() {
         var preForm = new FormData();
@@ -225,6 +229,7 @@ app.controller('AddCompanyController', function($scope, $http) {
 
     }
 
+
     $scope.Clear = function() {
         $scope.Id = 0;
         $scope.DOJ = "";
@@ -259,5 +264,27 @@ app.controller('AddCompanyController', function($scope, $http) {
         $scope.RegistrationValidUpto = "";
     }
     $scope.Clear();
+
+    $scope.showRegistration = function() {
+        $scope.color = {
+            'background-color': 'grey'
+        };
+        $scope.colors = {
+            'background-color': '#17a2b8'
+        };
+        $scope.defaultshow = true;
+        $scope.changeshow = false;
+    }
+
+    $scope.showViewRegistration = function() {
+        $scope.colors = {
+            'background-color': 'grey'
+        };
+        $scope.color = {
+            'background-color': '#17a2b8'
+        };
+        $scope.defaultshow = false;
+        $scope.changeshow = true;
+    }
 
 });
