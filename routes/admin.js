@@ -17,6 +17,7 @@ var companyServicesProviderSchema = require("../model/companyservicesprovider");
 var termnconditionSchema = require("../model/termncondition");
 var bookingSlotMasterSchema = require("../model/bookingslotmaster");
 var bookingMasterSchema = require("../model/booking");
+var registrationFeesSchema = require('../model/registrationfees');
 
 config = require("../config");
 
@@ -1450,5 +1451,105 @@ router.post("/", async function (req, res, next) {
     }
   } catch (err) {}
 });
+
+router.post("/updateMembershipTypeIsAcitve", async function (req, res, next) {
+    const { id, isActive } = req.body;
+    try {
+      let data = await membershipTypeMstSchema.find({ _id: id });
+      if (data.length == 1) {
+        var dataa = {
+            isActive: isActive,
+        };
+        let datas = await membershipTypeMstSchema.findByIdAndUpdate(id, dataa);
+      }
+      res
+        .status(200)
+        .json({ Message: "isActive Updated!", Data: 1, IsSuccess: true });
+    } catch (err) {
+      res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+  });
+
+router.post("/getregistrationFees", async function (req, res, next) {
+    const { companyId } = req.body;
+    try {
+      let data = await registrationFeesSchema.find({ companyId: companyId });
+      res.status(200).json({
+        Message: " Registration Fees Data!",
+        Data: data,
+        IsSuccess: true,
+      });
+    } catch (err) {
+      res.json({
+        Message: err.message,
+        Data: 0,
+        IsdSuccess: false,
+      });
+    }
+  });
+  
+router.post("/addRegistrationFees", async function (req, res, next) {
+    const {
+      companyId,
+      regDate,
+      membershipTypeID,
+      amtPaid,
+      taxableValue,
+      cGSTAmt,
+      sGSTAmt,
+      iGSTAmt,
+      payThrough,
+      payDateTime,
+      transactionNo,
+      billNo,
+      billEmailed,
+      EmailDateTime
+    } = req.body;
+    try {
+        var registrationFees = new registrationFeesSchema({
+          _id: new config.mongoose.Types.ObjectId(),
+          companyId: companyId,
+          regDate: regDate,
+          membershipTypeID: membershipTypeID,
+          amtPaid: amtPaid,
+          taxableValue: taxableValue,
+          cGSTAmt: cGSTAmt,
+          sGSTAmt: sGSTAmt,
+          iGSTAmt:iGSTAmt,
+          payThrough:payThrough,
+          payDateTime:payDateTime,
+          transactionNo:transactionNo,
+          billNo:billNo,
+          billEmailed:billEmailed,
+          EmailDateTime:EmailDateTime
+        });
+        registrationFees.save();
+      res
+        .status(200)
+        .json({ Message: "Registration Fees Done Successfully!", Data: 1, IsSuccess: true });
+    } catch {
+      res.json({
+        Message: err.message,
+        Data: 0,
+        IsdSuccess: false,
+      });
+    }
+  });
+  
+router.post("/deleteRegistrationFees", async function (req, res, next) {
+    try {
+      const { id } = req.body;
+      let data = await registrationFeesSchema.findByIdAndRemove(id);
+      res
+        .status(200)
+        .json({ Message: "Registration Fees Deleted!", Data: 1, IsSuccess: true });
+    } catch (err) {
+      res.json({
+        Message: err.message,
+        Data: 0,
+        IsdSuccess: false,
+      });
+    }
+  });
 
 module.exports = router;

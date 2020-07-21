@@ -1,5 +1,16 @@
-const mongoose = require('mongoose');
 
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+const mongoose = require('mongoose');
 var bookingMasterSchema = new mongoose.Schema({
  _id: mongoose.Schema.Types.ObjectId,
  customerId:{
@@ -31,8 +42,8 @@ serviceProviderId:{
     ref:'bookingSlotMaster'
  },
  appointmentDate:{
-    type:Date,
-     default:Date.now
+    type:String,
+    set: date => formatDate(date)
  },
  appointmentTime:{
     type:String

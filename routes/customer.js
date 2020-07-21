@@ -3,6 +3,7 @@ var router = express.Router();
 var multer = require("multer");
 var path = require("path");
 var config = require('../config');
+var dateFormat = require('dateformat');
 // const bcrypt = require('bcrypt');
 var customerMasterSchema = require('../model/customermaster');
 var companyInventoryMasterSchema = require('../model/companyinventorymaster');
@@ -91,6 +92,23 @@ router.post("/customerSignIn", async function (req, res, next) {
     }
   } catch (err) {
     res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+  }
+});
+
+router.post("/getcustomerById", async function (req, res, next) {
+  const {id} = req.body;
+  try {
+    let data = await customerMasterSchema.find({_id:id});
+    console.log(data);
+    res
+      .status(200)
+      .json({ Message: "customer Data!", Data: data, IsSuccess: true });
+  } catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
   }
 });
 
@@ -213,6 +231,38 @@ router.post('/getCompanyMasterByBusinessCategoryId', async function (req, res, n
           Data: 0,
           IsdSuccess: false,
       });
+  }
+});
+
+router.post("/getInventoryAndServiceListByCompanyId", async function (
+  req,
+  res,
+  next
+) {
+  try {
+    const { companyId } = req.body;
+    let data = await companyInventoryMasterSchema.find({
+      companyId: companyId,
+    });
+    let datalist = [];
+    for (let i = 0; i < data.length; i++) {
+      var serviceProviders = [];
+      if (data[i].multipleServiceProviderRequired == true) {
+        serviceProviders = await companyServicesProviderSchema.find({
+          inventoryId: data[i].id,
+        });
+      }
+      datalist.push({ Inventory: data[i], serviceProviders: serviceProviders });
+    }
+    res
+      .status(200)
+      .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+  } catch (err) {
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
   }
 });
 
@@ -525,41 +575,47 @@ router.post('/getbillDetailByOrderNo', async function (req, res, next) {
   }
 });
 
-router.post('/getSlotDetail', async function(req, res, next) {
+router.post("/avaliableSlot", async function (req, res, next) {
+  const { inventoryId,serviceProviderId } = req.body;
   try {
-      const { companyId,inventoryId,serviceProviderId } = req.body;
-      let data = await companyInventoryMasterSchema.find({ companyId: companyId, _id:inventoryId });
-      let datalist = [];
-      if (data.length == 1) {
-          var serviceProviders = [];
-          if (data[0].multipleServiceProviderRequired == true) {
-              serviceProviders = await companyServicesProviderSchema.find({ inventoryId: inventoryId,_id:serviceProviderId });
-              if(serviceProviders.length == 1) {
-                var slot = await bookingSlotMasterSchema.find({
-                  companyId: companyId,
-                  inventoryId: inventoryId,
-                  serviceProviderId:serviceProviderId
-              })
-              }  
-          }else{
-              var slot = await bookingSlotMasterSchema.find({
-                  companyId: companyId,
-                  inventoryId: inventoryId
-              })
-          }
-          datalist.push({ Inventory: data[0], serviceProviders: serviceProviders, slot:slot});
+    let datalist = [];
+      data = await companyInventoryMasterSchema.find({_id:inventoryId});
+      if(data[0].multipleServiceProviderRequired == true){
+        let data = await bookingMasterSchema.find({serviceProviderId:serviceProviderId ,appointmentDate: new Date().toISOString().split("T")[0]}).populate("companyId").populate("inventoryId").populate("serviceProviderId")
+        .populate("customerId");
+       for (let i = 0; i < data.length; i++) {
+        var bookingSlotId = data[i].bookingSlotId;
+        var appointmentDate = data[i].appointmentDate;
+        var appointmentTime = data[i].appointmentTime;
+        datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime});
       }
-      res
+    }else{
+      let data = await bookingMasterSchema.find({inventoryId:inventoryId ,appointmentDate: new Date().toISOString()}).populate("companyId").populate("inventoryId").populate("serviceProviderId")
+      .populate("customerId");
+     for (let i = 0; i < data.length; i++) {
+      var bookingSlotId = data[i].bookingSlotId;
+      var appointmentDate = data[i].appointmentDate;
+      var appointmentTime = data[i].appointmentTime;
+      datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime});
+    }
+  }
+    if (datalist != "null") {
+        res
           .status(200)
           .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-
+     } else {
+        res
+          .status(200)
+          .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
+     }
   } catch (err) {
-      res.json({
-          Message: err.message,
-          Data: 0,
-          IsdSuccess: false,
-      });
+    res.json({
+      Message: err.message,
+      Data: 0,
+      IsdSuccess: false,
+    });
   }
 });
+
 module.exports = router;
 

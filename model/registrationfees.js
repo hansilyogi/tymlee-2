@@ -19,60 +19,25 @@ var registrationFeesSchema = new mongoose.Schema({
         required:true
     },
     taxableValue:{
-        type:Number,
-        required:true
+        type:Number
     },
     cGSTAmt:{
-        type:Number,
-        required:true
+        type:Number
     },
     sGSTAmt:{
-        type:Number,
-        required:true
+        type:Number
     },
     iGSTAmt:{
-        type:Number,
-        required:true
-    },
-    payModeID:{
-        type:Number,
-        required:true
+        type:Number
     },
     payThrough:{
-        type:String,
-        required:true
-    },
-    cardNumber:{
-        type:String,
-        required:true
-    },
-    cVCCode:{
-        type:String,
-        required:true
-    },
-    expiryDate:{
-        type:Date,
-        required:true
-    },
-    nameOnCard:{
-        type:String,
-        required:true
-    },
-    payStatus:{
-        type:String,
-        required:true
-    },
-    payStatusDecription:{
-        type:String,
-        required:true
+        type:String
     },
     payDateTime:{
-        type:Date,
-        required:true
+        type:Date
     },
     transactionNo:{
-        type:String,
-        required:true
+        type:String
     },
     billNo:{
         type:String,
@@ -82,8 +47,7 @@ var registrationFeesSchema = new mongoose.Schema({
         type:Boolean
     },
     EmailDateTime:{
-        type:Date,
-        required:true
+        type:Date
     }
 });
 
