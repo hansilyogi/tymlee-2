@@ -6,6 +6,10 @@ var registrationFeesSchema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'companyMaster'
     },
+    regNo:{
+        type:Number,
+        required:true
+    },
     regDate:{
         type:Date,
         required:true
