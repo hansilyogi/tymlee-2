@@ -581,7 +581,7 @@ router.post("/avaliableSlot", async function (req, res, next) {
     let datalist = [];
       data = await companyInventoryMasterSchema.find({_id:inventoryId});
       if(data[0].multipleServiceProviderRequired == true){
-        let data = await bookingMasterSchema.find({serviceProviderId:serviceProviderId ,appointmentDate: new Date().toISOString().split("T")[0]}).populate("companyId").populate("inventoryId").populate("serviceProviderId")
+        let data = await bookingMasterSchema.find({serviceProviderId:serviceProviderId ,appointmentDate: new Date().toISOString()}).populate("companyId").populate("inventoryId").populate("serviceProviderId")
         .populate("customerId");
        for (let i = 0; i < data.length; i++) {
         var bookingSlotId = data[i].bookingSlotId;
@@ -616,6 +616,7 @@ router.post("/avaliableSlot", async function (req, res, next) {
     });
   }
 });
+
 
 module.exports = router;
 

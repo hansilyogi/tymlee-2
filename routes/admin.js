@@ -153,10 +153,7 @@ router.post("/companySignIn", async function (req, res, next) {
   }
 });
 
-router.post(
-  "/addMembershipType",
-  uploadmembership.single("registrationIcon"),
-  async function (req, res, next) {
+router.post("/addMembershipType",uploadmembership.single("registrationIcon"),async function (req, res, next) {
     const {
       membershipType,
       registrationFee,
@@ -188,8 +185,7 @@ router.post(
         IsdSuccess: false,
       });
     }
-  }
-);
+  });
 
 router.post("/MembershipType", async function (req, res, next) {
   try {
@@ -206,10 +202,7 @@ router.post("/MembershipType", async function (req, res, next) {
   }
 });
 
-router.post(
-  "/UpdateMembershipType",
-  uploadmembership.single("registrationIcon"),
-  async function (req, res, next) {
+router.post( "/UpdateMembershipType",uploadmembership.single("registrationIcon"),async function (req, res, next) {
     try {
       const {
         id,
@@ -256,8 +249,7 @@ router.post(
         IsdSuccess: false,
       });
     }
-  }
-);
+  });
 
 router.post("/DeleteMembershipType", async function (req, res, next) {
   try {
@@ -275,10 +267,7 @@ router.post("/DeleteMembershipType", async function (req, res, next) {
   }
 });
 
-router.post(
-  "/addCategoryMaster",
-  uploadbusinesscategory.single("businessIcon"),
-  async function (req, res, next) {
+router.post( "/addCategoryMaster",uploadbusinesscategory.single("businessIcon"),async function (req, res, next) {
     const {
       businessCategoryName,
       startDate,
@@ -315,8 +304,7 @@ router.post(
         IsdSuccess: false,
       });
     }
-  }
-);
+  });
 
 router.post("/CategoryMaster", async function (req, res, next) {
   try {
@@ -333,10 +321,7 @@ router.post("/CategoryMaster", async function (req, res, next) {
   }
 });
 
-router.post(
-  "/updateCategoryMaster",
-  uploadbusinesscategory.single("businessIcon"),
-  async function (req, res, next) {
+router.post( "/updateCategoryMaster",uploadbusinesscategory.single("businessIcon"),async function (req, res, next) {
     try {
       const {
         id,
@@ -388,8 +373,8 @@ router.post(
         IsdSuccess: false,
       });
     }
-  }
-);
+
+  });
 
 router.post("/deleteCategoryMaster", async function (req, res, next) {
   try {
@@ -1503,7 +1488,8 @@ router.post("/addRegistrationFees", async function (req, res, next) {
       transactionNo,
       billNo,
       billEmailed,
-      EmailDateTime
+      EmailDateTime,
+      regNo
     } = req.body;
     try {
         var registrationFees = new registrationFeesSchema({
@@ -1521,7 +1507,8 @@ router.post("/addRegistrationFees", async function (req, res, next) {
           transactionNo:transactionNo,
           billNo:billNo,
           billEmailed:billEmailed,
-          EmailDateTime:EmailDateTime
+          EmailDateTime:EmailDateTime,
+          regNo:regNo
         });
         registrationFees.save();
       res
