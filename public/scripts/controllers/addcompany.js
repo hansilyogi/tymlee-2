@@ -10,6 +10,7 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.BankDataList = [];
     $scope.defaultshow = true;
     $scope.changeshow = false;
+    $scope.RegistrationFeesList = [];
     $scope.color = {
         'background-color': 'grey'
     };
@@ -295,7 +296,7 @@ app.controller('AddCompanyController', function($scope, $http) {
         $scope.changeshow = false;
     }
 
-    $scope.showViewRegistration = function() {
+    $scope.showViewRegistration = function(data) {
         $scope.colors = {
             'background-color': 'grey'
         };
@@ -306,12 +307,17 @@ app.controller('AddCompanyController', function($scope, $http) {
         $scope.changeshow = true;
     }
 
+    $scope.RegisterData = function(data) {
+        $scope.CompanyId = data;
+    }
+
     $scope.submitRegistrationFees = function() {
-        $scope.CompanyId = sessionStorage.getItem("SessionId");
+
+        console.log($scope.CompanyId);
         var json = {
             "id": $scope.Id,
             "companyId": $scope.CompanyId,
-            "regDate": $scope.RegNo,
+            "regNo": $scope.RegNo,
             "regDate": $scope.RegDate,
             "membershipTypeID": $scope.MemberShipType,
             "amtPaid": $scope.AmtPaid,
@@ -323,25 +329,26 @@ app.controller('AddCompanyController', function($scope, $http) {
             "payDateTime": $scope.PayDateTime,
             "transactionNo": $scope.TransactionNo,
             "billNo": $scope.BillNo,
-            "billEmailed": $scope.BillEmailId,
+            "billEmailed": true,
             "EmailDateTime": $scope.EmailDateTime
 
         };
         $http({
-            url: imageroute + "/admin/addCityMaster",
+            url: imageroute + "/admin/addRegistrationFees",
             method: "POST",
             data: json,
             cache: false,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(function(response) {
                 if (response.data.Data == 1) {
-                    alert("City Saved!");
-                    $("#modal-lg").modal("toggle");
-                    $scope.GetCity();
+                    alert("Registration Fees Saved!");
+                    $("#modalRegistrationFees-lg").modal("toggle");
+                    $scope.ClearRegistration();
+                    $scope.GetRegistrationFees();
 
                 } else {
                     $scope.btnsave = false;
-                    alert("Unable to Save City");
+                    alert("Unable to Save Registration Fees ");
                 }
             },
             function(error) {
@@ -351,5 +358,51 @@ app.controller('AddCompanyController', function($scope, $http) {
         );
 
     }
+
+
+    $scope.ClearRegistration = function() {
+        $scope.Id = 0;
+        $scope.RegNo = "";
+        $scope.RegDate = "";
+        $scope.MemberShipType = "";
+        $scope.AmtPaid = "";
+        $scope.TaxableValue = "";
+        $scope.CGSTPercent = "";
+        $scope.SGSTPercent = "";
+        $scope.IGSTPercent = "";
+        $scope.PayThrough = "";
+        $scope.PayDateTime = "";
+        $scope.TransactionNo = "";
+        $scope.BillNo = "";
+        $scope.EmailDateTime = "";
+    }
+    $scope.ClearRegistration();
+
+    $scope.GetRegistrationFees = function() {
+        var list = {
+            "companyId": $scope.CompanyId
+        }
+        console.log(list);
+        $http({
+            url: imageroute + "/admin/getregistrationFees",
+            method: "POST",
+            cache: false,
+            data: list,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.RegistrationFeesList = response.data.Data;
+
+                } else {
+                    $scope.RegistrationFeesList = [];
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
+    }
+    $scope.GetRegistrationFees();
 
 });

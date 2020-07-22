@@ -62,7 +62,7 @@
                                             <button type="button" class="btn btn-info btn-sm btn-flat" title="Id Proof Detail" data-toggle="modal" data-target="#modalProof-lg" ng-click="GetLoginData(data)"><i class="fa fa-id-card"></i>
                                         </button>
 
-                                            <button type="button" style="margin-top:10px;" class="btn btn-info btn-sm btn-flat" title="Add Registration Fees" data-toggle="modal" data-target="#modalRegistrationFees-lg"><span class="fa fa-plus"></span>
+                                            <button type="button" style="margin-top:10px;" class="btn btn-info btn-sm btn-flat" title="Add Registration Fees" data-toggle="modal" data-target="#modalRegistrationFees-lg" ng-click="RegisterData(data._id)"><span class="fa fa-plus"></span>
                                         </button>
 
 
@@ -289,7 +289,7 @@
 
                             </li>
                             <li class="nav-item">
-                                <button type="button" class="btn btn-info btn-sm btn-flat" ng-style="colors" ng-click="showViewRegistration()"><i class="fa fa-eye"> View Registration Fees  </i>
+                                <button type="button" class="btn btn-info btn-sm btn-flat" ng-style="colors" ng-click="showViewRegistration(data)"><i class="fa fa-eye"> View Registration Fees  </i>
                                 </button>
                             </li>
 
@@ -396,13 +396,6 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>Bill EmailId</label>
-                                                    <input type="text" class="form-control form-control-sm" ng-model="BillEmailId" placeholder="Bill EmailId" autocomplete="off">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
                                                     <label>EmailDateTime</label>
                                                     <input type="date" class="form-control form-control-sm" ng-model="EmailDateTime" placeholder="EmailDateTime" autocomplete="off">
 
@@ -411,11 +404,12 @@
                                         </div>
 
                                     </div>
+                                    <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save changes</button>
                                 </form>
                             </div>
 
                             <div class="" id="viewregistrationFees" ng-show="changeshow" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
+                                <table class="table table-striped table-bordered table-responsive" datatable="ng" dt-options="vm.dtOptions">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -436,7 +430,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="data in CompletedList">
+                                        <tr ng-repeat="data in RegistrationFeesList">
                                             <td>{{$index+1}}</td>
                                             <td>2323</td>
                                             <td>201</td>
@@ -446,19 +440,19 @@
                                             <td>20-02-2020</td>
                                             <td>5%</td>
                                             <td>10%</td>
-                                            <td>5%/td>
-                                                <td>Cash</td>
-                                                <td>20-02-2020</td>
-                                                <td>2121</td>
-                                                <td>20-02-2020</td>
-                                                <td width=10%>
+                                            <td>5%</td>
+                                            <td>Cash</td>
+                                            <td>20-02-2020</td>
+                                            <td>2121</td>
+                                            <td>20-02-2020</td>
+                                            <td width=10%>
 
-                                                    <!-- <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
+                                                <!-- <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                             </button> -->
-                                                    <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Completed Details" ng-click="GetCompletedOtherDetails(data)" data-toggle="modal" data-target="#modalComplete-lg"><i class="fa fa-user-plus"></i>
+                                                <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Completed Details" ng-click="GetCompletedOtherDetails(data)" data-toggle="modal" data-target="#modalComplete-lg"><i class="fa fa-user-plus"></i>
                                             </button>
 
-                                                </td>
+                                            </td>
                                         </tr>
 
                                     </tbody>
