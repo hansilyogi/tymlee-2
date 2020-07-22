@@ -14,6 +14,25 @@ app.controller('AddCompanyController', function($scope, $http) {
         'background-color': 'grey'
     };
 
+
+    var LoginUser = sessionStorage.getItem("SessionId");
+    var LoginRole = sessionStorage.getItem("Role");
+    var LoginName = sessionStorage.getItem("Username");
+
+    if (LoginUser != null && LoginUser != undefined) {
+        if (LoginRole == "company") {
+            $scope.CompanyId = LoginUser;
+            $scope.LoginName = LoginName;
+        } else
+            $scope.IsVisible = true;
+        $scope.LoginName = LoginName;
+    } else {
+        window.location.href = "login.html";
+    }
+
+
+
+
     $scope.submitCompany = function() {
         var preForm = new FormData();
 
@@ -285,6 +304,52 @@ app.controller('AddCompanyController', function($scope, $http) {
         };
         $scope.defaultshow = false;
         $scope.changeshow = true;
+    }
+
+    $scope.submitRegistrationFees = function() {
+        $scope.CompanyId = sessionStorage.getItem("SessionId");
+        var json = {
+            "id": $scope.Id,
+            "companyId": $scope.CompanyId,
+            "regDate": $scope.RegNo,
+            "regDate": $scope.RegDate,
+            "membershipTypeID": $scope.MemberShipType,
+            "amtPaid": $scope.AmtPaid,
+            "taxableValue": $scope.TaxableValue,
+            "cGSTAmt": $scope.CGSTPercent,
+            "sGSTAmt": $scope.SGSTPercent,
+            "iGSTAmt": $scope.IGSTPercent,
+            "payThrough": $scope.PayThrough,
+            "payDateTime": $scope.PayDateTime,
+            "transactionNo": $scope.TransactionNo,
+            "billNo": $scope.BillNo,
+            "billEmailed": $scope.BillEmailId,
+            "EmailDateTime": $scope.EmailDateTime
+
+        };
+        $http({
+            url: imageroute + "/admin/addCityMaster",
+            method: "POST",
+            data: json,
+            cache: false,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(function(response) {
+                if (response.data.Data == 1) {
+                    alert("City Saved!");
+                    $("#modal-lg").modal("toggle");
+                    $scope.GetCity();
+
+                } else {
+                    $scope.btnsave = false;
+                    alert("Unable to Save City");
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.btnsave = false;
+            }
+        );
+
     }
 
 });
