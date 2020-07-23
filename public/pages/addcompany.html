@@ -320,8 +320,12 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Week Start Day</label>
-                                    <input type="date" class="form-control form-control-sm" ng-model="WeekStartDay" placeholder="WeekStartDay" autocomplete="off">
-
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="WeekStartDay" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in WeekStartDayList"
+                                                ng-selected="WeekStartDay == sel" value="{{sel}}">
+                                                {{sel}}</option>
+                                      </select>
                                 </div>
                             </div>
                             <div class="col-md-3">

@@ -6,6 +6,7 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.MemberShipTypeList = [];
     $scope.PayThroughList = ['UPI', 'Credit Card', 'Debit Card', 'NetBanking'];
     $scope.MessageList = ['Prop', 'Patnership', 'Pvt.Ltd', 'LLp', 'LTD'];
+    $scope.WeekStartDayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     $scope.CityList = [];
     $scope.BankDataList = [];
     $scope.defaultshow = true;
@@ -309,7 +310,30 @@ app.controller('AddCompanyController', function($scope, $http) {
 
     $scope.RegisterData = function(data) {
         $scope.CompanyId = data;
+        var list = {
+            "companyId": $scope.CompanyId
+        }
+        $http({
+            url: imageroute + "/admin/getregistrationFees",
+            method: "POST",
+            cache: false,
+            data: list,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.RegistrationFeesList = response.data.Data;
+
+                } else {
+                    $scope.RegistrationFeesList = [];
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
     }
+    $scope.RegisterData();
 
     $scope.submitRegistrationFees = function() {
 
@@ -344,7 +368,7 @@ app.controller('AddCompanyController', function($scope, $http) {
                     alert("Registration Fees Saved!");
                     $("#modalRegistrationFees-lg").modal("toggle");
                     $scope.ClearRegistration();
-                    $scope.GetRegistrationFees();
+                    $scope.RegisterData();
 
                 } else {
                     $scope.btnsave = false;
@@ -378,31 +402,31 @@ app.controller('AddCompanyController', function($scope, $http) {
     }
     $scope.ClearRegistration();
 
-    $scope.GetRegistrationFees = function() {
-        var list = {
-            "companyId": $scope.CompanyId
-        }
-        console.log(list);
-        $http({
-            url: imageroute + "/admin/getregistrationFees",
-            method: "POST",
-            cache: false,
-            data: list,
-            headers: { "Content-Type": "application/json; charset=UTF-8" },
-        }).then(
-            function(response) {
-                if (response.data.Data.length >= 1) {
-                    $scope.RegistrationFeesList = response.data.Data;
+    $scope.DeleteRegistrationFeesData = function(id) {
+        var result = confirm("Are you sure you want to delete this ?");
+        if (result) {
+            $http({
+                url: imageroute + "/admin/deleteRegistrationFees",
+                method: "POST",
+                cache: false,
+                data: { id: id },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.Data == 1) {
+                        alert("Delete Successfully !");
+                        $scope.RegisterData();
 
-                } else {
-                    $scope.RegistrationFeesList = [];
+                    } else {
+                        alert("Data Not deleted !");
+                        $scope.RegisterData();
+                    }
+                },
+                function(error) {
+                    console.log("Internal Server");
                 }
-            },
-            function(error) {
-                console.log("Internal Server");
-            }
-        );
+            );
+        }
     }
-    $scope.GetRegistrationFees();
 
 });

@@ -432,26 +432,25 @@
                                     <tbody>
                                         <tr ng-repeat="data in RegistrationFeesList">
                                             <td>{{$index+1}}</td>
-                                            <td>2323</td>
-                                            <td>201</td>
-                                            <td>Standard</td>
-                                            <td>2000</td>
-                                            <td>1800</td>
-                                            <td>20-02-2020</td>
-                                            <td>5%</td>
-                                            <td>10%</td>
-                                            <td>5%</td>
-                                            <td>Cash</td>
-                                            <td>20-02-2020</td>
-                                            <td>2121</td>
-                                            <td>20-02-2020</td>
+                                            <td>{{data.regNo}}</td>
+                                            <td>{{data.billNo}}</td>
+                                            <td>{{data.membershipTypeID}}</td>
+                                            <td>{{data.amtPaid}}</td>
+                                            <td>{{data.taxableValue}}</td>
+                                            <td>{{data.regDate | date: "medium"}}</td>
+                                            <td>{{data.cGSTAmt}}</td>
+                                            <td>{{data.sGSTAmt}}</td>
+                                            <td>{{data.iGSTAmt}}</td>
+                                            <td>{{data.payThrough}}</td>
+                                            <td>{{data.payDateTime | date: "medium"}}</td>
+                                            <td>{{data.transactionNo}}</td>
+                                            <td>{{data.EmailDateTime | date: "medium"}}</td>
                                             <td width=10%>
 
                                                 <!-- <button type="button" class="btn btn-danger btn-sm btn-flat" data-toggle="modal" ng-click="DeleteData(data._id)"><i class="fa fa-trash"></i>
                                             </button> -->
-                                                <button type="button" class="btn btn-info btn-sm btn-flat" title="Other Completed Details" ng-click="GetCompletedOtherDetails(data)" data-toggle="modal" data-target="#modalComplete-lg"><i class="fa fa-user-plus"></i>
+                                                <button type="button" style="margin-top:10px;" class="btn btn-danger btn-flat btn-sm " data-toggle="modal" ng-click="DeleteRegistrationFeesData(data._id)"><i class="fa fa-trash"></i>
                                             </button>
-
                                             </td>
                                         </tr>
 
