@@ -116,8 +116,6 @@ app.controller('AddCompanyController', function($scope, $http) {
 
     }
 
-
-
     $scope.GetBusinessCategoryType = function() {
         $http({
             url: imageroute + "/admin/CategoryMaster",

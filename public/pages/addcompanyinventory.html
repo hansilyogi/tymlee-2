@@ -57,17 +57,17 @@
                             <!-- /.card -->
                         </div>
 
-                        <div class="mt-3" ng-show="defaultInventory">
+                        <div class="mt-3">
 
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Appointment Minutes</label>
                                         <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutes" placeholder="Appointment Minutes" autocomplete="off">
 
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Rate Type</label>
                                         <select class="form-control form-control-sm" ng-model="RateType" ng-init="">
@@ -79,7 +79,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Rate Amount</label>
                                         <input type="number" class="form-control form-control-sm" ng-model="RateAmount" placeholder="0" autocomplete="off">

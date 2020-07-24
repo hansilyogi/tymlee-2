@@ -1,58 +1,58 @@
 const mongoose = require('mongoose');
 
 var registrationFeesSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    companyId:{
-        type:mongoose.Types.ObjectId,
-        ref:'companyMaster'
+    _id: mongoose.Schema.Types.ObjectId,
+    companyId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'companyMaster'
     },
-    regNo:{
-        type:Number,
-        required:true
+    regNo: {
+        type: Number,
+        required: true
     },
-    regDate:{
-        type:Date,
-        required:true
+    regDate: {
+        type: Date,
+        required: true
     },
-    membershipTypeID:{
-        type:mongoose.Types.ObjectId,
-        ref:'membershipTypeMst'
+    membershipTypeID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'membershipTypeMst'
     },
-    amtPaid:{
-        type:Number,
-        required:true
+    amtPaid: {
+        type: Number,
+        required: true
     },
-    taxableValue:{
-        type:Number
+    taxableValue: {
+        type: Number
     },
-    cGSTAmt:{
-        type:Number
+    cGSTAmt: {
+        type: Number
     },
-    sGSTAmt:{
-        type:Number
+    sGSTAmt: {
+        type: Number
     },
-    iGSTAmt:{
-        type:Number
+    iGSTAmt: {
+        type: Number
     },
-    payThrough:{
-        type:String
+    payThrough: {
+        type: String
     },
-    payDateTime:{
-        type:Date
+    payDateTime: {
+        type: Date
     },
-    transactionNo:{
-        type:String
+    transactionNo: {
+        type: String
     },
-    billNo:{
-        type:String,
-        required:true
+    billNo: {
+        type: String,
+        required: true
     },
-    billEmailed:{
-        type:Boolean
+    billEmailed: {
+        type: Boolean
     },
-    EmailDateTime:{
-        type:Date
+    EmailDateTime: {
+        type: Date
     }
 });
 
-module.exports = mongoose.model('registrationFees',registrationFeesSchema);
+module.exports = mongoose.model('registrationFees', registrationFeesSchema);
