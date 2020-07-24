@@ -11,6 +11,7 @@ app.controller('BannerController', function($scope, $http) {
         preForm.append("id", $scope.Id);
         preForm.append("title", $scope.Title);
         preForm.append("description", $scope.Description);
+        preForm.append("expiryDate", $scope.ExpiryDate);
 
         $http({
             url: imageroute + "/admin/addBanner",
@@ -94,6 +95,7 @@ app.controller('BannerController', function($scope, $http) {
         $scope.Id = data._id;
         $scope.Title = data.title;
         $scope.Description = data.description;
+        $scope.ExpiryDate = new Date(data.expiryDate);
     }
 
 
@@ -101,6 +103,7 @@ app.controller('BannerController', function($scope, $http) {
         $scope.Id = 0;
         $scope.Title = "";
         $scope.Description = "";
+        $scope.ExpiryDate = "";
         angular.element("input[type='file']").val(null);
     }
     $scope.Clear();

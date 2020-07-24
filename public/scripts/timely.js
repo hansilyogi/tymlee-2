@@ -240,11 +240,9 @@ app.controller('CompanyLoginController', function($scope, $http) {
     $scope.companylogin = function() {
         var companyEmail = $scope.CompanyEmail;
         var password = $scope.Password;
-        var companyCode = $scope.CompanyCode;
         var datalist = {
             adminEmail: companyEmail,
-            adminPassword: password,
-            companyCode: companyCode
+            adminPassword: password
         }
 
         $http({
