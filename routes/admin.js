@@ -862,7 +862,7 @@ router.post("/addBanner", uploadbanner.single("image"), async function(
 
 router.post("/getBanner", async function(req, res, next) {
     try {
-        let data = await bannerSchema.find({ expiryDate: { $lte: Date.now() } });
+        let data = await bannerSchema.find();
         res
             .status(200)
             .json({ Message: "Banner Data!", Data: data, IsSuccess: true });

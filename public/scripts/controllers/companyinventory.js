@@ -32,7 +32,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
 
     $scope.submitCompanyInventory = function() {
         if ($scope.toggleyes == false) {
-            var json = {
+            var inventory = {
                 "id": $scope.Id,
                 "companyId": "5f04587fdd1ead1304d025ad",
                 "inventoryName": $scope.InventoryName,
@@ -49,7 +49,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryNotes3": $scope.InventoryNotes3
 
             };
-            console.log(json);
+            console.log(inventory);
         }
         if ($scope.toggleyes == true) {
             var json = [];
@@ -70,6 +70,12 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "multipleServiceProviderRequired": $scope.toggleyes,
+                "inventoryNotes1Name": $scope.InventoryNotes1Name,
+                "inventoryNotes1": $scope.InventoryNotes1,
+                "inventoryNotes2Name": $scope.InventoryNotes2Name,
+                "inventoryNotes2": $scope.InventoryNotes2,
+                "inventoryNotes3Name": $scope.InventoryNotes3Name,
+                "inventoryNotes3": $scope.InventoryNotes3,
                 "serviceProvider": json
             }
         }

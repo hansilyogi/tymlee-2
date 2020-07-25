@@ -4,12 +4,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Company Inventory</h1>
+                    <h1>Inventory</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Master</a></li>
-                        <li class="breadcrumb-item active">Company Inventory</li>
+                        <li class="breadcrumb-item active">Inventory</li>
                     </ol>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                                 <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Rate Amount</label>
-                                        <input type="number" class="form-control form-control-sm" ng-model="RateAmount" placeholder="0" autocomplete="off">
+                                        <input type="number" step="0.01" min="0" max="100000" class="form-control form-control-sm" ng-model="RateAmount" placeholder="0" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -145,14 +145,14 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Appointment Minutes</label>
-                                            <input type="number" class="form-control form-control-sm" ng-model="AppointmentMinutesData" placeholder="Appointment Minutes" autocomplete="off">
+                                            <input type="number" step="0.01" min="0" max="10000" class="form-control form-control-sm" ng-model="AppointmentMinutesData" placeholder="Appointment Minutes" autocomplete="off">
 
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Rate Amount</label>
-                                            <input type="number" class="form-control form-control-sm" ng-model="RateAmountData" placeholder="0" autocomplete="off">
+                                            <input type="number" step="0.01" min="0" max="100000" class="form-control form-control-sm" ng-model="RateAmountData" placeholder="0" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-md-3">

@@ -172,6 +172,17 @@ app.config(function($routeProvider, $locationProvider) {
             },
             templateUrl: "./pages/sendnotification.html",
             controller: "SendNotificationController",
+        })
+        .when("/bill", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/bill.html",
+            controller: "BillController",
         });
     $locationProvider.html5Mode({
         enabled: true,
