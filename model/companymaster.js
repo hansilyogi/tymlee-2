@@ -1,125 +1,125 @@
 const mongoose = require('mongoose');
 
 var companyMasterSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    companyCode:{
-        type:String
+    _id: mongoose.Schema.Types.ObjectId,
+    companyCode: {
+        type: String
     },
-    doj:{
-        type:Date
+    doj: {
+        type: Date
     },
-    businessCategoryId:{
-        type:mongoose.Types.ObjectId,
-        ref:'categoryMaster'
+    businessCategoryId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'categoryMaster'
     },
-    companyName:{
-        type:String,
-        required:true
+    companyName: {
+        type: String,
+        required: true
     },
-    addressLine1:{
-        type:String,
-        required:true
+    addressLine1: {
+        type: String,
+        required: true
     },
-    addressLine2:{
-        type:String
+    addressLine2: {
+        type: String
     },
-    cityMasterId:{
-        type:mongoose.Types.ObjectId,
-        ref:'cityMaster'
+    cityMasterId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'cityMaster'
     },
-    zipcode:{
-        type:String
+    zipcode: {
+        type: String
     },
-    mapLocation:{
-        type:String
+    mapLocation: {
+        type: String
     },
-    phone:{
-        type:String
+    phone: {
+        type: String
     },
-    fax:{
-        type:String
+    fax: {
+        type: String
     },
-    url:{
-        type:String
+    url: {
+        type: String
     },
-    supportEmail:{
-        type:String
+    supportEmail: {
+        type: String
     },
-    adminEmail:{
-        type:String
+    adminEmail: {
+        type: String
     },
-    adminMobile:{
-        type:String
+    adminMobile: {
+        type: String
     },
-    adminPassword:{
-        type:String
+    adminPassword: {
+        type: String
     },
-    gstinNo:{
-        type:String
+    gstinNo: {
+        type: String
     },
-    paNo:{
-        type:String
+    paNo: {
+        type: String
     },
-    bank:{
-        bankName:{
-            type:String
+    bank: {
+        bankName: {
+            type: String
         },
-        bankBranchName:{
-            type:String
+        bankBranchName: {
+            type: String
         },
-        bankAddress:{
-            type:String
+        bankAddress: {
+            type: String
         },
-        bankCity:{
-            type:String
+        bankCity: {
+            type: String
         },
-        bankState:{
-            type:String
+        bankState: {
+            type: String
         },
-        bankAccountNo:{
-            type:String
+        bankAccountNo: {
+            type: String
         },
-        bankIfscCode:{
-            type:String
+        bankIfscCode: {
+            type: String
         }
     },
-    companyType:{
-        type:String
+    companyType: {
+        type: String
     },
-    personName:{
-        type:String
+    personName: {
+        type: String
     },
-    personPhoto:{
-        type:String
+    personPhoto: {
+        type: String
     },
-    aadharCard:{
-        type:String
+    aadharCard: {
+        type: String
     },
-    panCard:{
-        type:String
+    panCard: {
+        type: String
     },
-    cancelledCheque:{
-        type:String
+    cancelledCheque: {
+        type: String
     },
-    weekStartDay:{
-        type:String
+    weekStartDay: {
+        type: String
     },
-    companyLogo:{
-        type:String
+    companyLogo: {
+        type: String
     },
-    cancellationPolicy:{
-        type:String
+    cancellationPolicy: {
+        type: String
     },
-    companyHtmlPage:{
-        type:String
+    companyHtmlPage: {
+        type: String
     },
-    registrationValidUpto:{
-        type:Date
+    registrationValidUpto: {
+        type: Date
     },
-    active:{
-        type:Boolean,
-        default:true
+    active: {
+        type: Boolean,
+        default: true
     }
 });
 
-module.exports = mongoose.model('companyMaster',companyMasterSchema);
+module.exports = mongoose.model('companyMaster', companyMasterSchema);

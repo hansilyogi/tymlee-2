@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var customerRouter = require('./routes/customer');
 var companyUserRouter = require('./routes/companyuser');
+var vendorUserRouter = require('./routes/vendor');
 
 var app = express();
 
@@ -24,8 +25,9 @@ app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/customer', customerRouter);
 app.use('/companyuser', companyUserRouter);
+app.use('/api', vendorUserRouter);
 
-app.get('/*', function(req, res) {
+app.get('/*', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
