@@ -15,10 +15,10 @@ config = require("../config");
 //image uploading
 
 var filestorage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/Document");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -35,7 +35,7 @@ var fieldset = finalstorage.fields([
 ]);
 
 /* APIS listing. */
-router.post("/VendorSignUp", fieldset, async function (req, res, next) {
+router.post("/VendorSignUp", fieldset, async function(req, res, next) {
     const {
         doj,
         businessCategoryId,
@@ -147,7 +147,7 @@ router.post("/VendorSignUp", fieldset, async function (req, res, next) {
     }
 });
 
-router.post("/VendorSignIn", async function (req, res, next) {
+router.post("/VendorSignIn", async function(req, res, next) {
     const { adminEmail, adminPassword } = req.body;
 
     console.log('--->>>--------req.body', req.body);
@@ -174,7 +174,7 @@ router.post("/VendorSignIn", async function (req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-router.post("/VendorSignIn", async function (req, res, next) {
+router.post("/VendorSignIn", async function(req, res, next) {
     const { adminEmail, adminPassword } = req.body;
 
     console.log('--->>>--------req.body', req.body);
@@ -201,7 +201,7 @@ router.post("/VendorSignIn", async function (req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-router.get("/getCity", async function (req, res, next) {
+router.post("/getCity", async function(req, res, next) {
     try {
         let data = await cityMasterSchema.find();
         res
@@ -216,7 +216,7 @@ router.get("/getCity", async function (req, res, next) {
     }
 });
 
-router.get("/getCategory", async function (req, res, next) {
+router.post("/getCategory", async function(req, res, next) {
     try {
         let data = await categoryMasterSchema.find();
         res
