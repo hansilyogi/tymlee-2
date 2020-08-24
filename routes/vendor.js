@@ -210,8 +210,14 @@ router.post("/getCategory", async function(req, res, next) {
 
 router.post("/getAllCustomer", async function(req, res, next) {
     try {
-        let customer = await bookingMasterSchema.distinct('customerId');
-        let data = await customerMasterSchema.find({ _id: { $in: customer } });
+        let customer = await bookingMasterSchema.find({ companyId: req.body.companyId }).distinct('customerId');
+        let customerData = await customerMasterSchema.find({ _id: { $in: customer } });
+        let data = [];
+        for (let obj of customerData) {
+            let appointments = await bookingMasterSchema.find({ companyId: req.body.companyId, customerId: obj._id }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+            obj.set('appointments', appointments, { strict: false });
+            data.push(obj);
+        }
         res
             .status(200)
             .json({ Message: "All Customers Data!", Data: data, IsSuccess: true });
