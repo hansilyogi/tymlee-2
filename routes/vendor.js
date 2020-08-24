@@ -110,15 +110,15 @@ router.post("/VendorSignUp", fieldset, async function(req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files.personPhoto == undefined ?
+                personPhoto: req.files !== undefined && req.files.personPhoto == undefined ?
                     null : req.files.personPhoto[0].path,
-                aadharCard: req.files.aadharCard == undefined ?
+                aadharCard: req.files !== undefined && req.files.aadharCard == undefined ?
                     null : req.files.aadharCard[0].path,
-                panCard: req.files.panCard == undefined ? null : req.files.panCard[0].path,
+                panCard: req.files !== undefined && req.files.panCard == undefined ? null : req.files.panCard[0].path,
                 cancelledCheque: req.files.cancelledCheque == undefined ?
                     null : req.files.cancelledCheque[0].path,
                 weekStartDay: weekStartDay,
-                companyLogo: req.files.companyLogo == undefined ?
+                companyLogo: req.files !== undefined && req.files.companyLogo == undefined ?
                     null : req.files.companyLogo[0].path,
                 cancellationPolicy: cancellationPolicy,
                 companyHtmlPage: companyHtmlPage,
@@ -174,33 +174,7 @@ router.post("/VendorSignIn", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-router.post("/VendorSignIn", async function(req, res, next) {
-    const { adminEmail, adminPassword } = req.body;
 
-    console.log('--->>>--------req.body', req.body);
-    try {
-        let company = await companyMasterSchema.find({
-            adminEmail: adminEmail,
-            adminPassword: adminPassword,
-            active: true,
-        });
-        if (company.length == 1) {
-            res.status(200).json({
-                Message: "company  Login!",
-                Data: company,
-                IsSuccess: true,
-            });
-        } else {
-            res.status(200).json({
-                Message: "invalid Data!",
-                Data: 0,
-                IsSuccess: true,
-            });
-        }
-    } catch (err) {
-        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
-    }
-});
 router.post("/getCity", async function(req, res, next) {
     try {
         let data = await cityMasterSchema.find();
