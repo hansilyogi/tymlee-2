@@ -260,4 +260,19 @@ router.post("/getAllAppointment", async function(req, res, next) {
     }
 });
 
+router.post("/updateCustomerStatus", async function(req, res, next) {
+    try {
+        let data = await bookingMasterSchema.findOneAndUpdate({ companyId: req.body.companyId, customerId: req.body.customerId }, { status: req.body.status });
+        res
+            .status(200)
+            .json({ Message: "User Status updated!", Data: 1, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
 module.exports = router;
