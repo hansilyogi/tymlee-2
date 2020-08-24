@@ -208,7 +208,6 @@ router.post("/getCategory", async function(req, res, next) {
     }
 });
 
-
 router.post("/getAllCustomer", async function(req, res, next) {
     try {
         let customer = await bookingMasterSchema.distinct('customerId');
@@ -216,6 +215,42 @@ router.post("/getAllCustomer", async function(req, res, next) {
         res
             .status(200)
             .json({ Message: "All Customers Data!", Data: data, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post("/getTodayAppointment", async function(req, res, next) {
+    try {
+        let data = await bookingMasterSchema.find({
+            companyId: req.body.companyId,
+            appointmentDate: {
+                $lt: new Date(),
+                $gte: new Date(new Date().setDate(new Date().getDate() - 1))
+            }
+        }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+        res
+            .status(200)
+            .json({ Message: "All Appointment Data!", Data: data, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post("/getAllAppointment", async function(req, res, next) {
+    try {
+        let data = await bookingMasterSchema.find({ companyId: req.body.companyId }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+        res
+            .status(200)
+            .json({ Message: "All Appointment Data!", Data: data, IsSuccess: true });
     } catch (err) {
         res.json({
             Message: err.message,
