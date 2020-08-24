@@ -110,16 +110,16 @@ router.post("/VendorSignUp", fieldset, async function(req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files == undefined && req.files.personPhoto == undefined ?
-                    null : req.files.personPhoto[0].path,
-                aadharCard: req.files == undefined && req.files.aadharCard == undefined ?
-                    null : req.files.aadharCard[0].path,
-                panCard: req.files == undefined && req.files.panCard == undefined ? null : req.files.panCard[0].path,
-                cancelledCheque: req.files.cancelledCheque == undefined ?
-                    null : req.files.cancelledCheque[0].path,
+                personPhoto: req.files !== undefined ? (req.files.personPhoto == undefined ?
+                    null : req.files.personPhoto[0].path) : null,
+                aadharCard: req.files !== undefined ? (req.files.aadharCard == undefined ?
+                    null : req.files.aadharCard[0].path) : null,
+                panCard: req.files !== undefined ? (req.files.panCard == undefined ? null : req.files.panCard[0].path) : null,
+                cancelledCheque: req.files !== undefined ? (req.files.cancelledCheque == undefined ?
+                    null : req.files.cancelledCheque[0].path) : null,
                 weekStartDay: weekStartDay,
-                companyLogo: req.files == undefined && req.files.companyLogo == undefined ?
-                    null : req.files.companyLogo[0].path,
+                companyLogo: req.files !== undefined ? (req.files.companyLogo == undefined ?
+                    null : req.files.companyLogo[0].path) : null,
                 cancellationPolicy: cancellationPolicy,
                 companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto,
