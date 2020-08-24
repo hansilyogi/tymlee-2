@@ -2,11 +2,14 @@ var express = require("express");
 var router = express.Router();
 var multer = require("multer");
 var path = require("path");
+var mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
 
 var companyMasterSchema = require("../model/companymaster");
 var cityMasterSchema = require("../model/citymaster");
 var categoryMasterSchema = require("../model/categorymaster");
+var bookingMasterSchema = require("../model/booking");
+var customerMasterSchema = require("../model/customermaster");
 
 var a = Math.floor(100000 + Math.random() * 900000);
 
@@ -205,5 +208,21 @@ router.post("/getCategory", async function(req, res, next) {
     }
 });
 
+
+router.post("/getAllCustomer", async function(req, res, next) {
+    try {
+        let customer = await bookingMasterSchema.distinct('customerId');
+        let data = await customerMasterSchema.find({ _id: { $in: customer } });
+        res
+            .status(200)
+            .json({ Message: "All Customers Data!", Data: data, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
 
 module.exports = router;
