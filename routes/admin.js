@@ -23,10 +23,10 @@ config = require("../config");
 
 //image uploading
 var membershiplocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/membership");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -36,10 +36,10 @@ var membershiplocation = multer.diskStorage({
 var uploadmembership = multer({ storage: membershiplocation });
 
 var bannerlocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/banner");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -49,10 +49,10 @@ var bannerlocation = multer.diskStorage({
 var uploadbanner = multer({ storage: bannerlocation });
 
 var businesscategorylocation = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/businesscategory");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -62,10 +62,10 @@ var businesscategorylocation = multer.diskStorage({
 var uploadbusinesscategory = multer({ storage: businesscategorylocation });
 
 var filestorage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, "uploads/Document");
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(
             null,
             file.fieldname + "_" + Date.now() + path.extname(file.originalname)
@@ -83,7 +83,7 @@ var fieldset = finalstorage.fields([
 
 /* APIS listing. */
 
-router.post("/adminSignUp", async function (req, res, next) {
+router.post("/adminSignUp", async function(req, res, next) {
     const { userName, password } = req.body;
     try {
         let newadmin = new adminLoginSchema({
@@ -100,7 +100,7 @@ router.post("/adminSignUp", async function (req, res, next) {
     }
 });
 
-router.post("/adminSignIn", async function (req, res, next) {
+router.post("/adminSignIn", async function(req, res, next) {
     const { userName, password } = req.body;
     try {
         let admin = await adminLoginSchema.find({
@@ -126,7 +126,7 @@ router.post("/adminSignIn", async function (req, res, next) {
     }
 });
 
-router.post("/companySignIn", async function (req, res, next) {
+router.post("/companySignIn", async function(req, res, next) {
     const { adminEmail, adminPassword } = req.body;
     try {
         let company = await companyMasterSchema.find({
@@ -152,7 +152,7 @@ router.post("/companySignIn", async function (req, res, next) {
     }
 });
 
-router.post("/addMembershipType", uploadmembership.single("registrationIcon"), async function (req, res, next) {
+router.post("/addMembershipType", uploadmembership.single("registrationIcon"), async function(req, res, next) {
     const {
         membershipType,
         registrationFee,
@@ -186,7 +186,7 @@ router.post("/addMembershipType", uploadmembership.single("registrationIcon"), a
     }
 });
 
-router.post("/MembershipType", async function (req, res, next) {
+router.post("/MembershipType", async function(req, res, next) {
     try {
         let data = await membershipTypeMstSchema.find();
         res
@@ -201,7 +201,7 @@ router.post("/MembershipType", async function (req, res, next) {
     }
 });
 
-router.post("/UpdateMembershipType", uploadmembership.single("registrationIcon"), async function (req, res, next) {
+router.post("/UpdateMembershipType", uploadmembership.single("registrationIcon"), async function(req, res, next) {
     try {
         const {
             id,
@@ -250,7 +250,7 @@ router.post("/UpdateMembershipType", uploadmembership.single("registrationIcon")
     }
 });
 
-router.post("/DeleteMembershipType", async function (req, res, next) {
+router.post("/DeleteMembershipType", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await membershipTypeMstSchema.findByIdAndRemove(id);
@@ -266,7 +266,7 @@ router.post("/DeleteMembershipType", async function (req, res, next) {
     }
 });
 
-router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function (req, res, next) {
+router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
     const {
         businessCategoryName,
         startDate,
@@ -305,7 +305,7 @@ router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"),
     }
 });
 
-router.post("/CategoryMaster", async function (req, res, next) {
+router.post("/CategoryMaster", async function(req, res, next) {
     try {
         let data = await categoryMasterSchema.find();
         res
@@ -320,7 +320,7 @@ router.post("/CategoryMaster", async function (req, res, next) {
     }
 });
 
-router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function (req, res, next) {
+router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
     try {
         const {
             id,
@@ -375,7 +375,7 @@ router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon
 
 });
 
-router.post("/deleteCategoryMaster", async function (req, res, next) {
+router.post("/deleteCategoryMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await categoryMasterSchema.findByIdAndRemove(id);
@@ -391,7 +391,7 @@ router.post("/deleteCategoryMaster", async function (req, res, next) {
     }
 });
 
-router.post("/addCityMaster", async function (req, res, next) {
+router.post("/addCityMaster", async function(req, res, next) {
     try {
         const { id, cityCode, cityName, stateName, stateCode } = req.body;
         if (id == "0") {
@@ -424,7 +424,7 @@ router.post("/addCityMaster", async function (req, res, next) {
     }
 });
 
-router.post("/getCityMaster", async function (req, res, next) {
+router.post("/getCityMaster", async function(req, res, next) {
     try {
         let data = await cityMasterSchema.find();
         res
@@ -439,7 +439,7 @@ router.post("/getCityMaster", async function (req, res, next) {
     }
 });
 
-router.post("/deleteCityMaster", async function (req, res, next) {
+router.post("/deleteCityMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await cityMasterSchema.findByIdAndRemove(id);
@@ -455,7 +455,7 @@ router.post("/deleteCityMaster", async function (req, res, next) {
     }
 });
 
-router.post("/addCityBusinessCategory", async function (req, res, next) {
+router.post("/addCityBusinessCategory", async function(req, res, next) {
     try {
         const { id, businessCategoryId, startDate } = req.body;
         if (id == "0") {
@@ -489,7 +489,7 @@ router.post("/addCityBusinessCategory", async function (req, res, next) {
     }
 });
 
-router.post("/getCityBusinessCategory", async function (req, res, next) {
+router.post("/getCityBusinessCategory", async function(req, res, next) {
     try {
         let data = await cityBusinessCategorySchema
             .find()
@@ -508,7 +508,7 @@ router.post("/getCityBusinessCategory", async function (req, res, next) {
     }
 });
 
-router.post("/deleteCityBusinessCategory", async function (req, res, next) {
+router.post("/deleteCityBusinessCategory", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await cityBusinessCategorySchema.findByIdAndRemove(id);
@@ -526,7 +526,7 @@ router.post("/deleteCityBusinessCategory", async function (req, res, next) {
     }
 });
 
-router.post("/addCompanyMaster", fieldset, async function (req, res, next) {
+router.post("/addCompanyMaster", fieldset, async function(req, res, next) {
     const {
         doj,
         businessCategoryId,
@@ -640,7 +640,7 @@ router.post("/addCompanyMaster", fieldset, async function (req, res, next) {
     }
 });
 
-router.post("/updateCompanyMaster", fieldset, async function (req, res, next) {
+router.post("/updateCompanyMaster", fieldset, async function(req, res, next) {
     const {
         id,
         doj,
@@ -779,7 +779,7 @@ router.post("/updateCompanyMaster", fieldset, async function (req, res, next) {
     }
 });
 
-router.post("/getCompanyMaster", async function (req, res, next) {
+router.post("/getCompanyMaster", async function(req, res, next) {
     try {
         let data = await companyMasterSchema
             .find()
@@ -797,7 +797,7 @@ router.post("/getCompanyMaster", async function (req, res, next) {
     }
 });
 
-router.post("/deleteCompanyMaster", async function (req, res, next) {
+router.post("/deleteCompanyMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await companyMasterSchema.findByIdAndRemove(id);
@@ -813,7 +813,7 @@ router.post("/deleteCompanyMaster", async function (req, res, next) {
     }
 });
 
-router.post("/addBanner", uploadbanner.single("image"), async function (
+router.post("/addBanner", uploadbanner.single("image"), async function(
     req,
     res,
     next
@@ -860,7 +860,7 @@ router.post("/addBanner", uploadbanner.single("image"), async function (
     }
 });
 
-router.post("/getBanner", async function (req, res, next) {
+router.post("/getBanner", async function(req, res, next) {
     try {
         let data = await bannerSchema.find();
         res
@@ -875,7 +875,7 @@ router.post("/getBanner", async function (req, res, next) {
     }
 });
 
-router.post("/deleteBanner", async function (req, res, next) {
+router.post("/deleteBanner", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await bannerSchema.findByIdAndRemove(id);
@@ -891,7 +891,7 @@ router.post("/deleteBanner", async function (req, res, next) {
     }
 });
 
-router.post("/getcustomer", async function (req, res, next) {
+router.post("/getcustomer", async function(req, res, next) {
     try {
         let data = await customerMasterSchema.find();
         console.log(data);
@@ -907,7 +907,7 @@ router.post("/getcustomer", async function (req, res, next) {
     }
 });
 
-router.post("/getCompanyUserMaster", async function (req, res, next) {
+router.post("/getCompanyUserMaster", async function(req, res, next) {
     const { companyId } = req.body;
     try {
         let data = await companyUserMasterSchema.find({ companyId: companyId });
@@ -925,7 +925,7 @@ router.post("/getCompanyUserMaster", async function (req, res, next) {
     }
 });
 
-router.post("/addCompanyUserMaster", async function (req, res, next) {
+router.post("/addCompanyUserMaster", async function(req, res, next) {
     const {
         id,
         companyId,
@@ -976,7 +976,7 @@ router.post("/addCompanyUserMaster", async function (req, res, next) {
     }
 });
 
-router.post("/deleteCompanyUser", async function (req, res, next) {
+router.post("/deleteCompanyUser", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await companyUserMasterSchema.findByIdAndRemove(id);
@@ -992,7 +992,7 @@ router.post("/deleteCompanyUser", async function (req, res, next) {
     }
 });
 
-router.post("/addInventoryAndServiceProvider", async function (req, res, next) {
+router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
     const {
         companyId,
         inventoryName,
@@ -1074,7 +1074,7 @@ router.post("/addInventoryAndServiceProvider", async function (req, res, next) {
     }
 });
 
-router.post("/getInventoryAndServiceListByCompanyId", async function (
+router.post("/getInventoryAndServiceListByCompanyId", async function(
     req,
     res,
     next
@@ -1106,7 +1106,7 @@ router.post("/getInventoryAndServiceListByCompanyId", async function (
     }
 });
 
-router.post("/addTermNCondition", async function (req, res, next) {
+router.post("/addTermNCondition", async function(req, res, next) {
     const { id, title, description } = req.body;
     try {
         if (id == "0") {
@@ -1135,7 +1135,7 @@ router.post("/addTermNCondition", async function (req, res, next) {
     }
 });
 
-router.post("/getTermNCondition", async function (req, res, next) {
+router.post("/getTermNCondition", async function(req, res, next) {
     try {
         let data = await termnconditionSchema.find();
         res
@@ -1150,7 +1150,7 @@ router.post("/getTermNCondition", async function (req, res, next) {
     }
 });
 
-router.post("/deleteTermNCondition", async function (req, res, next) {
+router.post("/deleteTermNCondition", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await termnconditionSchema.findByIdAndRemove(id);
@@ -1166,7 +1166,7 @@ router.post("/deleteTermNCondition", async function (req, res, next) {
     }
 });
 
-router.post("/getSlot", async function (req, res, next) {
+router.post("/getSlot", async function(req, res, next) {
     const { companyId, inventoryId, serviceProviderId } = req.body;
     try {
         let data = await bookingSlotMasterSchema
@@ -1189,7 +1189,7 @@ router.post("/getSlot", async function (req, res, next) {
     }
 });
 
-router.post("/addSlot", async function (req, res, next) {
+router.post("/addSlot", async function(req, res, next) {
     const {
         id,
         companyId,
@@ -1241,7 +1241,7 @@ router.post("/addSlot", async function (req, res, next) {
     }
 });
 
-router.post("/deleteSlot", async function (req, res, next) {
+router.post("/deleteSlot", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await bookingSlotMasterSchema.findByIdAndDelete(id);
@@ -1257,7 +1257,7 @@ router.post("/deleteSlot", async function (req, res, next) {
     }
 });
 
-router.post("/getBookingHistory", async function (req, res, next) {
+router.post("/getBookingHistory", async function(req, res, next) {
     try {
         let data = await bookingMasterSchema
             .find({ status: "pending" })
@@ -1307,7 +1307,7 @@ router.post("/getBookingHistory", async function (req, res, next) {
     }
 });
 
-router.post("/updateBookingCancel", async function (req, res, next) {
+router.post("/updateBookingCancel", async function(req, res, next) {
     const { bookingId, status } = req.body;
     try {
         let data = await bookingMasterSchema.find({ _id: bookingId });
@@ -1325,7 +1325,7 @@ router.post("/updateBookingCancel", async function (req, res, next) {
     }
 });
 
-router.post("/sendNotification", async function (req, res, next) {
+router.post("/sendNotification", async function(req, res, next) {
     const { companyId, type } = req.body;
     try {
         let datalist = [];
@@ -1382,7 +1382,7 @@ router.post("/sendNotification", async function (req, res, next) {
     }
 });
 
-router.post("/", async function (req, res, next) {
+router.post("/", async function(req, res, next) {
     const { title, message, type, data } = req.body;
     try {
         var payload = {
@@ -1406,10 +1406,10 @@ router.post("/", async function (req, res, next) {
                     console.log(doc);
                 });
         }
-    } catch (err) { }
+    } catch (err) {}
 });
 
-router.post("/updateMembershipTypeIsAcitve", async function (req, res, next) {
+router.post("/updateMembershipTypeIsAcitve", async function(req, res, next) {
     const { id, isActive } = req.body;
     try {
         let data = await membershipTypeMstSchema.find({ _id: id });
@@ -1427,7 +1427,7 @@ router.post("/updateMembershipTypeIsAcitve", async function (req, res, next) {
     }
 });
 
-router.post("/getregistrationFees", async function (req, res, next) {
+router.post("/getregistrationFees", async function(req, res, next) {
     const { companyId } = req.body;
     try {
         let data = await registrationFeesSchema.find({ companyId: companyId });
@@ -1445,7 +1445,7 @@ router.post("/getregistrationFees", async function (req, res, next) {
     }
 });
 
-router.post("/addRegistrationFees", async function (req, res, next) {
+router.post("/addRegistrationFees", async function(req, res, next) {
     const {
         companyId,
         regDate,
@@ -1495,7 +1495,7 @@ router.post("/addRegistrationFees", async function (req, res, next) {
     }
 });
 
-router.post("/deleteRegistrationFees", async function (req, res, next) {
+router.post("/deleteRegistrationFees", async function(req, res, next) {
     try {
         const { id } = req.body;
         let data = await registrationFeesSchema.findByIdAndRemove(id);
