@@ -1,27 +1,23 @@
 const mongoose = require('mongoose');
 
 var cityMasterSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    cityCode:{
-        type:String,
-        required:true
+    cityCode: {
+        type: String,
+        required: true
     },
-    cityName:{
-        type:String,
-        required:true
+    cityName: {
+        type: String,
+        required: true
     },
-    stateName:{
-        type:String,
-        required:true
+    stateId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'companyMaster',
+        required: true
     },
-    stateCode:{
-        type:String,
-        required:true
-    },
-    isActive:{
-        type:Boolean,
-        default:true
+    status: {
+        type: Boolean,
+        default: true
     }
 });
 
-module.exports = mongoose.model('cityMaster',cityMasterSchema);
+module.exports = mongoose.model('cityMaster', cityMasterSchema);
