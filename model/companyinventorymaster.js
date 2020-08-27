@@ -1,53 +1,53 @@
 const mongoose = require('mongoose');
 
 var companyInventoryMasterSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    companyId:{
-        type:mongoose.Types.ObjectId,
-        ref:'companyMaster'
+    _id: mongoose.Schema.Types.ObjectId,
+    companyId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'companyMaster'
     },
-    inventoryName:{
-        type:String,
-        required:true
+    inventoryName: {
+        type: String,
+        required: true
     },
-    inventoryDescription:{
-        type:String,
-        required:true
+    inventoryDescription: {
+        type: String,
+        required: true
     },
-    appointmentMinutes:{
-        type:Number
+    appointmentMinutes: {
+        type: Number
     },
-    multipleServiceProviderRequired:{
-        type:Boolean,
-        default:false
+    multipleServiceProviderRequired: {
+        type: Boolean,
+        default: false
     },
-    rateType:{
-        type:String
+    rateType: {
+        type: String
     },
-    rateAmt:{
-        type:Number
+    rateAmt: {
+        type: Number
     },
-    inventoryNotes1Name:{
-        type:String
+    inventoryNotes1Name: {
+        type: String
     },
-    inventoryNotes1:{
-        type:String
+    inventoryNotes1: {
+        type: String
     },
-    inventoryNotes2Name:{
-        type:String
+    inventoryNotes2Name: {
+        type: String
     },
-    inventoryNotes2:{
-        type:String
+    inventoryNotes2: {
+        type: String
     },
-    inventoryNotes3Name:{
-        type:String
+    inventoryNotes3Name: {
+        type: String
     },
-    inventoryNotes3:{
-        type:String
+    inventoryNotes3: {
+        type: String
     },
-    inventoryAvailable:{
-        type:Boolean
+    inventoryAvailable: {
+        type: Boolean
     }
 });
 
-module.exports = mongoose.model('companyInventoryMaster',companyInventoryMasterSchema);
+module.exports = mongoose.model('companyInventoryMaster', companyInventoryMasterSchema);

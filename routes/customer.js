@@ -589,9 +589,10 @@ router.post("/avaliableSlot", async function(req, res, next) {
     try {
         let datalist = [];
         data = await companyInventoryMasterSchema.find({ _id: inventoryId });
-        if (data[0].multipleServiceProviderRequired == true) {
+        if (data.length > 0 && data[0].multipleServiceProviderRequired == true) {
             let data = await bookingMasterSchema.find({ serviceProviderId: serviceProviderId, appointmentDate: new Date().toISOString() }).populate("companyId").populate("inventoryId").populate("serviceProviderId")
                 .populate("customerId");
+
             for (let i = 0; i < data.length; i++) {
                 var bookingSlotId = data[i].bookingSlotId;
                 var appointmentDate = data[i].appointmentDate;
