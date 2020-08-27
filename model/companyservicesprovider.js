@@ -1,34 +1,34 @@
 const mongoose = require('mongoose');
 
 var companyServicesProviderSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    companyId:{
-        type:mongoose.Types.ObjectId,
-        ref:'companyMaster'
+    _id: mongoose.Schema.Types.ObjectId,
+    companyId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'companyMaster'
     },
-    inventoryId:{
-        type:mongoose.Types.ObjectId,
-        ref:'companyInventoryMaster'
+    inventoryId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'companyInventoryMaster'
     },
-    serviceProviderName:{
-        type:String
+    serviceProviderName: {
+        type: String
     },
-    serviceProviderDescription:{
-        type:String
+    serviceProviderDescription: {
+        type: String
     },
-    appointmentMinutes:{
-        type:Number
+    appointmentMinutes: {
+        type: Number
     },
-    rateType:{
-        type:String
+    rateType: {
+        type: String
     },
-    rateAmt:{
-        type:Number
+    rateAmt: {
+        type: Number
     },
-    serviceProviderAvailable:{
-        type:Boolean,
-        default:true
+    serviceProviderAvailable: {
+        type: Boolean,
+        default: true
     }
 });
 
-module.exports = mongoose.model('companyServicesProvider',companyServicesProviderSchema);
+module.exports = mongoose.model('companyServicesProvider', companyServicesProviderSchema);

@@ -253,29 +253,19 @@ router.post('/getCompanyMasterByBusinessCategoryId', async function(req, res, ne
     }
 });
 
-router.post("/getInventoryAndServiceListByCompanyId", async function(
+router.post("/getServiceListByCompanyId", async function(
     req,
     res,
     next
 ) {
     try {
         const { companyId } = req.body;
-        let data = await companyInventoryMasterSchema.find({
+        serviceProviders = await companyServicesProviderSchema.find({
             companyId: companyId,
         });
-        let datalist = [];
-        for (let i = 0; i < data.length; i++) {
-            var serviceProviders = [];
-            if (data[i].multipleServiceProviderRequired == true) {
-                serviceProviders = await companyServicesProviderSchema.find({
-                    inventoryId: data[i].id,
-                });
-            }
-            datalist.push({ Inventory: data[i], serviceProviders: serviceProviders });
-        }
         res
             .status(200)
-            .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+            .json({ Message: "Data Found!", Data: serviceProviders, IsSuccess: true });
     } catch (err) {
         res.json({
             Message: err.message,
