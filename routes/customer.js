@@ -18,6 +18,7 @@ var bookingSlotMasterSchema = require('../model/bookingslotmaster');
 var bookingMasterSchema = require('../model/booking');
 var companyTransactionSchema = require('../model/companytransaction');
 var feedbackSchema = require('../model/feedback');
+const { ObjectId } = require('mongodb');
 
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -128,15 +129,29 @@ router.post('/getBanner', async function(req, res, next) {
     }
 });
 
-router.post('/getState', async function(req, res, next) {
+router.post('/getState', async function (req, res, next) {
     try {
-        let data = await stateMasterSchema.find();
-        res.status(200).json({
-            Message: "State Data!",
-            Data: data,
-            IsSuccess: true
-        });
-
+        let data = await stateMasterSchema.find().lean();
+        if (data && data.length) {
+            let promise = data.map(async stateObj => {
+                let response = await cityMasterSchema.find({
+                    stateId: stateObj._id
+                });
+                return { ...stateObj, cities: response };
+            });
+            const results = await Promise.all(promise);
+            res.status(200).json({
+                Message: "State Data!",
+                Data: results,
+                IsSuccess: true
+            });
+        } else {
+            res.status(200).json({
+                Message: "State Data!",
+                Data: data || [],
+                IsSuccess: true
+            });
+        }
     } catch (err) {
         res.json({
             Message: err.message,
