@@ -642,5 +642,41 @@ router.post("/avaliableSlot", async function(req, res, next) {
     }
 });
 
+router.post("/getCategoriesInfo", async function(req, res, next) {
+    try {
+        let banner = await bannerSchema.find();
+        let categories = await categoryMasterSchema.find().lean();
+        let results = [];
+        if (categories && categories.length) {
+            let promise = categories.map(async category => {
+                let companies = await companyMasterSchema.find({ businessCategoryId: category._id }).populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId').lean();
+                if (companies && companies.length) {
+                    let innerPromise = companies.map(async company => {
+                        let services = await companyServicesProviderSchema.find({
+                            companyId: company._id,
+                        });
+                        return { ...company, services };
+                    });
+                    let innerResults = await Promise.all(innerPromise);
+                    return { ...category, componies: innerResults };
+                } else {
+                    return { ...category, componies: [] };
+                }
+            });
+            results = await Promise.all(promise);
+        }
+        res.status(200).json({ 
+            Message: "Data Found!", 
+            Data: {
+                banner,
+                categories: results
+            }, 
+            IsSuccess: true
+        });
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
+
 
 module.exports = router;
