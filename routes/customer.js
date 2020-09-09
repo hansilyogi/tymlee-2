@@ -77,7 +77,7 @@ router.post("/customerSignIn", async function(req, res, next) {
             isVerified: true,
             isActive: true,
         }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode');
-        if (Customer.length == 1) {
+        if (Customer) {
             res.status(200).json({
                 Message: "Customer  Login!",
                 Data: Customer,
