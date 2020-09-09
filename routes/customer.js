@@ -71,13 +71,12 @@ router.post('/customerSignUp', async function(req, res, next) {
 router.post("/customerSignIn", async function(req, res, next) {
     const { emailID, password } = req.body;
     try {
-
-        let Customer = await customerMasterSchema.find({
+        let Customer = await customerMasterSchema.findOne({
             emailID: emailID,
             password: password,
             isVerified: true,
             isActive: true,
-        });
+        }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode');
         if (Customer.length == 1) {
             res.status(200).json({
                 Message: "Customer  Login!",
