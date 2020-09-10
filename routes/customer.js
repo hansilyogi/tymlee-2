@@ -56,7 +56,8 @@ router.post('/customerSignUp', async function(req, res, next) {
                 address2: address2,
                 city: city,
                 state: state,
-                zipcode: zipcode
+                zipcode: zipcode,
+                isActive: true
             });
             newCustomer.save();
             res
@@ -85,9 +86,9 @@ router.post("/customerSignIn", async function(req, res, next) {
             });
         } else {
             res.status(200).json({
-                Message: "invalid Data!",
-                Data: Customer,
-                IsSuccess: true,
+                Message: "Invalid Data!",
+                // Data: Customer,
+                IsSuccess: false,
             });
         }
     } catch (err) {
