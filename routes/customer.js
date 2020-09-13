@@ -57,7 +57,8 @@ router.post('/customerSignUp', async function(req, res, next) {
                 city: city,
                 state: state,
                 zipcode: zipcode,
-                isActive: true
+                isActive: true,
+                isVerified: true
             });
             newCustomer.save();
             res
