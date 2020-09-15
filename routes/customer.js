@@ -19,6 +19,7 @@ var bookingMasterSchema = require('../model/booking');
 var companyTransactionSchema = require('../model/companytransaction');
 var feedbackSchema = require('../model/feedback');
 const { ObjectId } = require('mongodb');
+const moment = require('moment');
 
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -600,40 +601,62 @@ router.post('/getbillDetailByOrderNo', async function(req, res, next) {
     }
 });
 
-router.post("/avaliableSlot", async function(req, res, next) {
-    const { inventoryId, serviceProviderId } = req.body;
+router.post("/avaliableSlot", async function (req, res, next) {
+    const { inventoryId, serviceProviderId, date } = req.body;
     try {
-        let datalist = [];
-        data = await companyInventoryMasterSchema.find({ _id: inventoryId });
-        if (data.length > 0 && data[0].multipleServiceProviderRequired == true) {
-            let data = await bookingMasterSchema.find({ serviceProviderId: serviceProviderId, appointmentDate: new Date().toISOString() }).populate("companyId").populate("inventoryId").populate("serviceProviderId")
-                .populate("customerId");
+        // let datalist = [];
+        let avaliableSlot = await bookingSlotMasterSchema.find({
+            inventoryId: ObjectId(inventoryId),
+            serviceProviderId: ObjectId(serviceProviderId),
+            dayName: moment(date).format('dddd')
+        }).lean();
+        if (avaliableSlot && avaliableSlot.length) {
+            let currentBooking = avaliableSlot.map(async (avaliableSlotObj, i) => {
+                let bookinkgMaster = await bookingMasterSchema.count({
+                    "bookingSlotId": avaliableSlotObj._id
+                });
+                avaliableSlotObj.remaingSlotCount = avaliableSlotObj.appointmentCount - bookinkgMaster
+                return avaliableSlotObj
+            })
 
-            for (let i = 0; i < data.length; i++) {
-                var bookingSlotId = data[i].bookingSlotId;
-                var appointmentDate = data[i].appointmentDate;
-                var appointmentTime = data[i].appointmentTime;
-                datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime });
-            }
-        } else {
-            let data = await bookingMasterSchema.find({ inventoryId: inventoryId, appointmentDate: new Date().toISOString() }).populate("companyId").populate("inventoryId").populate("serviceProviderId")
-                .populate("customerId");
-            for (let i = 0; i < data.length; i++) {
-                var bookingSlotId = data[i].bookingSlotId;
-                var appointmentDate = data[i].appointmentDate;
-                var appointmentTime = data[i].appointmentTime;
-                datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime });
-            }
+            let result = await Promise.all(currentBooking);
+            return res.status(200).json({
+                Message: "Data Found!", Data: result || [], IsSuccess: true
+            })
         }
-        if (datalist != "null") {
-            res
-                .status(200)
-                .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
-        } else {
-            res
-                .status(200)
-                .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
-        }
+        return res.status(200).json({
+            Message: "Data Found!", Data: avaliableSlot || [], IsSuccess: true
+        })
+        // data = await companyInventoryMasterSchema.find({ _id: inventoryId });
+        // if (data.length > 0 && data[0].multipleServiceProviderRequired == true) {
+        //     let data = await bookingMasterSchema.find({ serviceProviderId: serviceProviderId, appointmentDate: new Date().toISOString() }).populate("companyId").populate("inventoryId").populate("serviceProviderId")
+        //         .populate("customerId");
+
+        //     for (let i = 0; i < data.length; i++) {
+        //         var bookingSlotId = data[i].bookingSlotId;
+        //         var appointmentDate = data[i].appointmentDate;
+        //         var appointmentTime = data[i].appointmentTime;
+        //         datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime });
+        //     }
+        // } else {
+        //     let data = await bookingMasterSchema.find({ inventoryId: inventoryId, appointmentDate: new Date().toISOString() }).populate("companyId").populate("inventoryId").populate("serviceProviderId")
+        //         .populate("customerId");
+        //     for (let i = 0; i < data.length; i++) {
+        //         var bookingSlotId = data[i].bookingSlotId;
+        //         var appointmentDate = data[i].appointmentDate;
+        //         var appointmentTime = data[i].appointmentTime;
+        //         datalist.push({ bookingSlotId: bookingSlotId, appointmentDate: appointmentDate, appointmentTime: appointmentTime });
+        //     }
+        // }
+        // if (datalist != "null") {
+        //     res
+        //         .status(200)
+        //         .json({ Message: "Data Found!", Data: datalist, IsSuccess: true });
+        // } else {
+        //     res
+        //         .status(200)
+        //         .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
+        // }
     } catch (err) {
         res.json({
             Message: err.message,
