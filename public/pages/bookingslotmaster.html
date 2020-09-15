@@ -157,8 +157,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Day Name</label>
-                                    <input type="text" class="form-control form-control-sm" required="" ng-model="DayName" placeholder="Monday" autocomplete="off">
-
+                                    <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="DayName" placeholder="Monday" autocomplete="off"> -->
+                                    <select class="form-control form-control-sm" ng-model="DayName" ng-init="">
+                                        <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="day in weekDays"
+                                                    ng-selected="DayName == day" value="{{day}}">
+                                                    {{day}}</option>
+                                      </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -172,14 +177,18 @@
                                 <div class="form-group">
                                     <label>From Time</label>
                                     <!-- <input type="time" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="9" autocomplete="off"> -->
-                                    <input type="text" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="FromTime" autocomplete="off">
+                                    <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="FromTime" autocomplete="off"> -->
+                                    <input type="time" class="form-control form-control-sm" ng-model="FromTime" [name="FromTime" ] [required="true" ]
+                                        [ng-required="true" ]>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>To Time</label>
                                     <!-- <input type="time" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="9" autocomplete="off"> -->
-                                    <input type="text" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="ToTime" autocomplete="off">
+                                    <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="ToTime" autocomplete="off"> -->
+                                    <input type="time" class="form-control form-control-sm" ng-model="ToTime" [name="ToTime" ] [required="true" ]
+                                        [ng-required="true" ]>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -189,12 +198,12 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Rate/ Price</label><br>
                                     <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" required="" ng-model="Rate" placeholder="Rate/ Price" autocomplete="off">
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                         <button type="submit" class="btn btn-primary" ng-disabled="btnsave">Save changes</button>

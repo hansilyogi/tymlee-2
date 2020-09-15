@@ -8,7 +8,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.VisibleData = false;
     $scope.ServiceProviderList = [];
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
-
+    $scope.weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     $scope.GetCompany = function() {
         $http({
@@ -61,6 +61,10 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.GetInventory();
 
     $scope.submitbookingslot = function() {
+        let fromTimeHrs =  ($scope.FromTime.getHours() < 10 ?'0':'') + $scope.FromTime.getHours(); // new Date($scope.FromTime).getHours();
+        let fromTimeMinutes = ($scope.FromTime.getMinutes() < 10 ?'0':'') + $scope.FromTime.getMinutes();  //new Date($scope.FromTime).getMinutes();
+        let toTimeHrs = ($scope.ToTime.getHours() < 10 ?'0':'') + $scope.ToTime.getHours(); // new Date($scope.ToTime).getHours();
+        let toTimeMinutes = ($scope.ToTime.getMinutes() < 10 ?'0':'') + $scope.ToTime.getMinutes();  // new Date($scope.ToTime).getMinutes()
         var json = {
             "id": $scope.Id,
             "companyId": $scope.CompanyId,
@@ -68,10 +72,10 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             "serviceProviderId": $scope.ServiceProviderId,
             "dayName": $scope.DayName,
             "slotName": $scope.SlotName,
-            "fromTime": $scope.FromTime,
-            "toTime": $scope.ToTime,
+            "fromTime": `${fromTimeHrs}:${fromTimeMinutes}`,
+            "toTime": `${toTimeHrs}:${toTimeMinutes}`,
             "appointmentCount": $scope.AppointmentCount,
-            "rate": $scope.Rate
+            "rate": 50
         };
         $http({
             url: imageroute + "/admin/addSlot",
@@ -209,7 +213,6 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     //     $scope.SGSTPercent = data.sgstPercent;
     //     $scope.IGSTPercent = data.igstPercent;
     // }
-
 
     $scope.Clear = function() {
         $scope.Id = 0;

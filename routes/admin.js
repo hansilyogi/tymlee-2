@@ -1167,14 +1167,11 @@ router.post("/deleteTermNCondition", async function(req, res, next) {
 });
 
 router.post("/getSlot", async function(req, res, next) {
-    const { companyId, inventoryId, serviceProviderId } = req.body;
+    const { companyId, inventoryId } = req.body;
     try {
+        let findCriteria = JSON.parse(JSON.stringify( Object.assign({companyId, inventoryId})));
         let data = await bookingSlotMasterSchema
-            .find({
-                companyId: companyId,
-                inventoryId: inventoryId,
-                $or: [{ serviceProviderId: serviceProviderId }],
-            })
+            .find(findCriteria)
             .populate("inventoryId")
             .populate("serviceProviderId");
         res
@@ -1203,7 +1200,7 @@ router.post("/addSlot", async function(req, res, next) {
         rate,
     } = req.body;
     try {
-        if (serviceProviderId != null) {
+        if (serviceProviderId) {
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 companyId: companyId,
@@ -1214,26 +1211,33 @@ router.post("/addSlot", async function(req, res, next) {
                 fromTime: fromTime,
                 toTime: toTime,
                 appointmentCount: appointmentCount,
-                rate: rate,
+                rate: rate || 50,
             });
         } else {
+            let serviceProviderId = await companyServicesProviderSchema.findOne({
+                inventoryId: inventoryId,
+                companyId: companyId,
+            }).select('_id');
+            if (!serviceProviderId) {
+                res.status(400).json({IsSuccess: false, Message: "Invalid Service Provider!"})
+            }
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 companyId: companyId,
                 inventoryId: inventoryId,
-                serviceProviderId: null,
+                serviceProviderId: serviceProviderId,
                 dayName: dayName,
                 slotName: slotName,
                 fromTime: fromTime,
                 toTime: toTime,
                 appointmentCount: appointmentCount,
-                rate: rate,
+                rate: rate || 50,
             });
         }
-        slot.save();
+        await slot.save();
         res.status(200).json({ Message: "Slot Added!", Data: 1, IsSuccess: true });
-    } catch {
-        res.json({
+    } catch(err) {
+        res.status(400).json({
             Message: err.message,
             Data: 0,
             IsdSuccess: false,
