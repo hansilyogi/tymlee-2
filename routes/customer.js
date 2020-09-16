@@ -255,8 +255,11 @@ router.post('/getCategoryMaster', async function(req, res, next) {
 
 router.post('/getCompanyMasterByBusinessCategoryId', async function(req, res, next) {
     try {
-        const { businessCategoryId } = req.body;
-        let data = await companyMasterSchema.find({ businessCategoryId: businessCategoryId }).populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId');
+        const { businessCategoryId, cityMasterId } = req.body;
+        let conditions = JSON.parse(JSON.stringify({businessCategoryId, cityMasterId}));
+        let data = await companyMasterSchema.find(conditions)
+            .populate('businessCategoryId', ' businessCategoryName')
+            .populate('cityMasterId');
         res
             .status(200)
             .json({ Message: "Company Master Data!", Data: data, IsSuccess: true });
