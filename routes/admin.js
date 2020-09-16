@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var multer = require("multer");
 var path = require("path");
+const moment = require('moment');
 // const bcrypt = require('bcrypt');
 var membershipTypeMstSchema = require("../model/membershiptypemst");
 var cityMasterSchema = require("../model/citymaster");
@@ -1167,9 +1168,9 @@ router.post("/deleteTermNCondition", async function(req, res, next) {
 });
 
 router.post("/getSlot", async function(req, res, next) {
-    const { companyId, inventoryId } = req.body;
+    const { companyId, inventoryId, serviceProviderId } = req.body;
     try {
-        let findCriteria = JSON.parse(JSON.stringify( Object.assign({companyId, inventoryId})));
+        let findCriteria = JSON.parse(JSON.stringify( Object.assign({companyId, inventoryId, serviceProviderId})));
         let data = await bookingSlotMasterSchema
             .find(findCriteria)
             .populate("inventoryId")
@@ -1186,7 +1187,7 @@ router.post("/getSlot", async function(req, res, next) {
     }
 });
 
-router.post("/addSlot", async function(req, res, next) {
+router.post("/addSlot", async function (req, res, next) {
     const {
         id,
         companyId,
@@ -1200,6 +1201,26 @@ router.post("/addSlot", async function(req, res, next) {
         rate,
     } = req.body;
     try {
+        let exisitingBookingSlots = await bookingSlotMasterSchema.find({
+            inventoryId: inventoryId,
+            companyId: companyId,
+            dayName: dayName
+        }).lean();
+        function checkexhistingSlot() {
+            let format = 'HH:mm';
+            let beforeTime = moment(fromTime, format)
+            let afterTime = moment(toTime, format);
+            return Promise.all(
+                exisitingBookingSlots.map((slot) => {
+                    let slotStartTime = moment(`${slot.fromTime}`, format);
+                    let slotEndTime = moment(`${slot.toTime}`, format);
+                    if (slotStartTime.isSame(beforeTime) || slotStartTime.isBetween(beforeTime, afterTime) || slotEndTime.isSame(afterTime) || slotEndTime.isBetween(beforeTime, afterTime)) {
+                        throw new Error('Sloat Already Available!')
+                    }
+                })
+            );
+        }
+        let isExist = await checkexhistingSlot();
         if (serviceProviderId) {
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
@@ -1219,7 +1240,7 @@ router.post("/addSlot", async function(req, res, next) {
                 companyId: companyId,
             }).select('_id');
             if (!serviceProviderId) {
-                res.status(400).json({IsSuccess: false, Message: "Invalid Service Provider!"})
+                res.status(400).json({ IsSuccess: false, Message: "Invalid Service Provider!" })
             }
             var slot = new bookingSlotMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
@@ -1236,9 +1257,9 @@ router.post("/addSlot", async function(req, res, next) {
         }
         await slot.save();
         res.status(200).json({ Message: "Slot Added!", Data: 1, IsSuccess: true });
-    } catch(err) {
+    } catch (err) {
         res.status(400).json({
-            Message: err.message,
+            Message: err.message || err,
             Data: 0,
             IsdSuccess: false,
         });

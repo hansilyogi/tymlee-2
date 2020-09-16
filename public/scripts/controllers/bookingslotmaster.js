@@ -94,7 +94,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                 }
             },
             function(error) {
-                console.log(error);
+                alert(error.data.Message);
                 $scope.btnsave = false;
             }
         );
