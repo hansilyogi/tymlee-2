@@ -528,7 +528,11 @@ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
         var today = new Date();
         const { customerId } = req.body;
         var today = new Date();
-        let data = await bookingMasterSchema.find({ customerId: customerId, status: "pending", bookingDate: { $gte: today } });
+        let data = await bookingMasterSchema.find({ customerId: customerId, status: "pending", bookingDate: { $gte: today } })
+        .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2')
+        .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
+        .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate')
+        .sort({ 'bookingDate': 1 });
         if (data != "null") {
             res
                 .status(200)
