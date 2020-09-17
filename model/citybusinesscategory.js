@@ -6,6 +6,10 @@ var cityBusinessCategorySchema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'categoryMaster'
     },
+    cityId:{
+        type:mongoose.Types.ObjectId,
+        ref:'cityMaster'
+    },
     startDate:{
         type:Date,
         required:true

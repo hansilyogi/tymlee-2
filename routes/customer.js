@@ -11,6 +11,7 @@ var companyServicesProviderSchema = require('../model/companyservicesprovider');
 var stateMasterSchema = require('../model/statemaster');
 var cityMasterSchema = require('../model/citymaster');
 var categoryMasterSchema = require('../model/categorymaster');
+var cityBusinessCategorySchema = require('../model/citybusinesscategory');
 var companyMasterSchema = require('../model/companymaster');
 var termnconditionSchema = require('../model/termncondition');
 var bannerSchema = require('../model/banner');
@@ -244,6 +245,43 @@ router.post('/getCategoryMaster', async function(req, res, next) {
             .status(200)
             .json({ Message: "Catergory Master Data!", Data: data, IsSuccess: true });
 
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post('/getCategoryByCity', async function (req, res, next) {
+    try {
+        const { cityId } = req.body;
+        if (!cityId) {
+            return res.json({
+                Message: 'Invalid city provided!',
+                IsdSuccess: false,
+            })
+        }
+        let data = await cityBusinessCategorySchema.find({
+            cityId
+        }).populate('businessCategoryId');
+        let categories = [];
+        if (data && data.length) {
+            console.log('in')
+            data.map((obj) => {
+                if (obj && obj.businessCategoryId && (typeof obj.businessCategoryId) == 'object') {
+                    categories.push(obj.businessCategoryId)
+                }
+            })
+            res
+                .status(200)
+                .json({ Message: "Catergory Master Data!", Data: categories, IsSuccess: true });
+        } else {
+            res
+                .status(200)
+                .json({ Message: "Catergory Master Data!", Data: [], IsSuccess: true });
+        }
     } catch (err) {
         res.json({
             Message: err.message,
