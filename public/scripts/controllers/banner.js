@@ -4,85 +4,112 @@ app.controller('BannerController', function ($scope, $http) {
     $scope.DataList = [];
 
     $scope.submitBanner = function () {
-        if ($scope.files) {
-            let trimFileName = ($scope.Title).split(" ").join("");
-            var preForm = new FormData();
-            angular.forEach($scope.files, function (file) {
-                preForm.append("upload", file);
-            });
-            // preForm.append("id", $scope.Id);
-            // preForm.append("title", $scope.Title);
-            // preForm.append("description", $scope.Description);
-            // preForm.append("expiryDate", $scope.ExpiryDate);
-            let imgURL = `${assets_image_url}/${trimFileName}/banner`;
-            $http({
-                url: imgURL,
-                method: "POST",
-                data: preForm,
-                transformRequest: angular.identity,
-                headers: { "Content-Type": undefined, "Process-Data": false },
-            }).then(function (response) {
-                $scope.files = undefined
+        try {
+            if ($scope.files) {
+                let trimFileName = ($scope.Title).split(" ").join("");
+                var preForm = new FormData();
+                angular.forEach($scope.files, function (file) {
+                    preForm.append("upload", file);
+                });
+                // preForm.append("id", $scope.Id);
+                // preForm.append("title", $scope.Title);
+                // preForm.append("description", $scope.Description);
+                // preForm.append("expiryDate", $scope.ExpiryDate);
+                let imgURL = `${assets_image_url}/${trimFileName}/banner`;
+                // $http({
+                //     url: imgURL,
+                //     method: "POST",
+                //     data: preForm,
+                //     transformRequest: angular.identity,
+                //     headers: { "Content-Type": undefined, "Process-Data": false },
+                // })
+                fetch(imgURL, {
+                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                    // mode: 'cors', // no-cors, *cors, same-origin
+                    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    // credentials: 'same-origin', // include, *same-origin, omit
+                    // headers: {
+                    //     "Content-Type": 'multipart/form-data', "Process-Data": false
+                    // },
+                    // redirect: 'follow', // manual, *follow, error
+                    // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                    body: preForm
+                })
+                    .then(function (result) {
+                        if (result.ok) { console.log('tru') }
+                        result.json().then(function (response) {
+                            if (response && response.result) {
+                                $scope.files = undefined
+                                let data = {
+                                    id: $scope.Id,
+                                    title: $scope.Title,
+                                    description: $scope.Description,
+                                    expiryDate: $scope.ExpiryDate,
+                                    imagePath: `${assets_server_url}/${response.result}`,
+                                };
+                                $scope.updateBannerInfo(data)
+                            } else {
+                                $scope.btnsave = false;
+                                console.log(response)
+                                alert('File not Found')
+                            }
+                        })
+                    },
+                        function (error) {
+                            console.log(error);
+                            $scope.btnsave = false;
+                        }
+                    );
+            } else {
                 let data = {
                     id: $scope.Id,
                     title: $scope.Title,
                     description: $scope.Description,
                     expiryDate: $scope.ExpiryDate,
-                    imagePath: `${assets_server_url}/${response.data.result}`,
+                    // imagePath: `${assets_server_url}/${response.data.result}`,
                 };
                 $scope.updateBannerInfo(data)
-            },
-                function (error) {
-                    console.log(error);
-                    $scope.btnsave = false;
-                }
-            );
-        } else {
-            let data = {
-                id: $scope.Id,
-                title: $scope.Title,
-                description: $scope.Description,
-                expiryDate: $scope.ExpiryDate,
-                // imagePath: `${assets_server_url}/${response.data.result}`,
-            };
-            $scope.updateBannerInfo(data)
+            }
+
+            //     $http({
+            //         url: imageroute + "/admin/addBanner",
+            //         method: "POST",
+            //         data: {
+            //             id: $scope.Id,
+            //             title: $scope.Title,
+            //             description: $scope.Description,
+            //             expiryDate: $scope.ExpiryDate,
+            //             imagePath: `${assets_server_url}/${response.data.result}`,
+            //         },
+            //         // transformRequest: angular.identity,
+            //         headers: { "Content-Type": "application/json; charset=UTF-8" },
+            //         // headers: { "Content-Type": undefined, "Process-Data": false },
+            //     }).then(function (response) {
+            //         if (response.data.Data == 1) {
+            //             alert("Banner Saved!");
+            //             $("#modal-lg").modal("toggle");
+            //             $scope.GetBanner();
+
+            //         } else {
+            //             $scope.btnsave = false;
+            //             alert("Unable to Save Banner");
+            //         }
+            //     },
+            //         function (error) {
+            //             console.log(error);
+            //             $scope.btnsave = false;
+            //         }
+            //     );
+            // },
+            //     function (error) {
+            //         console.log(error);
+            //         $scope.btnsave = false;
+            //     }
+            // );
+        } catch (err) {
+            $scope.btnsave = false;
+            console.log(err)
         }
-
-        //     $http({
-        //         url: imageroute + "/admin/addBanner",
-        //         method: "POST",
-        //         data: {
-        //             id: $scope.Id,
-        //             title: $scope.Title,
-        //             description: $scope.Description,
-        //             expiryDate: $scope.ExpiryDate,
-        //             imagePath: `${assets_server_url}/${response.data.result}`,
-        //         },
-        //         // transformRequest: angular.identity,
-        //         headers: { "Content-Type": "application/json; charset=UTF-8" },
-        //         // headers: { "Content-Type": undefined, "Process-Data": false },
-        //     }).then(function (response) {
-        //         if (response.data.Data == 1) {
-        //             alert("Banner Saved!");
-        //             $("#modal-lg").modal("toggle");
-        //             $scope.GetBanner();
-
-        //         } else {
-        //             $scope.btnsave = false;
-        //             alert("Unable to Save Banner");
-        //         }
-        //     },
-        //         function (error) {
-        //             console.log(error);
-        //             $scope.btnsave = false;
-        //         }
-        //     );
-        // },
-        //     function (error) {
-        //         console.log(error);
-        //         $scope.btnsave = false;
-        //     }
-        // );
     }
     $scope.updateBannerInfo = function( data) {
         $http({
@@ -160,7 +187,6 @@ app.controller('BannerController', function ($scope, $http) {
 
     $scope.EditData = function (data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.Id = data._id;
         $scope.Title = data.title;
         $scope.Description = data.description;
