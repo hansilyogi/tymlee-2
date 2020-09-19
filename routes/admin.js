@@ -267,7 +267,7 @@ router.post("/DeleteMembershipType", async function(req, res, next) {
     }
 });
 
-router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
+router.post("/addCategoryMaster", async function(req, res, next) {
     const {
         businessCategoryName,
         startDate,
@@ -277,6 +277,7 @@ router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"),
         csgtPercent,
         sgstPercent,
         igstPercent,
+        businessIcon
     } = req.body;
     try {
         const file = req.file;
@@ -290,7 +291,7 @@ router.post("/addCategoryMaster", uploadbusinesscategory.single("businessIcon"),
             csgtPercent: csgtPercent,
             sgstPercent: sgstPercent,
             igstPercent: igstPercent,
-            businessIcon: file == undefined ? null : file.path,
+            businessIcon: businessIcon || undefined //file == undefined ? null : file.path,
         });
         await categorymaster.save();
 
@@ -321,7 +322,7 @@ router.post("/CategoryMaster", async function(req, res, next) {
     }
 });
 
-router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon"), async function(req, res, next) {
+router.post("/updateCategoryMaster", async function(req, res, next) {
     try {
         const {
             id,
@@ -333,9 +334,10 @@ router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon
             csgtPercent,
             sgstPercent,
             igstPercent,
+            businessIcon
         } = req.body;
-        const file = req.file;
-        if (file == undefined) {
+        // const file = req.file;
+        if (businessIcon == undefined) {
             var data = {
                 businessCategoryName: businessCategoryName,
                 startDate: startDate,
@@ -357,7 +359,7 @@ router.post("/updateCategoryMaster", uploadbusinesscategory.single("businessIcon
                 csgtPercent: csgtPercent,
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
-                businessIcon: file.path,
+                businessIcon: businessIcon //file.path,
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         }
@@ -458,10 +460,11 @@ router.post("/deleteCityMaster", async function(req, res, next) {
 
 router.post("/addCityBusinessCategory", async function(req, res, next) {
     try {
-        const { id, businessCategoryId, startDate } = req.body;
+        const { id, businessCategoryId, startDate, cityId } = req.body;
         if (id == "0") {
             var citybusinesscategory = new cityBusinessCategorySchema({
                 _id: new config.mongoose.Types.ObjectId(),
+                cityId: cityId,
                 businessCategoryId: businessCategoryId,
                 startDate: startDate,
             });
@@ -469,6 +472,7 @@ router.post("/addCityBusinessCategory", async function(req, res, next) {
         } else {
             var citybusinesscategory = {
                 businessCategoryId: businessCategoryId,
+                cityId: cityId,
                 startDate: startDate,
             };
             let data = await cityBusinessCategorySchema.findByIdAndUpdate(
@@ -814,25 +818,26 @@ router.post("/deleteCompanyMaster", async function(req, res, next) {
     }
 });
 
-router.post("/addBanner", uploadbanner.single("image"), async function(
+router.post("/addBanner",  async function(
     req,
     res,
     next
 ) {
-    const { id, title, description, expiryDate } = req.body;
+    const { id, title, description, expiryDate, imagePath } = req.body;
     try {
-        const file = req.file;
+        // const file = req.file;
         if (id == "0") {
             var banner = new bannerSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 title: title,
                 description: description,
-                image: file == undefined ? null : file.path,
+                // image: imagePath, //file == undefined ? null : file.path,
                 expiryDate: expiryDate,
             });
+            if (imagePath) banner.image = imagePath;
             banner.save();
         } else {
-            if (file == undefined) {
+            if (imagePath == undefined) {
                 var data = {
                     title: title,
                     description: description,
@@ -843,7 +848,7 @@ router.post("/addBanner", uploadbanner.single("image"), async function(
                 var data = {
                     title: title,
                     description: description,
-                    image: file.path,
+                    image: imagePath,
                     expiryDate: expiryDate,
                 };
                 let datas = await bannerSchema.findByIdAndUpdate(id, data);

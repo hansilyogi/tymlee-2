@@ -47,8 +47,8 @@
                                     <tr ng-repeat="data in DataList">
                                         <td>{{$index+1}}</td>
                                         <td>
-                                            <a ng-href="{{imageroute}}/{{data.businessIcon}}" target="_blank">
-                                                <img ng-src="{{imageroute}}/{{data.businessIcon}}" style="width: 100px;height: 100px;" />
+                                            <a ng-href="{{data.businessIcon}}" target="_blank">
+                                                <img ng-src="{{data.businessIcon}}" style="width: 100px;height: 100px;" />
                                             </a>
                                         </td>
                                         <td>{{data.businessCategoryName}}</td>

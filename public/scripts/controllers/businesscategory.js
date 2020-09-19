@@ -5,69 +5,84 @@ app.controller('BusinessCategoryController', function($scope, $http) {
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
 
     $scope.submitBusinessCategory = function() {
-        var preForm = new FormData();
-        angular.forEach($scope.files, function(file) {
-            preForm.append("businessIcon", file);
-        });
-        preForm.append("id", $scope.Id);
-        preForm.append("businessCategoryName", $scope.BusinessCategory);
-        preForm.append("startDate", $scope.StartDate);
-        preForm.append("bookingAmt", $scope.BookingAmount);
-        preForm.append("clientAmt", $scope.ClientAmount);
-        preForm.append("refundAmt", $scope.RefundAmount);
-        preForm.append("csgtPercent", $scope.CGSTPercent);
-        preForm.append("sgstPercent", $scope.SGSTPercent);
-        preForm.append("igstPercent", $scope.IGSTPercent);
-        if ($scope.Id != "0") {
-
-            $http({
-                url: imageroute + "/admin/updateCategoryMaster",
-                method: "POST",
-                data: preForm,
-                transformRequest: angular.identity,
-                headers: { "Content-Type": undefined, "Process-Data": false },
-            }).then(function(response) {
-                    if (response.data.Data == 1) {
-                        alert("Business Category Saved!");
-                        $("#modal-lg").modal("toggle");
-                        $scope.GetBusinessCategoryType();
-
-                    } else {
-                        $scope.btnsave = false;
-                        alert("Unable to Save Business Category");
+        let trimFileName = ($scope.BusinessCategory).split(" ").join("");
+        let imgURL = `${assets_image_url}/${trimFileName}/businessCategory`;
+        let postURL = $scope.Id ? '/admin/updateCategoryMaster' : '/admin/addCategoryMaster';
+        if ($scope.files) {
+            var preForm = new FormData();
+            angular.forEach($scope.files, function(file) {
+                preForm.append("upload", file);
+            });
+            function uploadFiles() {
+                return $http({
+                        url: imgURL,
+                        method: "POST",
+                        data: preForm,
+                        transformRequest: angular.identity,
+                        headers: { "Content-Type": undefined, "Process-Data": false },
+                    })
+            }
+              uploadFiles().then(function(response) {
+                    let reqData = {
+                        id : $scope.Id || undefined,
+                        businessCategoryName: $scope.BusinessCategory,
+                        startDate : $scope.StartDate,
+                        bookingAmt: $scope.BookingAmount,
+                        clientAmt: $scope.ClientAmount,
+                        refundAmt: $scope.RefundAmount,
+                        csgtPercent: $scope.CGSTPercent,
+                        sgstPercent: $scope.SGSTPercent,
+                        igstPercent: $scope.IGSTPercent,
+                        businessIcon: response.data.result ? `${assets_server_url}/${response.data.result}` : undefined
                     }
-                },
-                function(error) {
-                    console.log(error);
-                    $scope.btnsave = false;
-                }
-            );
+                    
+                    $scope.saveBusiness(postURL, reqData);
+              }, function(reason) {
+                  $scope.btnsave = false;
+                 alert("Unable to Save Business Category");
+              });
         } else {
-            $http({
-                url: imageroute + "/admin/addCategoryMaster",
-                method: "POST",
-                data: preForm,
-                transformRequest: angular.identity,
-                headers: { "Content-Type": undefined, "Process-Data": false },
-            }).then(function(response) {
-                    if (response.data.Data == 1) {
-                        alert("Business Category Saved!");
-                        $("#modal-lg").modal("toggle");
-                        $scope.GetBusinessCategoryType();
-
-                    } else {
-                        $scope.btnsave = false;
-                        alert("Unable to Save Business Category");
-                    }
-                },
-                function(error) {
-                    console.log(error);
-                    $scope.btnsave = false;
-                }
-            );
+            let reqData = {
+                id : $scope.Id || undefined,
+                businessCategoryName: $scope.BusinessCategory,
+                startDate : $scope.StartDate,
+                bookingAmt: $scope.BookingAmount,
+                clientAmt: $scope.ClientAmount,
+                refundAmt: $scope.RefundAmount,
+                csgtPercent: $scope.CGSTPercent,
+                sgstPercent: $scope.SGSTPercent,
+                igstPercent: $scope.IGSTPercent,
+                businessIcon: undefined
+            }
+            $scope.files = undefined;
+            $scope.saveBusiness(postURL, reqData);
         }
-    }
+     }
+     $scope.saveBusiness = function(url, data){
+        $http({
+            url: url,
+            method: "POST",
+            data: data,
+            // transformRequest: angular.identity,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(function(response) {
+                if (response.data.Data == 1) {
+                    $scope.files = undefined;
+                    alert("Business Category Saved!");
+                    $("#modal-lg").modal("toggle");
+                    $scope.GetBusinessCategoryType();
 
+                } else {
+                    $scope.btnsave = false;
+                    alert("Unable to Save Business Category");
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.btnsave = false;
+            }
+        );
+     }
     $scope.GetBusinessCategoryType = function() {
         $http({
             url: imageroute + "/admin/CategoryMaster",
