@@ -7,7 +7,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     $scope.defaultInventory = true;
     $scope.datano = true;
     $scope.toggleyes = false;
-
+    $scope.companies = [];
     $scope.AddData = function() {
         // $scope.SelectedDataList = [];
         // $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
@@ -30,11 +30,21 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
         console.log($scope.SelectedDataList);
     }
 
+    $scope.init = function() {
+        let role = sessionStorage.getItem("Role");
+        $scope.companyId = null;
+        if (role == 'company') {
+            $scope.companyId = sessionStorage.getItem("SessionId");
+        } else {
+            $scope.loadCompany();
+        }
+
+    };
     $scope.submitCompanyInventory = function() {
         if ($scope.toggleyes == false) {
             var inventory = {
                 "id": $scope.Id,
-                "companyId": "5f04587fdd1ead1304d025ad",
+                "companyId":  $scope.companyId, //"5f04587fdd1ead1304d025ad",
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "appointmentMinutes": $scope.AppointmentMinutes,
@@ -66,7 +76,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 json.push(data);
             });
             var inventory = {
-                "companyId": "5f04587fdd1ead1304d025ad",
+                "companyId": $scope.companyId,
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "multipleServiceProviderRequired": $scope.toggleyes,
@@ -182,7 +192,26 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     //     $scope.IGSTPercent = data.igstPercent;
     // }
 
-
+    $scope.loadCompany = function() {
+        $http({
+            url: imageroute + "/admin/getCompanyMaster",
+            method: "POST",
+            cache: false,
+            data: {},
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.companies = response.data.Data;
+                } else {
+                    $scope.companies = [];
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
+    }
     $scope.Clear = function() {
         $scope.Id = 0;
         $scope.InventoryName = "";
@@ -203,4 +232,5 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
         $scope.RateAmountData = "";
     }
     $scope.Clear();
+    $scope.init();
 });

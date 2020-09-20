@@ -648,6 +648,9 @@ router.post('/getbillDetailByOrderNo', async function(req, res, next) {
 
 router.post("/avaliableSlot", async function (req, res, next) {
     const { inventoryId, serviceProviderId, date } = req.body;
+    if (!inventoryId || !serviceProviderId || !date) {
+        throw new Error('Invalid data, provide Inventory, ServiceProvider, Date')
+    }
     try {
         // let datalist = [];
         let avaliableSlot = await bookingSlotMasterSchema.find({

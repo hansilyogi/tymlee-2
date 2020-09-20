@@ -53,6 +53,18 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-3" ng-if="!companyId">
+                                    <div class="form-group">
+                                        <label>Company</label> &nbsp;
+                                        <select class="form-control form-control-sm" ng-model="companyId" ng-init="">
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="company in companies"
+                                                    ng-selected="RateType == company._id" value="{{company._id}}">
+                                                    {{company.companyName}}</option>
+                                          </select>
+                                    </div>
+                                </div>
+
                             </div>
                             <!-- /.card -->
                         </div>
