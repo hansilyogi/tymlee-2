@@ -139,7 +139,7 @@ app.config(function($routeProvider, $locationProvider) {
                     }
                 },
             },
-            templateUrl: "./pages/serviceProvider.html",
+            templateUrl: "./pages/serviceprovider.html",
             controller: "ServiceProviderController",
         })
         .when("/bookingslotmaster", {
