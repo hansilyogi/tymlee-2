@@ -1020,7 +1020,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
         serviceProvider,
     } = req.body;
     try {
-        if (multipleServiceProviderRequired == false) {
+        if (!multipleServiceProviderRequired) {
             var companyInventory = new companyInventoryMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 companyId: companyId,
@@ -1038,7 +1038,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
                 inventoryNotes3: inventoryNotes3,
                 inventoryAvailable: true,
             });
-            companyInventory.save();
+            await companyInventory.save();
         } else {
             var companyInventory = new companyInventoryMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
