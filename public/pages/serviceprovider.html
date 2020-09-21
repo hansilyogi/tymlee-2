@@ -1,1 +1,175 @@
-<h1>Hello</h1>
+<div class="ServiceProviderController" style="padding:10px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Service Provider</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Master</a></li>
+                        <li class="breadcrumb-item active">Service Provider</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card ">
+                        <div class="card-header">
+                            <div class="row">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                        data-target="#modal-lg" ng-click="Clear()">
+                                        <i class="fa fa-plus"></i> &nbsp;Add Service Provider
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-striped table-bordered" datatable="ng" dt-options="vm.dtOptions">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Comapny</th>
+                                        <th>Inventory</th>
+                                        <th> Name</th>
+                                        <th> Description</th>
+                                        <th>Appointment Minutes</th>
+                                        <th>Amount</th>
+                                        <th> Available</th>
+                                        <th style="width: 40px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="data in serviceProviders">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{data.companyId.companyName}}</td>
+                                        <td>{{data.inventoryId.inventoryName}}</td>
+                                        <td>{{data.serviceProviderName}}</td>
+                                        <td>{{data.serviceProviderDescription}}</td>
+                                        <td>{{data.appointmentMinutes}}</td>
+                                        <td>{{data.rateAmt}} ({{data.rateType}})</td>
+                                        <td>{{data.serviceProviderAvailable}}</td>
+                                        <td width=10%>
+
+                                            <button type="button" class="btn btn-info btn-sm btn-flat"
+                                                ng-click="EditData(data)"><i class="fa fa-edit"></i>
+                                            </button>
+
+                                            <!-- <button type="button" class="btn btn-danger btn-sm btn-flat"
+                                                data-toggle="modal" ng-click="DeleteData(data._id)"><i
+                                                    class="fa fa-trash"></i>
+                                            </button> -->
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-lg">Add New Service Provider</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form ng-submit="onSubmit()">
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <select class="form-control form-control-sm" ng-model="model.companyId"
+                                        ng-change="loadInventory(model.companyId)" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                        <option ng-repeat="company in companyList"
+                                            ng-selected="model.companyId == company._id" value="{{company._id}}">
+                                            {{company.companyName}}</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Inventory</label>
+                                    <select class="form-control form-control-sm" ng-model="model.inventoryId"
+                                        ng-chnage="onInverntorySelect(inventory)" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                        <option ng-repeat="inventory in inventories"
+                                            ng-selected="model.inventoryId == inventory._id" value="{{inventory._id}}">
+                                            {{inventory.inventoryName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Service Provider Name</label>
+                                    <input type="text" class="form-control form-control-sm" required=""
+                                        ng-model="model.serviceProviderName" placeholder="Service Provider Name"
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Service Provider Description</label>
+                                    <input type="text" class="form-control form-control-sm" required=""
+                                        ng-model="model.serviceProviderDescription"
+                                        placeholder="Service Provider Description" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Appointment Minutes</label>
+                                    <input type="number" class="form-control form-control-sm" required=""
+                                        ng-model="model.appointmentMinutes" placeholder="Appointment Minutes"
+                                        autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Rate Type</label>
+                                    <select class="form-control form-control-sm" ng-model="model.rateType" ng-init="">
+                                        <option value="" disabled>Nothing Selected</option>
+                                        <option ng-repeat="sel in RateTypeList" ng-selected="model.rateType == sel"
+                                            value="{{sel}}">
+                                            {{sel}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="number" class="form-control form-control-sm" required=""
+                                        ng-model="model.rateAmt" placeholder="Amount" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" ng-disabled="loading">Save changes</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

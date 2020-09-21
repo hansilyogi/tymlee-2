@@ -131,7 +131,7 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/addcompanyinventory.html",
             controller: "AddCompanyInventoryController",
         })
-        .when("/serviceProvider", {
+        .when("/serviceprovider", {
             resolve: {
                 check: function() {
                     if (sessionStorage.getItem("SessionId") == null) {
