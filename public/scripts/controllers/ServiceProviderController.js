@@ -5,6 +5,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
     $scope.RateTypeList = ['Fixed', 'Variable'];
     $scope.serviceProviders = [];
     $scope.CompanyId = undefined;
+    $scope.loading = false;
 
     $scope.onInit = function() {
         if (sessionStorage.getItem('Role') == 'company') {
@@ -15,6 +16,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
         $scope.loadCompany();   
     }
     $scope.loadServiceProvider = function() {
+        $scope.loading = true;
         $http({
             url: imageroute + "/admin/getServiceProvider",
             method: "POST",
@@ -23,6 +25,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
+                $scope.loading = false;
                 if (response.data.Data.length) {
                     $scope.serviceProviders = response.data.Data;
                 } else {
@@ -30,11 +33,13 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 }
             },
             function(error) {
+                $scope.loading = false;
                 console.log("Insternal Server");
             }
         );
     }
     $scope.loadCompany = function() {
+            $scope.loading = true;
             $http({
                 url: imageroute + "/admin/getCompanyMaster",
                 method: "POST",
@@ -43,6 +48,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
+                    $scope.loading = false;
                     if (response.data.Data.length >= 1) {
                         $scope.companyList = response.data.Data;
                     } else {
@@ -50,6 +56,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                     }
                 },
                 function(error) {
+                    $scope.loading = false;
                     console.log("Insternal Server");
                 }
             );
@@ -57,6 +64,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
     }
     $scope.loadInventory = function(companyId) {
         if (companyId) {
+            $scope.loading = true;
             $http({
                 url: imageroute + "/admin/getInventoryByCompanyId",
                 method: "POST",
@@ -65,6 +73,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
+                    $scope.loading = false;
                     if (response.data.Data.length >= 1) {
                         $scope.inventories = response.data.Data;
                     } else {
@@ -72,6 +81,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                     }
                 },
                 function(error) {
+                    $scope.loading = false;
                     console.log("Insternal Server");
                 }
             );
@@ -101,13 +111,13 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 $scope.loadServiceProvider();
 
             } else {
-                $scope.btnsave = false;
+                $scope.loading = false;
                 alert("Unable to Create Service provider");
             }
         },
         function(error) {
             console.log(error);
-            $scope.btnsave = false;
+            $scope.loading = false;
         }
     );
     }
@@ -117,7 +127,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
         $scope.loadInventory(serviceProvider.companyId._id)
         let providerObj = Object.assign(JSON.parse(JSON.stringify(serviceProvider)), {companyId: serviceProvider.companyId._id, inventoryId: serviceProvider.inventoryId._id})
         $scope.model = JSON.parse(JSON.stringify(providerObj));
-        setTimeout(() => {
+        setTimeout(function () {
             $("#modal-lg").modal("toggle");
         }, 350)
     }
