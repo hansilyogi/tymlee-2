@@ -1,6 +1,6 @@
 var imageroute = window.location.origin;
-const assets_image_url = "http://65.0.17.89:5000/api/upload";
-const assets_server_url = "http://65.0.17.89:5000";
+var assets_image_url = "http://65.0.17.89:5000/api/upload";
+var assets_server_url = "http://65.0.17.89:5000";
 var app = angular.module("TimelyModule", ["ngRoute", "datatables"]);
 
 app.config(function($routeProvider, $locationProvider) {
