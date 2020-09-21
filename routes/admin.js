@@ -1085,9 +1085,9 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
 
 router.post("/getServiceProvider", async function(req, res, next) {
     try {
-        // const {} = req.body;
-        // let criteria = {}
-        var companyServicesProvider = await companyServicesProviderSchema.find({})
+        const {companyId} = req.body;
+        let criteria = JSON.parse(JSON.stringify({companyId}))
+        var companyServicesProvider = await companyServicesProviderSchema.find(criteria)
         .populate('companyId', '_id companyCode companyName')
         .populate('inventoryId', '_id inventoryName')
         res.status(200)

@@ -4,7 +4,13 @@ app.controller('ServiceProviderController', function($scope, $http) {
     $scope.inventories = [];
     $scope.RateTypeList = ['Fixed', 'Variable'];
     $scope.serviceProviders = [];
+    $scope.CompanyId = undefined;
+
     $scope.onInit = function() {
+        if (sessionStorage.getItem('Role') == 'company') {
+            $scope.CompanyId = sessionStorage.getItem('SessionId')
+        }
+
         $scope.loadServiceProvider();
         $scope.loadCompany();   
     }
@@ -13,7 +19,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
             url: imageroute + "/admin/getServiceProvider",
             method: "POST",
             cache: false,
-            data: {},
+            data: {companyId: $scope.CompanyId},
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
@@ -33,7 +39,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 url: imageroute + "/admin/getCompanyMaster",
                 method: "POST",
                 cache: false,
-                data: {},
+                data: {_id: $scope.CompanyId},
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
