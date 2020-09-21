@@ -15,7 +15,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
 
 
         $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
-        console.log($scope.SelectedDataList);
+        // console.log($scope.SelectedDataList);
 
 
         $scope.ServiceProviderName = "";
@@ -27,7 +27,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
 
     $scope.DeleteDataList = function(i) {
         $scope.SelectedDataList.splice(i, 1);
-        console.log($scope.SelectedDataList);
+        // console.log($scope.SelectedDataList);
     }
 
     $scope.init = function() {
@@ -48,7 +48,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "appointmentMinutes": $scope.AppointmentMinutes,
-                "multipleServiceProviderRequired": $scope.toggleyes,
+                // "multipleServiceProviderRequired": $scope.toggleyes,
                 "rateType": $scope.RateType,
                 "rateAmt": $scope.RateAmount,
                 "inventoryNotes1Name": $scope.InventoryNotes1Name,
@@ -59,7 +59,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryNotes3": $scope.InventoryNotes3
 
             };
-            console.log(inventory);
+            // console.log(inventory);
         }
         if ($scope.toggleyes == true) {
             var json = [];
@@ -79,7 +79,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "companyId": $scope.companyId,
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
-                "multipleServiceProviderRequired": $scope.toggleyes,
+                // "multipleServiceProviderRequired": $scope.toggleyes,
                 "inventoryNotes1Name": $scope.InventoryNotes1Name,
                 "inventoryNotes1": $scope.InventoryNotes1,
                 "inventoryNotes2Name": $scope.InventoryNotes2Name,

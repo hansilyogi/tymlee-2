@@ -19,6 +19,7 @@ var termnconditionSchema = require("../model/termncondition");
 var bookingSlotMasterSchema = require("../model/bookingslotmaster");
 var bookingMasterSchema = require("../model/booking");
 var registrationFeesSchema = require('../model/registrationfees');
+const { ObjectId } = require("mongodb");
 
 config = require("../config");
 
@@ -786,8 +787,10 @@ router.post("/updateCompanyMaster", fieldset, async function(req, res, next) {
 
 router.post("/getCompanyMaster", async function(req, res, next) {
     try {
+        const {_id} = req.body
+        let filterCriteria = JSON.parse(JSON.stringify({_id}))
         let data = await companyMasterSchema
-            .find()
+            .find(filterCriteria)
             .populate("businessCategoryId", " businessCategoryName")
             .populate("cityMasterId");
         res
@@ -1080,6 +1083,90 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
     }
 });
 
+router.post("/getServiceProvider", async function(req, res, next) {
+    try {
+        // const {} = req.body;
+        // let criteria = {}
+        var companyServicesProvider = await companyServicesProviderSchema.find({})
+        .populate('companyId', '_id companyCode companyName')
+        .populate('inventoryId', '_id inventoryName')
+        res.status(200)
+        .json({ Message: "Data Found!", Data: companyServicesProvider, IsSuccess: true });
+
+    } catch(err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+})
+
+router.post("/addServiceProvider", async function(req, res, next) {
+    try {
+        const {
+            _id,
+            companyId,
+            inventoryId,
+            serviceProviderName,
+            serviceProviderDescription,
+            appointmentMinutes,
+            rateType,
+            rateAmt} = req.body;
+            if ( !companyId ||  !inventoryId || !serviceProviderName || !serviceProviderDescription || !appointmentMinutes || !rateType || !rateAmt) {
+                throw new Error('Invalid Data pass!')
+            }
+            let data = {
+                companyId: companyId,
+                inventoryId: inventoryId,
+                serviceProviderName: serviceProviderName,
+                serviceProviderDescription: serviceProviderDescription,
+                appointmentMinutes: appointmentMinutes,
+                rateType: rateType,
+                rateAmt: rateAmt
+            };
+            if (_id) {
+                await companyServicesProviderSchema.findByIdAndUpdate(_id, data);
+            } else {
+                var companyServicesProvider = new companyServicesProviderSchema({
+                    _id: new config.mongoose.Types.ObjectId(),
+                    ...data
+                });
+                await companyServicesProvider.save();
+            }
+        res.status(200)
+        .json({ Message: "Data Saved!", IsSuccess: true });
+    } catch(err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+})
+
+router.post("/getInventoryByCompanyId", async function(
+    req,
+    res,
+    next
+) {
+    try {
+        const { companyId } = req.body;
+        let data = await companyInventoryMasterSchema.find({
+            companyId: companyId,
+        });
+        res
+            .status(200)
+            .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
 router.post("/getInventoryAndServiceListByCompanyId", async function(
     req,
     res,
@@ -1175,7 +1262,10 @@ router.post("/deleteTermNCondition", async function(req, res, next) {
 router.post("/getSlot", async function(req, res, next) {
     const { companyId, inventoryId, serviceProviderId } = req.body;
     try {
-        let findCriteria = JSON.parse(JSON.stringify( Object.assign({companyId, inventoryId, serviceProviderId})));
+        let findCriteria = JSON.parse(JSON.stringify( Object.assign({
+            companyId, 
+            inventoryId, serviceProviderId})));
+            // console.log(findCriteria)
         let data = await bookingSlotMasterSchema
             .find(findCriteria)
             .populate("inventoryId")

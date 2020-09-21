@@ -131,6 +131,17 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/addcompanyinventory.html",
             controller: "AddCompanyInventoryController",
         })
+        .when("/serviceProvider", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./pages/serviceProvider.html",
+            controller: "ServiceProviderController",
+        })
         .when("/bookingslotmaster", {
             resolve: {
                 check: function() {

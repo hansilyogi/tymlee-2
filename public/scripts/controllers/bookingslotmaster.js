@@ -9,13 +9,23 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.ServiceProviderList = [];
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
     $scope.weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
+    $scope.CompanyId = undefined;
+    $scope.onInit = function() {
+        if (sessionStorage.getItem('Role') == 'company') {
+            $scope.CompanyId = sessionStorage.getItem('SessionId')
+        }
+        $scope.GetCompany();
+        $scope.GetInventory();
+        $scope.GetBookingSlot();
+    }
+    
     $scope.GetCompany = function() {
+        let filter = {_id: $scope.CompanyId};
         $http({
             url: imageroute + "/admin/getCompanyMaster",
             method: "POST",
             cache: false,
-            data: {},
+            data: filter,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
@@ -31,7 +41,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
     }
-    $scope.GetCompany();
+    
 
     $scope.GetInventory = function() {
         $scope.serviceProviderDataList = false;
@@ -58,8 +68,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
     }
-    $scope.GetInventory();
-
+    
     $scope.submitbookingslot = function() {
         let fromTimeHrs =  ($scope.FromTime.getHours() < 10 ?'0':'') + $scope.FromTime.getHours(); // new Date($scope.FromTime).getHours();
         let fromTimeMinutes = ($scope.FromTime.getMinutes() < 10 ?'0':'') + $scope.FromTime.getMinutes();  //new Date($scope.FromTime).getMinutes();
@@ -102,7 +111,6 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     }
 
     $scope.ServiceProvider = function() {
-        console.log($scope.InventoryId);
         $scope.ServiceProviderList = [];
         for (let i = 0; i < $scope.InventoryList.length; i++) {
             if ($scope.InventoryList[i].Inventory._id == $scope.InventoryId) {
@@ -116,7 +124,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                 }
             }
         }
-        console.log($scope.ServiceProviderList);
+        // console.log($scope.ServiceProviderList);
 
 
         var list = {
@@ -144,11 +152,11 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
         );
     }
 
-    $scope.GetBookingSlot = function() {
+    $scope.GetBookingSlot = function() { 
         var list = {
-            companyId: $scope.CompanyId,
-            inventoryId: $scope.InventoryId,
-            serviceProviderId: $scope.ServiceProviderId
+            companyId: $scope.CompanyId || undefined,
+            inventoryId: $scope.InventoryId || undefined,
+            serviceProviderId: $scope.ServiceProviderId || undefined
         }
         $http({
             url: imageroute + "/admin/getSlot",
@@ -170,9 +178,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
     }
-    $scope.GetBookingSlot();
-
-
+    
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
@@ -226,4 +232,5 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
         $scope.Rate = "";
     }
     $scope.Clear();
+    $scope.onInit();
 });

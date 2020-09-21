@@ -301,7 +301,6 @@ router.post('/getCompanyMasterByBusinessCategoryId', async function(req, res, ne
         res
             .status(200)
             .json({ Message: "Company Master Data!", Data: data, IsSuccess: true });
-
     } catch (err) {
         res.json({
             Message: err.message,
@@ -648,10 +647,10 @@ router.post('/getbillDetailByOrderNo', async function(req, res, next) {
 
 router.post("/avaliableSlot", async function (req, res, next) {
     const { inventoryId, serviceProviderId, date } = req.body;
-    if (!inventoryId || !serviceProviderId || !date) {
-        throw new Error('Invalid data, provide Inventory, ServiceProvider, Date')
-    }
     try {
+        if (!inventoryId || !serviceProviderId || !date) {
+            throw new Error('Invalid data, provide Inventory, ServiceProvider, Date');
+        }
         // let datalist = [];
         let avaliableSlot = await bookingSlotMasterSchema.find({
             inventoryId: ObjectId(inventoryId),
@@ -706,7 +705,7 @@ router.post("/avaliableSlot", async function (req, res, next) {
         //         .json({ Message: "Something Went Wrong ", Data: 0, IsSuccess: true });
         // }
     } catch (err) {
-        res.json({
+        res.status(400).json({
             Message: err.message,
             Data: 0,
             IsdSuccess: false,
