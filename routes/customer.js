@@ -263,25 +263,21 @@ router.post('/getCategoryByCity', async function (req, res, next) {
                 IsdSuccess: false,
             })
         }
-        let data = await cityBusinessCategorySchema.find({
-            cityId
-        }).populate('businessCategoryId');
+        
+        let data = await companyMasterSchema.find({ cityMasterId: cityId })
+            // .select('_id active')
+            .populate({
+                path: 'businessCategoryId'
+            }).lean();
         let categories = [];
         if (data && data.length) {
-            console.log('in')
-            data.map((obj) => {
-                if (obj && obj.businessCategoryId && (typeof obj.businessCategoryId) == 'object') {
-                    categories.push(obj.businessCategoryId)
-                }
-            })
-            res
-                .status(200)
-                .json({ Message: "Catergory Master Data!", Data: categories, IsSuccess: true });
-        } else {
-            res
-                .status(200)
-                .json({ Message: "Catergory Master Data!", Data: [], IsSuccess: true });
+            data.forEach(element => {
+                categories.push({...element.businessCategoryId, companyId: element._id})
+            });
         }
+        res
+            .status(200)
+            .json({ Message: "Catergory Master Data!", Data: categories, IsSuccess: true });
     } catch (err) {
         res.json({
             Message: err.message,
