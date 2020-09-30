@@ -286,7 +286,7 @@ router.post("/getAllAppointment", async function(req, res, next) {
             }
         }
         let condition = JSON.parse(JSON.stringify({companyId, bookingDate}));
-        console.log(condition)
+        condition.status = {$ne: 'cancel'}
         let data = await bookingMasterSchema.find(condition)
         .select('_id status customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
         .populate('customerId', '_id mobileNo firstName lastName isActive')
