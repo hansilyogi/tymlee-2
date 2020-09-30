@@ -4,13 +4,13 @@ var multer = require("multer");
 var path = require("path");
 var mongoose = require('mongoose');
 // const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 var companyMasterSchema = require("../model/companymaster");
 var cityMasterSchema = require("../model/citymaster");
 var categoryMasterSchema = require("../model/categorymaster");
 var bookingMasterSchema = require("../model/booking");
 var customerMasterSchema = require("../model/customermaster");
-
 var a = Math.floor(100000 + Math.random() * 900000);
 
 config = require("../config");
@@ -38,6 +38,29 @@ var fieldset = finalstorage.fields([
 ]);
 
 /* APIS listing. */
+
+router.post("/getAppointmentByDate", async function(req, res, next) {
+    try {
+
+        let data = await bookingMasterSchema
+        .find({ status: "pending" })
+        .populate("companyId")
+        .populate("inventoryId")
+        .populate("serviceProviderId")
+        .populate("customerId");
+        res.status(200).json({
+            Message: "",
+            Data: req.params,
+            IsSuccess: true,
+        });
+    }catch(err) {
+        console.log(err)
+        res.json({
+            Message: err.message || err,
+            IsSuccess: false,
+        });
+    }
+})
 router.post("/VendorSignUp", fieldset, async function(req, res, next) {
     const {
         doj,
@@ -253,7 +276,23 @@ router.post("/getTodayAppointment", async function(req, res, next) {
 
 router.post("/getAllAppointment", async function(req, res, next) {
     try {
-        let data = await bookingMasterSchema.find({ companyId: req.body.companyId }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+        let {companyId, bookingDate} = req.body;
+        if (bookingDate) {
+            bookingDate = {
+                // $gte: "2020-09-30T00:00:00.000Z",
+                // $lt: "2020-09-30T23:59:00.000Z"
+                $gte:moment(bookingDate).startOf('day').format(),
+                $lt: moment(bookingDate).endOf('day').format(),
+            }
+        }
+        let condition = JSON.parse(JSON.stringify({companyId, bookingDate}));
+        console.log(condition)
+        let data = await bookingMasterSchema.find(condition)
+        .select('_id status customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
+        .populate('customerId', '_id mobileNo firstName lastName isActive')
+        .populate('inventoryId', '_id inventoryName inventoryDescription')
+        .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
+        .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate');
         res
             .status(200)
             .json({ Message: "All Appointment Data!", Data: data, IsSuccess: true });
