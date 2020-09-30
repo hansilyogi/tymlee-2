@@ -277,6 +277,9 @@ router.post("/getTodayAppointment", async function(req, res, next) {
 router.post("/getAllAppointment", async function(req, res, next) {
     try {
         let {companyId, bookingDate} = req.body;
+        if (!companyId) {
+            throw new Error('Invalid Company!')
+        }
         if (bookingDate) {
             bookingDate = {
                 // $gte: "2020-09-30T00:00:00.000Z",
