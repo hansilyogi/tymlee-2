@@ -270,19 +270,27 @@ router.post('/getCategoryByCity', async function (req, res, next) {
             .populate({
                 path: 'businessCategoryId'
             }).lean();
-        let categories = [];
+        let companyCategory = [];
+        let companyCategoryIds = [];
         if (data && data.length) {
             data.forEach(element => {
-                if (element.cityMasterId == cityId) {
-                    categories.push({...element.businessCategoryId, companyId: element._id, availability: true});
-                } else {
-                    categories.push({...element.businessCategoryId, companyId: element._id, availability: false});
+                companyCategoryIds.push(element.businessCategoryId)
+                if (element.businessCategoryId) {
+                    if (element.cityMasterId == cityId) {
+                        companyCategory.push({...element.businessCategoryId, companyId: element._id, availability: true});
+                    } else {
+                        companyCategory.push({...element.businessCategoryId, companyId: element._id, availability: false});
+                    }
                 }
             });
         }
+        let allCategory = await categoryMasterSchema.find({
+            _id: {$nin: companyCategoryIds}
+        }).lean();
+        companyCategory = companyCategory.concat(allCategory)
         res
             .status(200)
-            .json({ Message: "Catergory Master Data!", Data: _.uniqBy(categories, '_id'), IsSuccess: true });
+            .json({ Message: "Catergory Master Data!", Data: _.uniqBy(companyCategory, '_id'), IsSuccess: true });
     } catch (err) {
         res.json({
             Message: err.message,
