@@ -21,6 +21,7 @@ var companyTransactionSchema = require('../model/companytransaction');
 var feedbackSchema = require('../model/feedback');
 const { ObjectId } = require('mongodb');
 const moment = require('moment');
+var _ = require('lodash');
 
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -272,12 +273,16 @@ router.post('/getCategoryByCity', async function (req, res, next) {
         let categories = [];
         if (data && data.length) {
             data.forEach(element => {
-                categories.push({...element.businessCategoryId, companyId: element._id})
+                if (element.cityMasterId == cityId) {
+                    categories.push({...element.businessCategoryId, companyId: element._id, availability: true});
+                } else {
+                    categories.push({...element.businessCategoryId, companyId: element._id, availability: false});
+                }
             });
         }
         res
             .status(200)
-            .json({ Message: "Catergory Master Data!", Data: categories, IsSuccess: true });
+            .json({ Message: "Catergory Master Data!", Data: _.uniqBy(categories, '_id'), IsSuccess: true });
     } catch (err) {
         res.json({
             Message: err.message,

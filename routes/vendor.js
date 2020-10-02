@@ -310,15 +310,25 @@ router.post("/getAllAppointment", async function(req, res, next) {
 
 router.post("/updateCustomerStatus", async function(req, res, next) {
     try {
-        let data = await bookingMasterSchema.findOneAndUpdate({ companyId: req.body.companyId, customerId: req.body.customerId }, { status: req.body.status });
-        res
-            .status(200)
-            .json({ Message: "User Status updated!", Data: 1, IsSuccess: true });
+        let {companyId, customerId, _id, status} = req.body;
+        if (!companyId || !customerId || !status) {
+            throw new Error('Invalid data Passed, Customer, Company And Status are required!')
+        }
+        let booking = await bookingMasterSchema.findOne({_id});
+        if (booking) {
+            booking.status = status;
+            await booking.save()
+            res
+                .status(200)
+                .json({ Message: "Booking Status updated!", Data: booking, IsSuccess: true });
+        } else {
+            throw new Error('Booking not found!')
+        }
     } catch (err) {
         res.json({
             Message: err.message,
             Data: 0,
-            IsdSuccess: false,
+            IsSuccess: false,
         });
     }
 });
