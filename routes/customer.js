@@ -100,6 +100,30 @@ router.post("/customerSignIn", async function(req, res, next) {
     }
 });
 
+router.post("/changePassword", async function(req, res, next) {
+    const { emailID, _id, password,confirmPassword } = req.body;
+    try {
+        if (!vendorId) throw new Error('Invalid customer provided.')
+        let Customer = await customerMasterSchema.findOne(JSON.parse(JSON.stringify({_id, emailID})));
+        if (Customer) {
+            Customer.password = password;
+            await Customer.save();
+            res.status(200).json({
+                Message: "New Password set successfully",
+                IsSuccess: true,
+            });
+        } else {
+            res.status(200).json({
+                Message: "Invalid Data!",
+                // Data: Customer,
+                IsSuccess: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
+
 router.post("/getcustomerById", async function(req, res, next) {
     const { id } = req.body;
     try {
