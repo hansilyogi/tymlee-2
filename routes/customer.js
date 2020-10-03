@@ -298,7 +298,7 @@ router.post('/getCategoryByCity', async function (req, res, next) {
         let companyCategoryIds = [];
         if (data && data.length) {
             data.forEach(element => {
-                companyCategoryIds.push(element.businessCategoryId)
+                companyCategoryIds.push(element.businessCategoryId);
                 if (element.businessCategoryId) {
                     if (element.cityMasterId == cityId) {
                         companyCategory.push({...element.businessCategoryId, companyId: element._id, availability: true});
@@ -311,6 +311,12 @@ router.post('/getCategoryByCity', async function (req, res, next) {
         let allCategory = await categoryMasterSchema.find({
             _id: {$nin: companyCategoryIds}
         }).lean();
+        if (allCategory && allCategory.length) {
+            allCategory.map(item => {
+                item.availability = false;
+                return item;
+            })
+        }
         companyCategory = companyCategory.concat(allCategory)
         res
             .status(200)
