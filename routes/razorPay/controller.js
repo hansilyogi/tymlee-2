@@ -1,5 +1,6 @@
-const Razorpay = require('Razorpay'),
- moment = require('moment');
+let Razorpay = require('razorpay');
+let moment = require('moment');
+
 
 const instance = new Razorpay({
     key_id: 'rzp_test_a7VSGEl5KTwOCV',
@@ -8,10 +9,10 @@ const instance = new Razorpay({
 
 exports.generateOrderNo = async (req, res, next) => {
     try {
+        let {amount, currency, userId, companyId, companyName, serviceProviderName, serviceProviderId } = req.body;
         if (!amount || !userId) {
             throw new Error('Invalid User or amount!')
         }
-        let {amount, currency, userId, companyId, companyName, serviceProviderName, serviceProviderId } = req.body;
 
         let receipt = `bk_${moment().format('YYYYMMDDHHMMs')}`
         let d = await instance.orders.create({amount, currency: currency || "INR", receipt: receipt, payment_capture: true, notes: {userId, companyId, companyName, serviceProviderName, serviceProviderId, actionOn: new Date()}})
