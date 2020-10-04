@@ -63,7 +63,19 @@ router.get("/getInventories/:vendorId", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-
+router.get("/profile/:vendorId", async function(req, res, next) {
+    const { vendorId } = req.params;
+    try {
+        let company = await companyMasterSchema.findById({_id: vendorId});
+                res.status(200).json({
+                    Message: "vendor profile.",
+                    Data: company,
+                    IsSuccess: true,
+                });
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
 router.post("/getAppointmentByDate", async function(req, res, next) {
     try {
 
@@ -440,6 +452,83 @@ router.post("/deactivateAccount", async function(req, res, next) {
             Data: 0,
             IsSuccess: false,
         });
+    }
+});
+
+router.put("/profile/:vendorId", async function (req, res, next) {
+    const { vendorId } = req.params;
+    const {
+        doj,
+        businessCategoryId,
+        companyName,
+        addressLine1,
+        addressLine2,
+        cityMasterId,
+        zipcode,
+        mapLocation,
+        phone,
+        fax,
+        url,
+        supportEmail,
+        adminEmail,
+        adminMobile,
+        adminPassword,
+        gstinNo,
+        paNo,
+        bankName,
+        bankBranchName,
+        bankAddress,
+        bankCity,
+        bankState,
+        bankAccountNo,
+        bankIfscCode,
+        companyType,
+        personName,
+        weekStartDay,
+        cancellationPolicy,
+        companyHtmlPage,
+        registrationValidUpto,
+    } = req.body;
+    try {
+        let company = await companyMasterSchema.findById({ _id: vendorId })
+        company.doj = doj || company.doj;
+        company.businessCategoryId = businessCategoryId || company.businessCategoryId;
+        company.companyName = companyName || company.companyName;
+        company.addressLine1 = addressLine1 || company.addressLine1;
+        company.addressLine2 = addressLine2 || company.addressLine2;
+        company.cityMasterId = cityMasterId || company.cityMasterId;
+        company.zipcode = zipcode || company.zipcode;
+        company.mapLocation = mapLocation || company.mapLocation;
+        company.phone = phone || company.phone;
+        company.fax = fax || company.fax;
+        company.url = url || company.url;
+        company.supportEmail = supportEmail || company.supportEmail;
+        company.adminEmail = adminEmail || company.adminEmail;
+        company.adminMobile = adminMobile || company.adminMobile;
+        company.adminPassword = adminPassword || company.adminPassword;
+        company.gstinNo = gstinNo || company.gstinNo;
+        company.paNo = paNo || company.paNo;
+        company.bankName = bankName || company.bank.bankName;
+        company.bankBranchName = bankBranchName || company.bank.bankBranchName;
+        company.bankAddress = bankAddress || company.bank.bankAddress;
+        company.bankCity = bankCity || company.bank.bankCity;
+        company.bankState = bankState || company.bank.bankState;
+        company.bankAccountNo = bankAccountNo || company.bank.bankAccountNo;
+        company.bankIfscCode = bankIfscCode || company.bank.bankIfscCode;
+        company.companyType = companyType || company.companyType;
+        company.personName = personName || company.personName;
+        company.weekStartDay = weekStartDay || company.weekStartDay;
+        company.cancellationPolicy = cancellationPolicy || company.cancellationPolicy;
+        company.companyHtmlPage = companyHtmlPage || company.companyHtmlPage;
+        company.registrationValidUpto = registrationValidUpto || company.registrationValidUpto;
+        await company.save()
+        res.status(200).json({
+            Message: "customer profile.",
+            Data: company,
+            IsSuccess: true,
+        });
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: null, IsSuccess: false });
     }
 });
 
