@@ -22,7 +22,7 @@ var feedbackSchema = require('../model/feedback');
 const { ObjectId } = require('mongodb');
 const moment = require('moment');
 var _ = require('lodash');
-
+const razorPay = require('./razorPay/controller')
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, "uploads/customer");
@@ -803,7 +803,7 @@ router.post("/getCategoriesInfo", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-
+router.post('/new-order', razorPay.generateOrderNo)
 router.put("/profile/:userId", async function(req, res, next) {
     const { userId } = req.params;
     let {firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;
