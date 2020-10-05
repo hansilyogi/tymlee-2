@@ -62,7 +62,8 @@ var customerMasterSchema = new mongoose.Schema({
         default:true
     },
     image:{
-        type:String
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
     },
     fcmToken:{
         type:String

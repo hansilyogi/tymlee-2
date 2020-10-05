@@ -1402,7 +1402,7 @@ router.post("/getBookingHistory", async function(req, res, next) {
                 .populate("serviceProviderId")
                 .populate("customerId");
         }
-        var datas = await datalist.push({
+        var datas = datalist.push({
             Pending: data,
             Complete: Complete,
             Cancelled: Cancelled,

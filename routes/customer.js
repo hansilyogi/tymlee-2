@@ -22,7 +22,10 @@ var feedbackSchema = require('../model/feedback');
 const { ObjectId } = require('mongodb');
 const moment = require('moment');
 var _ = require('lodash');
-const razorPay = require('./razorPay/controller')
+const razorPay = require('./razorPay/controller');
+const {appConfig} = require('../app_config');
+const commonController = require('./common')
+
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, "uploads/customer");
@@ -36,12 +39,22 @@ var customerlocation = multer.diskStorage({
 });
 var uploadcustomer = multer({ storage: customerlocation });
 
+var _uploader = multer({
+    dest: path.join(appConfig.root, 'tmp'),
+    // maxCount: config.uploads.maxCount,
+    // limits: { // 1GB
+    //   fieldSize: 1048576000,
+    //   fileSize: 1048576000
+    // }
+  });
+var _mwUpload = _uploader.array('upload', 10);
+
 /* APIS listing. */
 
 router.get("/profile/:userId", async function(req, res, next) {
     const { userId } = req.params;
     try {
-        let user = await customerMasterSchema.findById({_id: userId}).select('_id isActive firstName lastName mobileNo emailID password address1 address2 city state zipcode isVerified');
+        let user = await customerMasterSchema.findById({_id: userId}).select('_id isActive firstName lastName mobileNo emailID password address1 address2 city state zipcode isVerified image').populate('image');
                 res.status(200).json({
                     Message: "customer profile.",
                     Data: user,
@@ -51,7 +64,7 @@ router.get("/profile/:userId", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: null, IsSuccess: false });
     }
 });
-
+router.get('/getImage/:uploadId', commonController.download)
 router.post('/customerSignUp', async function(req, res, next) {
     const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
     try {
@@ -96,7 +109,7 @@ router.post("/customerSignIn", async function(req, res, next) {
             password: password,
             isVerified: true,
             isActive: true,
-        }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode');
+        }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode image').populate('image');
         if (Customer) {
             res.status(200).json({
                 Message: "Customer  Login!",
@@ -143,7 +156,6 @@ router.post("/getcustomerById", async function(req, res, next) {
     const { id } = req.body;
     try {
         let data = await customerMasterSchema.find({ _id: id });
-        console.log(data);
         res
             .status(200)
             .json({ Message: "customer Data!", Data: data, IsSuccess: true });
@@ -815,6 +827,8 @@ router.post("/getCategoriesInfo", async function(req, res, next) {
     }
 });
 router.post('/new-order', razorPay.generateOrderNo)
+router.post('/uploader', _mwUpload, commonController.s3Create)
+
 router.put("/profile/:userId", async function(req, res, next) {
     const { userId } = req.params;
     let {firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;
