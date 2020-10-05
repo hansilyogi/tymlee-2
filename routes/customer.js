@@ -466,7 +466,7 @@ router.post('/addBookingMaster', async function(req, res, next) {
             sgstAmt: sgstAmt,
             igstAmt: igstAmt,
             payThrough: payThrough,
-            payDateTime: payDateTime,
+            payDateTime: payDateTime || new Date(),
             transactionNo: transactionNo,
             billNo: billNo,
             billEmailed: billEmailed,
@@ -699,14 +699,19 @@ router.post('/getbillDetailByOrderNo', async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
-
+function getHrsToMinutes(date) {
+    let t = moment(date).format()
+    let hh = parseInt(moment(date).format('HH'));
+    let mm = parseInt(moment(date).format('mm'));
+    return ((hh)*60) + mm;
+}
 router.post("/avaliableSlot", async function (req, res, next) {
     const { inventoryId, serviceProviderId, date } = req.body;
     try {
         if (!inventoryId || !serviceProviderId || !date) {
             throw new Error('Invalid data, provide Inventory, ServiceProvider, Date');
         }
-        // let datalist = [];
+        const currentMinutes = getHrsToMinutes(date);
         let avaliableSlot = await bookingSlotMasterSchema.find({
             inventoryId: ObjectId(inventoryId),
             serviceProviderId: ObjectId(serviceProviderId),
@@ -714,14 +719,20 @@ router.post("/avaliableSlot", async function (req, res, next) {
         }).lean();
         if (avaliableSlot && avaliableSlot.length) {
             let currentBooking = avaliableSlot.map(async (avaliableSlotObj, i) => {
-                let bookinkgMaster = await bookingMasterSchema.count({
-                    "bookingSlotId": avaliableSlotObj._id
-                });
-                avaliableSlotObj.remaingSlotCount = avaliableSlotObj.appointmentCount - bookinkgMaster
-                return avaliableSlotObj
-            })
+                let sFrom = `${moment().format('YYYY-MM-DD')} ${avaliableSlotObj.fromTime}`;
+                let sTo = `${moment().format('YYYY-MM-DD')} ${avaliableSlotObj.toTime}`;
 
+                let convertFrom = getHrsToMinutes(sFrom);
+                if (convertFrom >= currentMinutes) {
+                    let bookinkgMaster = await bookingMasterSchema.countDocuments({
+                        "bookingSlotId": avaliableSlotObj._id
+                    });
+                    avaliableSlotObj.remaingSlotCount = avaliableSlotObj.appointmentCount - bookinkgMaster
+                    return avaliableSlotObj
+                }
+            })
             let result = await Promise.all(currentBooking);
+                result  = result.filter((el) => el != null );
             return res.status(200).json({
                 Message: "Data Found!", Data: result || [], IsSuccess: true
             })
