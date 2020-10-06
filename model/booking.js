@@ -128,6 +128,10 @@ var bookingMasterSchema = new mongoose.Schema({
     status: {
         type: String,
         default: "pending"
+    },
+    activityStatus: {
+        type: String,
+        default: "No Show" //arrived, started, completed
     }
 });
 

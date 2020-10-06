@@ -354,7 +354,7 @@ router.post("/getAllAppointment", async function(req, res, next) {
         let condition = JSON.parse(JSON.stringify({companyId, bookingDate}));
         condition.status = {$ne: 'cancel'}
         let data = await bookingMasterSchema.find(condition)
-        .select('_id status customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
+        .select('_id status activityStatus customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
         .populate('customerId', '_id mobileNo firstName lastName isActive')
         .populate('inventoryId', '_id inventoryName inventoryDescription')
         .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
@@ -388,7 +388,7 @@ router.post("/getBookingReports", async function(req, res, next) {
         let condition = JSON.parse(JSON.stringify({companyId, bookingDate}));
         condition.status = {$ne: 'cancel'}
         let data = await bookingMasterSchema.find(condition)
-        .select('_id status customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
+        .select('_id status activityStatus customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
         .populate('customerId', '_id mobileNo firstName lastName isActive')
         .populate('inventoryId', '_id inventoryName inventoryDescription')
         .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
@@ -407,13 +407,18 @@ router.post("/getBookingReports", async function(req, res, next) {
 
 router.post("/updateCustomerStatus", async function(req, res, next) {
     try {
-        let {companyId, customerId, _id, status} = req.body;
-        if (!status || !_id) {
-            throw new Error('Invalid data Passed, Customer, Company And Status are required!')
+        let { _id, status, activityStatus} = req.body;
+        if (!_id) {
+            throw new Error('Invalid data Passed, Booking required and pass status or activity status!')
         }
         let booking = await bookingMasterSchema.findOne({_id});
         if (booking) {
-            booking.status = status;
+            if (booking.status) {
+                booking.status = status;
+            } 
+            if (activityStatus) {
+                booking.activityStatus = activityStatus;
+            }
             await booking.save()
             res
                 .status(200)
