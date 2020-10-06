@@ -78,11 +78,16 @@ router.get("/profile/:vendorId", async function(req, res, next) {
 });
 router.get("/customer", async function (req, res, next) {
     try {
-        let { mobileNo } = req.query;
-        if (!mobileNo) throw new Error('Provide valid Mobile number!');
-
+        let { mobileNo, firstName, lastName, emailID } = req.query;
+        if (!mobileNo && !firstName && !lastName && !emailID) throw new Error('Invalid Name, Mobile No or email!');
+        let filter = {};
+        if(mobileNo) { filter.mobileNo =  new RegExp(mobileNo, 'i') };
+        if(firstName) { filter.firstName =  new RegExp(firstName, 'i') };
+        if(lastName) { filter.lastName =  new RegExp(lastName, 'i') };
+        if(emailID) { filter.emailID =  new RegExp(emailID, 'i') };
         let customers = await customerMasterSchema.find(
-            { 'mobileNo': new RegExp(mobileNo, 'i') }).select('_id mobileNo firstName lastName emailID address1 address2 city state zipcode');
+            {$or: [filter]}
+        ).select('_id mobileNo firstName lastName emailID address1 address2 city state zipcode');
         res.status(200).json({
             Message: "customer data",
             Data: customers,
