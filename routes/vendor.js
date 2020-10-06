@@ -339,7 +339,7 @@ router.post("/getTodayAppointment", async function(req, res, next) {
 
 router.post("/getAllAppointment", async function(req, res, next) {
     try {
-        let {companyId, bookingDate} = req.body;
+        let {companyId, bookingDate, activityStatus} = req.body;
         if (!companyId) {
             throw new Error('Invalid Company!')
         }
@@ -350,8 +350,11 @@ router.post("/getAllAppointment", async function(req, res, next) {
                 $gte:moment(bookingDate).startOf('day').format(),
                 $lt: moment(bookingDate).endOf('day').format(),
             }
+        } else {
+            bookingDate = undefined
         }
-        let condition = JSON.parse(JSON.stringify({companyId, bookingDate}));
+        
+        let condition = JSON.parse(JSON.stringify({companyId, bookingDate, activityStatus}));
         condition.status = {$ne: 'cancel'}
         let data = await bookingMasterSchema.find(condition)
         .select('_id status activityStatus customerId inventoryId serviceProviderId bookingSlotId appointmentDate appointmentTime mobileNo specialRequest totalAmt taxableValue cgstAmt sgstAmt igstAmt payDateTime transactionNo billNo')
