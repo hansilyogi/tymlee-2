@@ -45,10 +45,10 @@ router.get("/getInventories/:vendorId", async function(req, res, next) {
     const { vendorId } = req.params;
     try {
         if (!vendorId) throw new Error('Invalid vendor.')
-        let companyUser = await companyInventoryMaster.findOne({companyId: vendorId.toString()});
+        let companyUser = await companyInventoryMaster.find({companyId: vendorId.toString()});
         if (companyUser) {
             res.status(200).json({
-                Message: "New Password set successfully",
+                Message: "Inventories",
                 Data: companyUser,
                 IsSuccess: true,
             });

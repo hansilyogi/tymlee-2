@@ -591,14 +591,17 @@ router.post('/getBookingHistoryByCustomerID', async function(req, res, next) {
 
 router.post('/getUpcomingByCustomerID', async function(req, res, next) {
     try {
-        var today = new Date();
         const { customerId } = req.body;
         var today = new Date();
-        let data = await bookingMasterSchema.find({ customerId: customerId, status: "pending", bookingDate: { $gte: today } })
+        let data = await bookingMasterSchema.find({ 
+            customerId: customerId, 
+            $or: [ { status:  "pending"}, { status: "confirm" } ],
+            bookingDate: { $gte: moment().utc().format() } 
+        })
         .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2')
         .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
         .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate')
-        .sort({ 'bookingDate': 1 });
+        .sort({ 'bookingDate': -1 });
         if (data != "null") {
             res
                 .status(200)
@@ -623,7 +626,7 @@ router.post('/updateBookingCancel', async function(req, res, next) {
         let data = await bookingMasterSchema.find({ _id: bookingId, orderNo: orderNo });
         if (data.length == 1) {
             var dataa = {
-                status: status
+                status: 'cancel'
             };
             let datas = await bookingMasterSchema.findByIdAndUpdate(bookingId, dataa);
         }
