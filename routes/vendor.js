@@ -447,6 +447,9 @@ router.post("/updateCustomerStatus", async function(req, res, next) {
             } 
             if (activityStatus) {
                 booking.activityStatus = activityStatus;
+                if (activityStatus.toLocaleLowerCase() == 'completed') {
+                    booking.status = 'Completed';
+                }
             }
             await booking.save()
             res

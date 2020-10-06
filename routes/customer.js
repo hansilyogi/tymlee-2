@@ -64,6 +64,35 @@ router.get("/profile/:userId", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: null, IsSuccess: false });
     }
 });
+router.get('/completeBooking/:customerId', async function(req, res, next) {
+    try {
+        const { customerId } = req.params;
+        if (!customerId) {throw new Error('Invalid Customer !')}
+        let data = await bookingMasterSchema.find({ 
+            customerId: ObjectId(customerId), 
+            $or: [ { status:  "Completed"}]
+        })
+        .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2')
+        .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
+        .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate')
+        .sort({ 'bookingDate': -1 });
+        if (data != "null") {
+            res
+                .status(200)
+                .json({ Message: "Data Found!", Data: data, IsSuccess: true });
+        } else {
+            res
+                .status(200)
+                .json({ Message: "Something Went Wrong ", Data: datalist, IsSuccess: true });
+        }
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
 router.get('/getImage/:uploadId', commonController.download)
 router.post('/customerSignUp', async function(req, res, next) {
     const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
@@ -623,10 +652,11 @@ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
 router.post('/updateBookingCancel', async function(req, res, next) {
     const { bookingId, orderNo, status } = req.body;
     try {
+        if (!bookingId || !orderNo) throw new Error('Invalid BookingId and Order number')
         let data = await bookingMasterSchema.find({ _id: bookingId, orderNo: orderNo });
         if (data.length == 1) {
             var dataa = {
-                status: 'cancel'
+                status: 'Cancel'
             };
             let datas = await bookingMasterSchema.findByIdAndUpdate(bookingId, dataa);
         }
