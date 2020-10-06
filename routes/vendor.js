@@ -76,6 +76,25 @@ router.get("/profile/:vendorId", async function(req, res, next) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
+router.get("/customer", async function (req, res, next) {
+    try {
+        let { mobileNo } = req.query;
+        if (!mobileNo) throw new Error('Provide valid Mobile number!');
+
+        let customers = await customerMasterSchema.find(
+            { 'mobileNo': new RegExp(mobileNo, 'i') }).select('_id mobileNo firstName lastName emailID address1 address2 city state zipcode');
+        res.status(200).json({
+            Message: "customer data",
+            Data: customers,
+            IsSuccess: true,
+        })
+    } catch (err) {
+        res.json({
+            Message: err.message || err,
+            IsSuccess: false,
+        });
+    }
+})
 router.post("/getAppointmentByDate", async function(req, res, next) {
     try {
 
