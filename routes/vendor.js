@@ -12,6 +12,7 @@ var categoryMasterSchema = require("../model/categorymaster");
 var bookingMasterSchema = require("../model/booking");
 var customerMasterSchema = require("../model/customermaster");
 var companyInventoryMaster = require('../model/companyinventorymaster')
+var companyServicesProviderSchema = require("../model/companyservicesprovider");
 const { ObjectId } = require('mongodb');
 var a = Math.floor(100000 + Math.random() * 900000);
 
@@ -41,11 +42,11 @@ var fieldset = finalstorage.fields([
 
 /* APIS listing. */
 
-router.get("/getInventories/:vendorId", async function(req, res, next) {
-    const { vendorId } = req.params;
+router.get("/getInventories/:companyId", async function(req, res, next) {
+    const { companyId } = req.params;
     try {
-        if (!vendorId) throw new Error('Invalid vendor.')
-        let companyUser = await companyInventoryMaster.find({companyId: vendorId.toString()});
+        if (!companyId) throw new Error('Invalid vendor.')
+        let companyUser = await companyInventoryMaster.find({companyId: companyId.toString()});
         if (companyUser) {
             res.status(200).json({
                 Message: "Inventories",
@@ -61,6 +62,26 @@ router.get("/getInventories/:vendorId", async function(req, res, next) {
         }
     } catch (err) {
         res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
+
+router.get("/serviceProvider/:companyId", async function(req, res, next) {
+    const { companyId } = req.params;
+    try {
+        if (!companyId) { throw new Error('Invalid CompanyId') }
+        let filter = JSON.parse(JSON.stringify({companyId: companyId.toString}))
+        filter.serviceProviderAvailable = true;
+        serviceProviders = await companyServicesProviderSchema.find(filter)
+        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode')
+        .populate('inventoryId');
+        res.status(200)
+            .json({ Message: "Data Found!", Data: serviceProviders, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
     }
 });
 router.get("/profile/:vendorId", async function(req, res, next) {
@@ -489,6 +510,77 @@ router.post("/deactivateAccount", async function(req, res, next) {
             Data: 0,
             IsSuccess: false,
         });
+    }
+});
+
+router.post("/inventory", async function(req, res, next) {
+    
+    let {inventoryName, inventoryDescription, companyId} = req.body;
+    let {_id, id, multipleServiceProviderRequired, appointmentMinutes, rateType, rateAmt, inventoryNotes1Name, inventoryNotes1, inventoryNotes2Name, inventoryNotes2, inventoryNotes3Name, inventoryNotes3, inventoryAvailable } = req.body;
+    try {
+        if (!inventoryName || !inventoryDescription || !companyId) throw new Error('Invalid inventory!')
+        let data = JSON.parse(JSON.stringify({multipleServiceProviderRequired, companyId, inventoryName, inventoryDescription, appointmentMinutes, rateType, rateAmt, inventoryNotes1Name, inventoryNotes1, inventoryNotes2Name, inventoryNotes2, inventoryNotes3Name, inventoryNotes3, inventoryAvailable}));
+        id = _id || id || new config.mongoose.Types.ObjectId(),
+        console.log(id)
+        let ic = await companyInventoryMaster.findOneAndUpdate({_id: id}, data, {upsert: true, new : true});
+        if (ic) {
+            res.status(200).json({
+                Message: "inventory updated",
+                Data: ic,
+                IsSuccess: true,
+            });
+        } else {
+            res.status(200).json({
+                Message: "Invalid Data!",
+                // Data: Customer,
+                IsSuccess: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+});
+
+router.post("/serviceProvider", async function(req, res, next) {
+    
+    let {
+        companyId,
+        inventoryId,
+        serviceProviderName,
+        serviceProviderDescription,
+        appointmentMinutes,
+        rateType,
+        rateAmt,
+    } = req.body;
+    let {_id } = req.body;
+    try {
+        if (
+            !companyId ||  !inventoryId || !serviceProviderName ||  !serviceProviderDescription ||  !appointmentMinutes ||  !rateType ||  !rateAmt   ) throw new Error('Invalid data passes!')
+        let data = JSON.parse(JSON.stringify({companyId,
+            inventoryId,
+            serviceProviderName,
+            serviceProviderDescription,
+            appointmentMinutes,
+            rateType,
+            rateAmt}));
+        let id = _id || new config.mongoose.Types.ObjectId();
+
+        let serviceP = await companyServicesProviderSchema.findOneAndUpdate({'_id': id}, data, {upsert: true, new : true});
+        if (serviceP) {
+            res.status(200).json({
+                Message: "ServicesProvider updated",
+                Data: serviceP,
+                IsSuccess: true,
+            });
+        } else {
+            res.status(200).json({
+                Message: "Invalid Data!",
+                // Data: Customer,
+                IsSuccess: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 });
 
