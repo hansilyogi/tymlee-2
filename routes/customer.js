@@ -861,7 +861,7 @@ router.post("/getCategoriesInfo", async function(req, res, next) {
 });
 router.post('/new-order', razorPay.generateOrderNo)
 router.post('/uploader', _mwUpload, commonController.s3Create)
-
+router.post('/send-otp', commonController.sendOTP)
 router.put("/profile/:userId", async function(req, res, next) {
     const { userId } = req.params;
     let {firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;

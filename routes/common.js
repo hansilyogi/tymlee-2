@@ -5,6 +5,7 @@ const
   rootDir = path.normalize(__dirname + '../../../'),
   mkdirp = require('mkdirp'),
   { appConfig } = require('../app_config'),
+  request = require('request'),
   ClientUpload = require('../model/upload.model');
 
 const AWS = require('aws-sdk');
@@ -131,3 +132,33 @@ exports.s3getImage = function (req, res, next) {
 
 };
 
+
+exports.sendOTP = function (req, res, next) {
+  try {
+    const { mobileNumber } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000)
+    request({
+      method: 'POST',
+      url: `http://promosms.itfuturz.com/vendorsms/pushsms.aspx?user=svvpmm&password=dns@123&msisdn=${mobileNumber}&sid=GLOBAL&msg=${otp}&fl=0&gwid=2`,
+      headers: {},
+      body: {},
+      json: true
+    }, function (err, result, body) {
+      if (err) {
+        res.status(500).json({
+          status: false,
+          message: err.message || err
+        })
+      }
+      res.status(200).json({
+        status: true,
+        message: body
+      })
+    })
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: err.message || err
+    })
+  }
+}
