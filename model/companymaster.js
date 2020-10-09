@@ -119,7 +119,12 @@ var companyMasterSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         default: true
-    }
+    },
+    otp: String,
+    otpSentOn:{
+        type:Date,
+        default:null
+    },
 });
 
 module.exports = mongoose.model('companyMaster', companyMasterSchema);

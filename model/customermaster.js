@@ -46,7 +46,7 @@ var customerMasterSchema = new mongoose.Schema({
         default:null
     },
     oTPSentOn:{
-        type:String,
+        type:Date,
         default:null
     },
     oTPVerifiedOn:{

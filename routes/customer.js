@@ -24,8 +24,15 @@ const moment = require('moment');
 var _ = require('lodash');
 const razorPay = require('./razorPay/controller');
 const {appConfig} = require('../app_config');
-const commonController = require('./common')
+const commonController = require('./common');
+const { request } = require('http');
+const NodeGeocoder = require('node-geocoder');
 
+const options = {
+    provider: 'google',
+    apiKey: appConfig.gKey, // for Mapquest, OpenCage, Google Premier
+    formatter: null // 'gpx', 'string', ...
+  };
 var customerlocation = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, "uploads/customer");
@@ -262,6 +269,23 @@ router.post('/getCity', async function(req, res, next) {
     }
 });
 
+router.post('/getCityByLatLang',async function(req, res, next) {
+    try {
+        let {lat, lon} = req.body;
+        if (!lat || !lon) throw new Error ("Invalid lat lang values")
+        const geocoder = NodeGeocoder(options)
+        let d = await geocoder.reverse({ lat, lon });
+        // letgetCityName = d.filter((i) => i.city)
+        res.status(200).json({
+            d
+        })    
+    } 
+    catch(err) {
+        res.status(400).json({
+            err
+        })     
+    }
+});
 router.post('/updateCustomer', uploadcustomer.single("image"), async function(req, res, next) {
     const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
     try {
@@ -862,6 +886,7 @@ router.post("/getCategoriesInfo", async function(req, res, next) {
 router.post('/new-order', razorPay.generateOrderNo)
 router.post('/uploader', _mwUpload, commonController.s3Create)
 router.post('/send-otp', commonController.sendOTP)
+router.post('/verify-otp', commonController.verifyOTP)
 router.put("/profile/:userId", async function(req, res, next) {
     const { userId } = req.params;
     let {firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode} = req.body;

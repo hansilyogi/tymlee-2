@@ -33,7 +33,7 @@ appConfig = {
     maxSize: 1e+7,
     maxCount: 10
   },
-
+  gKey: 'AIzaSyCcAOiS3MRf4QRE9og2pGSPgT8bJOmuTm8', //for prod config https://developers.google.com/maps/documentation/geocoding/get-api-key#restrict_key
   rule: {
     checkFrequency: 3600000
   },

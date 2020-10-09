@@ -6,12 +6,15 @@ const
   mkdirp = require('mkdirp'),
   { appConfig } = require('../app_config'),
   request = require('request'),
-  ClientUpload = require('../model/upload.model');
+  Customer = require('../model/customermaster'),
+  ClientUpload = require('../model/upload.model'),
+  CompanyMaster = require('../model/companymaster');
 
 const AWS = require('aws-sdk');
 AWS.config.update({ region: 'ap-south-1' });
 
 const { promisify } = require('util');
+const { async } = require('q');
 const asyncFsRead = promisify(fs.readFile);
 
 const awsS3Client = new AWS.S3({
@@ -131,30 +134,124 @@ exports.s3getImage = function (req, res, next) {
   // });
 
 };
-
-
-exports.sendOTP = function (req, res, next) {
+async function findAndUpdateCustomerOTP(mobileNo, otp) {
   try {
-    const { mobileNumber } = req.body;
-    const otp = Math.floor(100000 + Math.random() * 900000)
-    request({
-      method: 'POST',
-      url: `http://promosms.itfuturz.com/vendorsms/pushsms.aspx?user=svvpmm&password=dns@123&msisdn=${mobileNumber}&sid=GLOBAL&msg=${otp}&fl=0&gwid=2`,
-      headers: {},
-      body: {},
-      json: true
-    }, function (err, result, body) {
-      if (err) {
-        res.status(500).json({
-          status: false,
-          message: err.message || err
-        })
-      }
-      res.status(200).json({
-        status: true,
-        message: body
+    return await Customer.find({ $or: [{ mobileNo: mobileNo }, { mobileNo: '91' + mobileNo }] }).update([{$set: {oTP: otp.toString(), oTPSentOn: new Date()}}])
+  } catch(err) {
+    throw new Error(err)
+  }
+}
+
+async function findAndUpdateVendorOTP(mobileNo, otp) {
+  try {
+    return await CompanyMaster.find({ $or: [{ phone: mobileNo }, { phone: '91' + mobileNo }] }).update([{$set: {otp: otp.toString(), oTPSentOn: new Date()}}])
+  } catch(err) {
+    throw new Error(err)
+  }
+}
+
+exports.sendOTP = async function (req, res, next) {
+  try {
+    const { mobileNumber, type } = req.body;
+    if (!mobileNumber || !type) throw new Error('Invalid Number or Type!')
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    let isFound = false;
+    if (type == 'customer') {
+      let data = await findAndUpdateCustomerOTP(mobileNumber, otp);
+      isFound = data && data.nModified ? true : false;
+    } else if(type == 'vendor') {
+      let data = await findAndUpdateVendorOTP(mobileNumber, otp);
+      isFound = data && data.nModified ? true : false;
+    } else {
+      res.status(500).json({
+        status: false,
+        message:'Invalid Type',
+        otp: -1
       })
+    }
+    if (isFound) {
+
+      request({
+        method: 'POST',
+        url: `http://promosms.itfuturz.com/vendorsms/pushsms.aspx?user=svvpmm&password=dns@123&msisdn=${mobileNumber}&sid=GLOBAL&msg=${otp}&fl=0&gwid=2`,
+        headers: {},
+        body: {},
+        json: true
+      }, function (err, result, body) {
+        if (err) {
+          res.status(500).json({
+            status: false,
+            message: err.message || err,
+            otp: '-1'
+          })
+        }
+        if(body){         
+          res.status(200)
+          .json({
+            status: true,
+            otp: body.MessageData[0].MessageParts[0].Text,
+          })
+        }
+      });
+    } else {
+      res.status(200)
+          .json({
+            status: false,
+            otp: '-1',
+            message: 'Number not found!'
+          })
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: err.message || err,
+      otp: '-1'
     })
+  }
+}
+
+async function verifyOTP(req, res, next) {
+  try {
+    let { type, otp, newPassword, confirmPassword, mobileNo } = req.body;
+    if (!type || !otp || !newPassword || !confirmPassword || !mobileNo) throw new Error('Invalid request data!');
+
+    if (type == 'customer') {
+      let condition = JSON.stringify({oTP: otp, $or: [{ mobileNo: mobileNo }, { mobileNo: `91${ mobileNo}` }] });
+      console.log(condition)
+      let customer =  await Customer.findOne({ oTP: otp, $or: [{ mobileNo: mobileNo }, { mobileNo: `91${ mobileNo}` }] });
+      if (customer) {
+        customer.isVerified = true;
+        customer.oTP = '';
+        customer.oTPVerifiedOn =  new Date();
+        customer.password =  newPassword;
+       await customer.save();
+       delete customer.adminPassword;
+        res.status(200).json({
+          status: true,
+          data: customer,
+          message: 'Customer OTP verified '
+        })
+      } else {
+        throw new Error('Invlid OTP or Mobile Number')
+      }
+    } else if (type == 'vendor'){
+      let company =  await CompanyMaster.findOne({otp: otp, $or: [{ phone: mobileNo }, { phone: '91' + mobileNo }] });
+      if (company) {
+        company.oTP = null;
+        company.adminPassword =  newPassword;
+        await company.save();
+        delete company.adminPassword;
+        res.status(200).json({
+          status: true,
+          data: company,
+          message: 'Vendor OTP verified '
+        })
+      } else {
+        throw new Error('Invlid OTP or Mobile Number')
+      }
+    } else {
+      throw new Error('Invalid Type supplied!')
+    }
   } catch (err) {
     res.status(500).json({
       status: false,
@@ -162,3 +259,4 @@ exports.sendOTP = function (req, res, next) {
     })
   }
 }
+exports.verifyOTP = verifyOTP;
