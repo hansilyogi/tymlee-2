@@ -54,6 +54,17 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/businesscategory.html",
             controller: "BusinessCategoryController",
         })
+        .when("/states", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./scripts/controllers/states/state.html",
+            controller: "StatesController",
+        })
         .when("/city", {
             resolve: {
                 check: function() {

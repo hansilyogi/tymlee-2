@@ -27,6 +27,7 @@
     <script src="scripts/controllers/membershiptype.js"></script>
     <script src="scripts/controllers/businesscategory.js"></script>
     <script src="scripts/controllers/city.js"></script>
+    <script src="scripts/controllers/states/state.controller.js"></script>
     <script src="scripts/controllers/addcompany.js"></script>
     <script src="scripts/controllers/viewcustomer.js"></script>
     <script src="scripts/controllers/vendor.js"></script>
@@ -131,6 +132,12 @@
                                                 <a href="./businesscategory" class="nav-link">
                                                     <i class="fa fa-briefcase nav-icon"></i>
                                                     <p>Bussiness category</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item" ng-show="IsVisible">
+                                                <a href="./states" class="nav-link">
+                                                    <i class="fa fa-map-marker-alt nav-icon"></i>
+                                                    <p>State</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item" ng-show="IsVisible">

@@ -13,6 +13,8 @@ var stateMasterSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
+}, {
+    userPushEach: true
 });
 
 module.exports = mongoose.model('stateMaster', stateMasterSchema);

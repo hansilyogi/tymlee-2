@@ -20,7 +20,7 @@ var bookingSlotMasterSchema = require("../model/bookingslotmaster");
 var bookingMasterSchema = require("../model/booking");
 var registrationFeesSchema = require('../model/registrationfees');
 const { ObjectId } = require("mongodb");
-
+const stateController = require('./states/controller');
 config = require("../config");
 
 //image uploading
@@ -84,7 +84,9 @@ var fieldset = finalstorage.fields([
 ]);
 
 /* APIS listing. */
-
+router.get("/states", stateController.getAll);
+router.post('/states', stateController.create);
+router.delete('/states/:stateId', stateController.removeItem);
 router.post("/adminSignUp", async function(req, res, next) {
     const { userName, password } = req.body;
     try {
@@ -430,7 +432,7 @@ router.post("/addCityMaster", async function(req, res, next) {
 
 router.post("/getCityMaster", async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find();
+        let data = await cityMasterSchema.find() //.populate('stateId');
         res
             .status(200)
             .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
