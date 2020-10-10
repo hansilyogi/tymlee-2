@@ -2,7 +2,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
-    $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
+    $scope.MessageList = ['Restaurant', 'Spa/Saloon', 'Beauty Parlour', 'Hospitals'];
 
     $scope.submitBusinessCategory = function() {
         let trimFileName = ($scope.BusinessCategory).split(" ").join("");
