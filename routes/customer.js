@@ -275,9 +275,36 @@ router.post('/getCityByLatLang',async function(req, res, next) {
         if (!lat || !lon) throw new Error ("Invalid lat lang values")
         const geocoder = NodeGeocoder(options)
         let d = await geocoder.reverse({ lat, lon });
-        // letgetCityName = d.filter((i) => i.city)
+        let cityNames = [];
+        if (d && d.length) {
+            d.forEach(element => {
+                cityNames.push((element.city).toLowerCase())  
+            });
+            let cityData = await cityMasterSchema.find().lean(); //{cityName: {$in: cityNames}}
+            if (cityData && cityData.length) {
+                let data = [] ;
+                cityData.map((item) => {
+                    let isServiceExist = false
+                    if (cityNames.indexOf((item.cityName).toLowerCase()) >= 0) {
+                        isServiceExist = true;
+                    }
+                    data.push({...item, isServiceExist})
+                })
+                return res.status(200).json({
+                    "IsSuccess": true,
+                    "Message": "City Data!",
+                    Data: data
+                })
+            } else {
+                return res.status(200).json({
+                    "IsSuccess": true,
+                    "Message": "City Data!",
+                    Data: []
+                })
+            }
+        }
         res.status(200).json({
-            d
+           d
         })    
     } 
     catch(err) {
