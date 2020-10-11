@@ -72,7 +72,7 @@ router.get("/serviceProvider/:companyId", async function(req, res, next) {
         let filter = JSON.parse(JSON.stringify({companyId: companyId.toString}))
         filter.serviceProviderAvailable = true;
         serviceProviders = await companyServicesProviderSchema.find(filter)
-        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode')
+        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
         .populate('inventoryId');
         res.status(200)
             .json({ Message: "Data Found!", Data: serviceProviders, IsSuccess: true });
@@ -235,6 +235,9 @@ router.post("/VendorSignUp", fieldset, async function(req, res, next) {
                 registrationValidUpto: registrationValidUpto,
             });
             var datas = await companymaster.save();
+            if (adminMobile) {
+                //send otp
+            }
             console.log(datas);
             if (datas) {
                 res
@@ -551,6 +554,8 @@ router.post("/serviceProvider", async function(req, res, next) {
         appointmentMinutes,
         rateType,
         rateAmt,
+        lat,
+        long
     } = req.body;
     let {_id } = req.body;
     try {
@@ -562,7 +567,7 @@ router.post("/serviceProvider", async function(req, res, next) {
             serviceProviderDescription,
             appointmentMinutes,
             rateType,
-            rateAmt}));
+            rateAmt, lat, long}));
         let id = _id || new config.mongoose.Types.ObjectId();
 
         let serviceP = await companyServicesProviderSchema.findOneAndUpdate({'_id': id}, data, {upsert: true, new : true});

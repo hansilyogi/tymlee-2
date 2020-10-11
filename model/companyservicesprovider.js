@@ -28,6 +28,12 @@ var companyServicesProviderSchema = new mongoose.Schema({
     serviceProviderAvailable: {
         type: Boolean,
         default: true
+    },
+    lat: {
+        type: Number
+    },
+    long: {
+        type: Number
     }
 });
 
