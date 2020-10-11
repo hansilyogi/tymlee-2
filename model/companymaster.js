@@ -92,20 +92,40 @@ var companyMasterSchema = new mongoose.Schema({
     personPhoto: {
         type: String
     },
+    personPhotoAttachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
+    },
     aadharCard: {
         type: String
+    },
+    aadharCardAttachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
     },
     panCard: {
         type: String
     },
+    panCardAttachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
+    },
     cancelledCheque: {
         type: String
+    },
+    cancelledChequeAttachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
     },
     weekStartDay: {
         type: String
     },
     companyLogo: {
         type: String
+    },
+    companyLogoAttachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
     },
     cancellationPolicy: {
         type: String
@@ -125,6 +145,8 @@ var companyMasterSchema = new mongoose.Schema({
         type:Date,
         default:null
     },
+    notes: String
+
 });
 
 module.exports = mongoose.model('companyMaster', companyMasterSchema);

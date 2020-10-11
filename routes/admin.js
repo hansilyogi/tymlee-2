@@ -403,22 +403,20 @@ router.post("/deleteCategoryMaster", async function(req, res, next) {
 
 router.post("/addCityMaster", async function(req, res, next) {
     try {
-        const { id, cityCode, cityName, stateName, stateCode } = req.body;
+        const { id, cityCode, cityName, stateId } = req.body;
         if (id == "0") {
             var citymaster = new cityMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 cityCode: cityCode,
                 cityName: cityName,
-                stateName: stateName,
-                stateCode: stateCode,
+                stateId: stateId
             });
             await citymaster.save();
         } else {
             var citymaster = {
                 cityCode: cityCode,
                 cityName: cityName,
-                stateName: stateName,
-                stateCode: stateCode,
+                stateId: stateId
             };
             let data = await cityMasterSchema.findByIdAndUpdate(id, citymaster);
         }
@@ -436,7 +434,7 @@ router.post("/addCityMaster", async function(req, res, next) {
 
 router.post("/getCityMaster", async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find() //.populate('stateId');
+        let data = await cityMasterSchema.find().populate('stateId');
         res
             .status(200)
             .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
@@ -538,7 +536,7 @@ router.post("/deleteCityBusinessCategory", async function(req, res, next) {
     }
 });
 
-router.post("/addCompanyMaster", fieldset, async function(req, res, next) {
+router.post("/addCompanyMaster", async function(req, res, next) {
     const {
         doj,
         businessCategoryId,
@@ -570,6 +568,17 @@ router.post("/addCompanyMaster", fieldset, async function(req, res, next) {
         cancellationPolicy,
         companyHtmlPage,
         registrationValidUpto,
+        aadharCard,
+        aadharCardAttachment,
+        companyLogo,
+        companyLogoAttachment,
+        personPhoto,
+        personPhotoAttachment,
+        panCard,
+        panCardAttachment,
+        cancelledCheque,
+        cancelledChequeAttachment,
+        notes
     } = req.body;
     console.log(req.body);
     var a = Math.floor(100000 + Math.random() * 900000);
@@ -615,22 +624,32 @@ router.post("/addCompanyMaster", fieldset, async function(req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files.personPhoto == undefined ?
-                    null : req.files.personPhoto[0].path,
-                aadharCard: req.files.aadharCard == undefined ?
-                    null : req.files.aadharCard[0].path,
-                panCard: req.files.panCard == undefined ? null : req.files.panCard[0].path,
-                cancelledCheque: req.files.cancelledCheque == undefined ?
-                    null : req.files.cancelledCheque[0].path,
+                aadharCard: aadharCard,
+                aadharCardAttachment: aadharCardAttachment || '',
+                companyLogo: companyLogo || '',
+                companyLogoAttachment: companyLogoAttachment || '',
+                personPhoto: personPhoto || '',
+                personPhotoAttachment: personPhotoAttachment || '',
+                panCard: panCard || '',
+                panCardAttachment:panCardAttachment || '',
+                cancelledCheque: cancelledCheque || '',
+                cancelledChequeAttachment:cancelledChequeAttachment || '',
+                // personPhoto: req.files.personPhoto == undefined ?
+                //     null : req.files.personPhoto[0].path,
+                // aadharCard: req.files.aadharCard == undefined ?
+                //     null : req.files.aadharCard[0].path,
+                // panCard: req.files.panCard == undefined ? null : req.files.panCard[0].path,
+                // cancelledCheque: req.files.cancelledCheque == undefined ?
+                //     null : req.files.cancelledCheque[0].path,
                 weekStartDay: weekStartDay,
-                companyLogo: req.files.companyLogo == undefined ?
-                    null : req.files.companyLogo[0].path,
+                // companyLogo: req.files.companyLogo == undefined ?
+                //     null : req.files.companyLogo[0].path,
                 cancellationPolicy: cancellationPolicy,
                 companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto,
+                notes: notes || ''
             });
             var datas = await companymaster.save();
-            console.log(datas);
             if (datas) {
                 res
                     .status(200)
@@ -652,9 +671,9 @@ router.post("/addCompanyMaster", fieldset, async function(req, res, next) {
     }
 });
 
-router.post("/updateCompanyMaster", fieldset, async function(req, res, next) {
+router.post("/updateCompanyMaster", async function(req, res, next) {
     const {
-        id,
+        _id,
         doj,
         businessCategoryId,
         companyName,
@@ -685,101 +704,68 @@ router.post("/updateCompanyMaster", fieldset, async function(req, res, next) {
         cancellationPolicy,
         companyHtmlPage,
         registrationValidUpto,
+        aadharCard,
+        aadharCardAttachment,
+        companyLogo,
+        companyLogoAttachment,
+        personPhoto,
+        personPhotoAttachment,
+        panCard,
+        panCardAttachment,
+        cancelledCheque,
+        cancelledChequeAttachment,
+        notes
     } = req.body;
-    try {
-        if (
-            req.files.personPhoto == "undefined" &&
-            req.files.aadharCard == "undefined" &&
-            req.files.panCard == "undefined" &&
-            req.files.cancelledCheque == "undefined" &&
-            req.files.companyLogo == "undefined"
-        ) {
-            var datas = {
-                doj: doj,
-                businessCategoryId: businessCategoryId,
-                companyName: companyName,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                cityMasterId: cityMasterId,
-                zipcode: zipcode,
-                mapLocation: mapLocation,
-                phone: phone,
-                fax: fax,
-                url: url,
-                supportEmail: supportEmail,
-                adminEmail: adminEmail,
-                adminMobile: adminMobile,
-                adminPassword: adminPassword,
-                gstinNo: gstinNo,
-                paNo: paNo,
-                bank: {
-                    bankName: bankName,
-                    bankBranchName: bankBranchName,
-                    bankAddress: bankAddress,
-                    bankCity: bankCity,
-                    bankState: bankState,
-                    bankAccountNo: bankAccountNo,
-                    bankIfscCode: bankIfscCode,
-                },
-                companyType: companyType,
-                personName: personName,
-                weekStartDay: weekStartDay,
-                cancellationPolicy: cancellationPolicy,
-                companyHtmlPage: companyHtmlPage,
-                registrationValidUpto: registrationValidUpto,
-            };
-            let data = await companyMasterSchema.findByIdAndUpdate(id, companyMaster);
-        } else {
-            var datas = {
-                doj: doj,
-                businessCategoryId: businessCategoryId,
-                companyName: companyName,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                cityMasterId: cityMasterId,
-                zipcode: zipcode,
-                mapLocation: mapLocation,
-                phone: phone,
-                fax: fax,
-                url: url,
-                supportEmail: supportEmail,
-                adminEmail: adminEmail,
-                adminMobile: adminMobile,
-                adminPassword: adminPassword,
-                gstinNo: gstinNo,
-                paNo: paNo,
-                bank: {
-                    bankName: bankName,
-                    bankBranchName: bankBranchName,
-                    bankAddress: bankAddress,
-                    bankCity: bankCity,
-                    bankState: bankState,
-                    bankAccountNo: bankAccountNo,
-                    bankIfscCode: bankIfscCode,
-                },
-                companyType: companyType,
-                personName: personName,
-                personPhoto: req.files.personPhoto == undefined ?
-                    req.files.personPhoto : req.files.personPhoto[0].path,
-                aadharCard: req.files.aadharCard == undefined ?
-                    req.files.aadharCard : req.files.aadharCard[0].path,
-                panCard: req.files.panCard == undefined ?
-                    req.files.panCard : req.files.panCard[0].path,
-                cancelledCheque: req.files.cancelledCheque == undefined ?
-                    files.cancelledCheque : req.files.cancelledCheque[0].path,
-                weekStartDay: weekStartDay,
-                companyLogo: req.files.companyLogo == undefined ?
-                    req.files.companyLogo : req.files.companyLogo[0].path,
-                cancellationPolicy: cancellationPolicy,
-                companyHtmlPage: companyHtmlPage,
-                registrationValidUpto: registrationValidUpto,
-            };
-            let data = await companyMasterSchema.findByIdAndUpdate(id, companyMaster);
-        }
-
+    try {   
+        var datas = {
+            doj: doj,
+            businessCategoryId: businessCategoryId,
+            companyName: companyName,
+            addressLine1: addressLine1,
+            addressLine2: addressLine2,
+            cityMasterId: cityMasterId,
+            zipcode: zipcode,
+            mapLocation: mapLocation,
+            phone: phone,
+            fax: fax,
+            url: url,
+            supportEmail: supportEmail,
+            adminEmail: adminEmail,
+            adminMobile: adminMobile,
+            adminPassword: adminPassword,
+            gstinNo: gstinNo,
+            paNo: paNo,
+            bank: {
+                bankName: bankName,
+                bankBranchName: bankBranchName,
+                bankAddress: bankAddress,
+                bankCity: bankCity,
+                bankState: bankState,
+                bankAccountNo: bankAccountNo,
+                bankIfscCode: bankIfscCode,
+            },
+            companyType: companyType,
+            personName: personName,
+            weekStartDay: weekStartDay,
+            cancellationPolicy: cancellationPolicy,
+            companyHtmlPage: companyHtmlPage,
+            registrationValidUpto: registrationValidUpto,
+            aadharCard: aadharCard || undefined,
+            aadharCardAttachment: aadharCardAttachment || undefined,
+            companyLogo: companyLogo || undefined,
+            companyLogoAttachment: companyLogoAttachment || undefined,
+            personPhoto: personPhoto || undefined,
+            personPhotoAttachment: personPhotoAttachment || undefined,
+            panCard: panCard || undefined,
+            panCardAttachment: panCardAttachment || undefined,
+            cancelledCheque: cancelledCheque || undefined,
+            cancelledChequeAttachment: cancelledChequeAttachment || undefined,
+            notes: notes || ''
+        };
+        let result = await companyMasterSchema.findByIdAndUpdate(_id, JSON.parse(JSON.stringify(datas)));        
         res.status(200).json({
-            Message: "CompanyMaster Added!",
-            Data: req.body,
+            Message: "CompanyMaster Updated!",
+            Data: result,
             IsSuccess: true,
         });
     } catch (err) {
@@ -798,7 +784,12 @@ router.post("/getCompanyMaster", async function(req, res, next) {
         let data = await companyMasterSchema
             .find(filterCriteria)
             .populate("businessCategoryId", " businessCategoryName")
-            .populate("cityMasterId");
+            .populate("cityMasterId")
+            .populate("personPhotoAttachment", "_id name")
+            .populate("aadharCardAttachment", "_id name")
+            .populate("panCardAttachment", "_id name")
+            .populate("cancelledChequeAttachment", "_id name")
+            .populate("companyLogoAttachment", "_id name")
         res
             .status(200)
             .json({ Message: "Company Master Data!", Data: data, IsSuccess: true });
@@ -910,7 +901,6 @@ router.post("/deleteBanner", async function(req, res, next) {
 router.post("/getcustomer", async function(req, res, next) {
     try {
         let data = await customerMasterSchema.find();
-        console.log(data);
         res
             .status(200)
             .json({ Message: "customer Data!", Data: data, IsSuccess: true });

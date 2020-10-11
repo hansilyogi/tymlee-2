@@ -2,14 +2,14 @@ app.controller('CityController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
-
+    
     $scope.submitCity = function() {
         var json = {
             "id": $scope.Id,
             "cityCode": $scope.CityCode,
             "cityName": $scope.CityName,
-            "stateCode": $scope.StateCode,
-            "stateName": $scope.StateName
+            // "stateCode": $scope.StateCode,
+            "stateId": $scope.stateId
         };
         $http({
             url: imageroute + "/admin/addCityMaster",
@@ -88,13 +88,35 @@ app.controller('CityController', function($scope, $http) {
     }
 
     $scope.EditData = function(data) {
+       
         $('#modal-lg').modal();
         console.log(data);
         $scope.Id = data._id;
         $scope.CityCode = data.cityCode;
         $scope.CityName = data.cityName;
-        $scope.StateName = data.stateName;
-        $scope.StateCode = data.stateCode;
+        $scope.stateId = data.stateId._id;
+        // $scope.StateCode = data.stateCode;
+    }
+    $scope.loadStates = function () {
+        $http({
+            url: imageroute + "/admin/states",
+            method: "GET",
+            cache: false,
+            data: {},
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function (response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.states = response.data.Data;
+
+                } else {
+                    $scope.states = [];
+                }
+            },
+            function (error) {
+                console.log("Internal Server");
+            }
+        );
     }
 
 
@@ -104,6 +126,9 @@ app.controller('CityController', function($scope, $http) {
         $scope.CityName = "";
         $scope.StateName = "";
         $scope.StateCode = "";
+        $scope.loadStates()
     }
     $scope.Clear();
+
+    
 });

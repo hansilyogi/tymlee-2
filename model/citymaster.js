@@ -11,7 +11,7 @@ var cityMasterSchema = new mongoose.Schema({
     },
     stateId: {
         type: mongoose.Types.ObjectId,
-        ref: 'companyMaster',
+        ref: 'stateMaster',
         required: true
     },
     status: {

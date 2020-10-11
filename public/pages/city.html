@@ -45,8 +45,8 @@
                                         <td>{{$index+1}}</td>
                                         <td>{{data.cityCode}}</td>
                                         <td>{{data.cityName}}</td>
-                                        <td>{{data.stateName}}</td>
-                                        <td>{{data.stateCode}}</td>
+                                        <td>{{data.stateId.stateName}}</td>
+                                        <td>{{data.stateId.stateCode}}</td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -93,18 +93,24 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>State Code <code>(As Per GST)</code></label>
                                     <input type="text" class="form-control form-control-sm" required="" ng-model="StateCode" autocomplete="off">
 
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>State Name</label>
-                                    <input type="text" class="form-control form-control-sm" required="" ng-model="StateName" autocomplete="off">
-
+                                    <label>State</label>
+                                    <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="StateName" autocomplete="off"> -->
+                                    
+                                    <select class="form-control form-control-sm" ng-init="" ng-model="stateId" required>
+                                        <option value="" disabled>Nothing Selected</option>
+                                            <option ng-repeat="sel in states"
+                                                ng-selected="stateId == sel" value="{{sel._id}}">
+                                                {{sel.stateName}}</option>
+                                      </select>
                                 </div>
                             </div>
                         </div>

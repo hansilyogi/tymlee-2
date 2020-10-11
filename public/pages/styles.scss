@@ -1,0 +1,42 @@
+.form .ng-invalid:not(.ignore-validation-css) {
+    background-color: #f9e3e3;
+    border-color: #f4c6c6;
+}
+
+.form {
+    .ng-invalid:not(.ignore-validation-css) {
+        background-color: #F9E3E3;
+        border-color: #F4C6C6;
+
+        .ui-select-toggle {
+            background-color: #F9E3E3;
+            border-color: #F4C6C6;
+        }
+
+        .ui-select-container.ng-valid,
+        .ui-select-container.ng-invalid {
+            background-color: transparent;
+        }
+    }
+
+    .ng-valid:not(.ignore-validation-css) {
+        background-color: #DFF5DF;
+        border-color: #BEEBBE;
+
+        .ui-select-toggle {
+            background-color: #DFF5DF;
+            border-color: #BEEBBE;
+        }
+    }
+
+    .ng-touched {
+        &.ng-invalid {}
+
+        &.ng-valid {}
+    }
+
+    .switch-success.ats-switch {
+        background-color: #fff;
+        border-color: #ccc;
+    }
+}

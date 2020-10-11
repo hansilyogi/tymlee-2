@@ -137,7 +137,6 @@ app.controller('BusinessCategoryController', function($scope, $http) {
 
     $scope.EditData = function(data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.Id = data._id;
         $scope.BusinessCategory = data.businessCategoryName;
         $scope.StartDate = new Date(data.startDate);

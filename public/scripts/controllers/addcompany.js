@@ -1,4 +1,4 @@
-app.controller('AddCompanyController', function($scope, $http) {
+app.controller('AddCompanyController', function($scope, $http, $q) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
@@ -15,8 +15,25 @@ app.controller('AddCompanyController', function($scope, $http) {
     $scope.color = {
         'background-color': 'grey'
     };
-
-
+    $scope.tabs = [
+        { id: 1, name: 'Vendor Detail', key:"vendorInfo", active: false },
+        { id: 2, name: 'Bank Detail', key:"bank", active: false },
+        { id: 3, name: 'ID Proof', key:'idProof',  active: false },
+        { id: 4, name: 'Login Detail', key:"login", active: false },
+        { id: 5, name: 'Notes', key:"notes", active: false }  
+    ];
+    $scope.selectedTab = $scope.tabs[0];
+    // $scope.model = {
+    //     "adminEmail":"test@yopmail.com","adminPassword":"1234567890","businessCategoryId":"5f1392cb0eb8e02d6499bcf9",
+    //     "companyName":"tesse","phone":"0000000000","addressLine1":"test","addressLine2":"test",
+        
+    //     "cityMasterId":"5f462dc9c23a9523182c0f86","zipcode":"000000","companyType":"Prop","personName":"test",
+    //     "bankName":"test","bankBranchName":"test","bankAddress":"test","bankState":"test",
+    //     "bankCity":"test","bankAccountNo":"00000000000000","bankIfscCode":"test0000",
+    //     "supportEmail":"test@yopmail.com","adminMobile":"1234567890","weekStartDay":"Sunday",
+    //     "notes":"test"
+    // };
+    $scope.model = {};
     var LoginUser = sessionStorage.getItem("SessionId");
     var LoginRole = sessionStorage.getItem("Role");
     var LoginName = sessionStorage.getItem("Username");
@@ -32,8 +49,9 @@ app.controller('AddCompanyController', function($scope, $http) {
         window.location.href = "login.html";
     }
 
-
-
+    $scope.changeTab = function(tab) {
+        $scope.selectedTab = tab;
+    }
 
     $scope.submitCompany = function() {
         var preForm = new FormData();
@@ -100,8 +118,9 @@ app.controller('AddCompanyController', function($scope, $http) {
         }).then(function(response) {
                 if (response.data.Data == 1) {
                     alert("Company Saved!");
-                    $("#modal-lg").modal("toggle");
-                    $scope.Clear();
+                    $("#modal-lg-company").modal("toggle");
+                    $scope.model = {};
+                    // $scope.Clear();
 
                 } else {
                     $scope.btnsave = false;
@@ -116,6 +135,106 @@ app.controller('AddCompanyController', function($scope, $http) {
 
     }
 
+    function companyFileUploader(data) {
+            let promise = data.map((item) => {
+                debugger
+                var preForm = new FormData();
+                // preForm.append('key', item.value);
+                preForm.append('upload', item.value);
+                let innerDefer = $q.defer()
+                $http({
+                    url: imageroute + "/customer/uploader",
+                    method: "POST",
+                    data: preForm,
+                    transformRequest: angular.identity,
+                    headers: { "Content-Type": undefined, "Process-Data": false },
+                })
+                .then(function (result) {
+                    if (result && result.data && result.data.status) {
+                        $scope.files = undefined
+                        let data = {
+                            imagePath: `customer/getImage/${result.data.data[0]._id}`,
+                            attachment: result.data.data[0]._id
+                        };
+                        let attachmentkey = item.key + 'Attachment'
+                        innerDefer.resolve({
+                            [item.key]: `customer/getImage/${result.data.data[0]._id}`,
+                            [attachmentkey]: result.data.data[0]._id
+                        })
+                    } else {
+                        console.log('File not Found');
+                    }
+                },
+                    function (error) {
+                        innerDefer.reject(error)
+                    }
+                );
+                return innerDefer.promise;
+             })
+             
+            return Promise.all(promise)        
+    }
+
+    $scope.submit = function() {
+        console.log($scope.model, JSON.stringify($scope.model))
+        let files = []
+        if ($scope.PersonImage != null && $scope.PersonImage.length > 0)
+            files.push({key: 'personPhoto', value: $scope.PersonImage[0]});
+        
+        if ($scope.AadharCard != null && $scope.AadharCard.length > 0)
+            files.push({key:'aadharCard', value: $scope.AadharCard[0]});
+
+        if ($scope.PanCard != null && $scope.PanCard.length > 0)
+            files.push({key:'panCard', value: $scope.PanCard[0]});
+
+        if ($scope.CancelledCheque != null && $scope.CancelledCheque.length > 0)
+            files.push({key:'cancelledCheque',value: $scope.CancelledCheque[0]});
+
+        if ($scope.CompanyLogo != null && $scope.CompanyLogo.length > 0)
+            files.push({key:'companyLogo', value: $scope.CompanyLogo[0]});
+        if (files && files.length) {
+            var promise = companyFileUploader(files);
+            promise.then(function(uploadResult) {
+                uploadResult.forEach(i => {
+                    return Object.assign($scope.model, {...i})
+                })
+                $scope.saveCompanyWithFile()
+            }, function(reason) {
+                alert('Unable to Upload the files!')
+            });
+        } else {
+            $scope.saveCompanyWithFile()
+        }
+
+    }
+    $scope.saveCompanyWithFile = function() {
+        let requestURL = $scope.model._id ? '/admin/updateCompanyMaster' : '/admin/addCompanyMaster'
+        $http({
+            url: imageroute + requestURL,
+            method: "POST",
+            data: this.model,
+            // transformRequest: angular.identity,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(function(response) {
+                if (response.data.IsSuccess) {
+                    $("#modal-lg-company").modal("toggle");
+                    alert("Company Saved!");
+                    $scope.model = {};
+                    $scope.GetCompany()
+                    // $scope.Clear();
+
+                } else {
+                    $scope.btnsave = false;
+                    let message = response.data.Message || "Unable to Save Company";
+                    alert(message);
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.btnsave = false;
+            }
+        );
+    }
     $scope.GetBusinessCategoryType = function() {
         $http({
             url: imageroute + "/admin/CategoryMaster",
@@ -236,6 +355,32 @@ app.controller('AddCompanyController', function($scope, $http) {
         }
     }
 
+    $scope.getCurrentCompany = function(data, index ) {
+        $scope.selectedTab = $scope.tabs[0];
+        $scope.Id = data._id;
+        let companyObj = Object.assign({}, data);
+        companyObj.businessCategoryId = data.businessCategoryId && data.businessCategoryId._id ? data.businessCategoryId._id : null;
+        companyObj.bankAccountNo = data.bank.bankAccountNo || null ;
+        companyObj.bankAddress = data.bank.bankAddress || null ;
+        companyObj.bankBranchName = data.bank.bankBranchName || null ;
+        companyObj.bankCity = data.bank.bankCity || null ;
+        companyObj.bankIfscCode = data.bank.bankIfscCode || null ;
+        companyObj.bankName = data.bank.bankName || null ;
+        companyObj.bankState = data.bank.bankState || null ;
+        companyObj.cityMasterId = data.cityMasterId && data.cityMasterId._id ? data.cityMasterId._id : null;
+        companyObj.doj = new Date(data.doj);
+        companyObj.registrationValidUpto = new Date(data.registrationValidUpto);
+
+        $scope.model = companyObj;
+        console.log( companyObj)
+
+       
+        setTimeout(() => {
+
+            $("#modal-lg-company").modal("toggle");
+            $scope.$apply()
+        },500)
+    }
     $scope.GetBankData = function(data) {
         console.log(data.bank);
         $scope.BankDataList = data.bank;
