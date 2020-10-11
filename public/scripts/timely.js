@@ -237,7 +237,6 @@ app.controller('LoginController', function($scope, $http) {
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
-                console.log(response.data);
                 if (response.data.Data.length == 1) {
                     $scope.DataList = response.data.Data[0];
                     $scope.errorstyle = { color: "green" };
@@ -255,7 +254,6 @@ app.controller('LoginController', function($scope, $http) {
             },
             function(error) {
                 $scope.errormessages = "Internal Server";
-                console.log("Internal Server");
                 alert("Internal Server");
             }
         );
@@ -288,7 +286,6 @@ app.controller('CompanyLoginController', function($scope, $http) {
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
-                console.log(response.data);
                 if (response.data.Data.length == 1) {
                     $scope.DataList = response.data.Data[0];
                     $scope.errorstyle = { color: "green" };
@@ -306,7 +303,6 @@ app.controller('CompanyLoginController', function($scope, $http) {
             },
             function(error) {
                 $scope.errormessages = "Internal Server";
-                console.log("Internal Server");
                 alert("Internal Server");
             }
         );

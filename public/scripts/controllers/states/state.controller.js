@@ -83,7 +83,6 @@ angular.module("TimelyModule")
 
     $scope.EditData = function (data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.model = JSON.parse(JSON.stringify(data))
     }
 

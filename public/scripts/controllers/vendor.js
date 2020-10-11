@@ -137,7 +137,6 @@ app.controller('VendorController', function($scope, $http) {
 
     $scope.EditData = function(data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.Id = data._id;
         $scope.CompanyId = data.companyId;
         $scope.UserName = data.userName;

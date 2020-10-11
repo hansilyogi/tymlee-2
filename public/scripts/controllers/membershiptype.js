@@ -121,7 +121,6 @@ app.controller('MembershipController', function($scope, $http) {
 
     $scope.EditData = function(data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.Id = data._id;
         $scope.MemberType = data.membershipType;
         $scope.RegistrationFee = data.registrationFee;
