@@ -23,37 +23,41 @@ app.controller('BannerController', function ($scope, $http) {
                 //     transformRequest: angular.identity,
                 //     headers: { "Content-Type": undefined, "Process-Data": false },
                 // })
-                fetch(imgURL, {
-                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                    // mode: 'cors', // no-cors, *cors, same-origin
-                    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                    // credentials: 'same-origin', // include, *same-origin, omit
-                    // headers: {
-                    //     "Content-Type": 'multipart/form-data', "Process-Data": false
-                    // },
-                    // redirect: 'follow', // manual, *follow, error
-                    // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                    body: preForm
+                // fetch(imgURL, {
+                //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                //     // mode: 'cors', // no-cors, *cors, same-origin
+                //     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                //     // credentials: 'same-origin', // include, *same-origin, omit
+                //     // headers: {
+                //     //     "Content-Type": 'multipart/form-data', "Process-Data": false
+                //     // },
+                //     // redirect: 'follow', // manual, *follow, error
+                //     // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                //     body: preForm
+                // })
+                $http({
+                    url: imageroute + "/customer/uploader",
+                    method: "POST",
+                    data: preForm,
+                    transformRequest: angular.identity,
+                    headers: { "Content-Type": undefined, "Process-Data": false },
                 })
                     .then(function (result) {
-                        if (result.ok) { console.log('tru') }
-                        result.json().then(function (response) {
-                            if (response && response.result) {
-                                $scope.files = undefined
-                                let data = {
-                                    id: $scope.Id,
-                                    title: $scope.Title,
-                                    description: $scope.Description,
-                                    expiryDate: $scope.ExpiryDate,
-                                    imagePath: `${assets_server_url}/${response.result}`,
-                                };
-                                $scope.updateBannerInfo(data)
-                            } else {
-                                $scope.btnsave = false;
-                                console.log(response)
-                                alert('File not Found')
-                            }
-                        })
+                        if (result && result.data && result.data.status) {
+                            $scope.files = undefined
+                            let data = {
+                                id: $scope.Id,
+                                title: $scope.Title,
+                                description: $scope.Description,
+                                expiryDate: $scope.ExpiryDate,
+                                imagePath: `customer/getImage/${result.data.data[0]._id}`,
+                                attachment: result.data.data[0]._id
+                            };
+                            $scope.updateBannerInfo(data)
+                        } else {
+                            $scope.btnsave = false;
+                            alert('File not Found');
+                        }
                     },
                         function (error) {
                             console.log(error);

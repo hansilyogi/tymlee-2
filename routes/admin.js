@@ -280,7 +280,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         csgtPercent,
         sgstPercent,
         igstPercent,
-        businessIcon
+        businessIcon,
+        attachment
     } = req.body;
     try {
         const file = req.file;
@@ -294,7 +295,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
             csgtPercent: csgtPercent,
             sgstPercent: sgstPercent,
             igstPercent: igstPercent,
-            businessIcon: businessIcon || undefined //file == undefined ? null : file.path,
+            businessIcon: businessIcon || undefined, //file == undefined ? null : file.path,
+            attachment: attachment || undefined
         });
         await categorymaster.save();
 
@@ -337,7 +339,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             csgtPercent,
             sgstPercent,
             igstPercent,
-            businessIcon
+            businessIcon, 
+            attachment
         } = req.body;
         // const file = req.file;
         if (businessIcon == undefined) {
@@ -362,7 +365,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 csgtPercent: csgtPercent,
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
-                businessIcon: businessIcon //file.path,
+                businessIcon: businessIcon, //file.path,
+                attachment: attachment
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         }
@@ -828,7 +832,7 @@ router.post("/addBanner",  async function(
     res,
     next
 ) {
-    const { id, title, description, expiryDate, imagePath } = req.body;
+    const { id, title, description, expiryDate, imagePath, attachment } = req.body;
     try {
         // const file = req.file;
         if (id == "0") {
@@ -836,11 +840,11 @@ router.post("/addBanner",  async function(
                 _id: new config.mongoose.Types.ObjectId(),
                 title: title,
                 description: description,
-                // image: imagePath, //file == undefined ? null : file.path,
                 expiryDate: expiryDate,
             });
             if (imagePath) banner.image = imagePath;
-            banner.save();
+            if (attachment) banner.attachment = attachment;
+            await banner.save();
         } else {
             if (imagePath == undefined) {
                 var data = {
@@ -854,6 +858,7 @@ router.post("/addBanner",  async function(
                     title: title,
                     description: description,
                     image: imagePath,
+                    attachment: attachment,
                     expiryDate: expiryDate,
                 };
                 let datas = await bannerSchema.findByIdAndUpdate(id, data);

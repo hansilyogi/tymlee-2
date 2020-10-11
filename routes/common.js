@@ -107,7 +107,7 @@ exports.s3Create = function (req, res, next) {
     }));
 
   chain = chain.then(function (results) {
-    res.json(results);
+    res.status(200).json({status: true, data: results});
   }).catch(next);
 };
 

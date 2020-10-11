@@ -6,7 +6,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
 
     $scope.submitBusinessCategory = function() {
         let trimFileName = ($scope.BusinessCategory).split(" ").join("");
-        let imgURL = `${assets_image_url}/${trimFileName}/businessCategory`;
+        let imgURL = `${imageroute}/customer/uploader`;
         let postURL = $scope.Id ? '/admin/updateCategoryMaster' : '/admin/addCategoryMaster';
         if ($scope.files) {
             var preForm = new FormData();
@@ -33,7 +33,8 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                         csgtPercent: $scope.CGSTPercent,
                         sgstPercent: $scope.SGSTPercent,
                         igstPercent: $scope.IGSTPercent,
-                        businessIcon: response.data.result ? `${assets_server_url}/${response.data.result}` : undefined
+                        businessIcon: `customer/getImage/${response.data.data[0]._id}` || undefined,
+                        attachment: response.data.data[0]._id || undefined
                     }
                     
                     $scope.saveBusiness(postURL, reqData);

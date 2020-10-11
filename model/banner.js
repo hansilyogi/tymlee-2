@@ -14,6 +14,10 @@ var bannerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    attachment: {
+        type: mongoose.Types.ObjectId,
+        ref: 'ClientUpload'
+    },
     expiryDate: {
         type: Date,
         required: true

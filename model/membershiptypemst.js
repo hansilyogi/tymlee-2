@@ -26,6 +26,10 @@ var membershipTypeMstSchema = new mongoose.Schema({
        type:String,
        required:true
    },
+   attachment: {
+    type: mongoose.Types.ObjectId,
+    ref: 'ClientUpload'
+},
    benefitList:{
        type:String,
        required:true
