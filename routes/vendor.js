@@ -65,18 +65,37 @@ router.get("/getInventories/:companyId", async function(req, res, next) {
     }
 });
 
-router.get("/serviceProvider/:companyId", async function(req, res, next) {
+router.get("/serviceProvider/:companyId", async function (req, res, next) {
     const { companyId } = req.params;
     try {
         if (!companyId) { throw new Error('Invalid CompanyId') }
-        let filter = JSON.parse(JSON.stringify({companyId: companyId.toString}))
+        let filter = JSON.parse(JSON.stringify({ companyId: companyId.toString }));
         filter.serviceProviderAvailable = true;
-        serviceProviders = await companyServicesProviderSchema.find(filter)
-        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
-        .populate('inventoryId');
-        res.status(200)
-            .json({ Message: "Data Found!", Data: serviceProviders, IsSuccess: true });
+        let ss = await companyServicesProviderSchema.find(filter)
+            .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
+            .populate('inventoryId').lean();
+        if (ss && ss.length) {
+            await Promise.all(
+                ss.map(async (item, i) => {
+                    let booking = await bookingMasterSchema.count({
+                        serviceProviderId: item._id, //ObjectId(),
+                        bookingDate: {
+                            $gte: moment().startOf('day').format(),
+                            $lt: moment().endOf('day').format(),
+                        }
+                    });
+                    return { ...item, todaysBooking: booking }
+                })
+            ).then(d => {
+                res.status(200)
+                    .json({ Message: "Data Found!", Data: d, IsSuccess: true });
+            })
+        } else {
+            res.status(200)
+                .json({ Message: "Data Found!", Data: ss, IsSuccess: true });
+        }
     } catch (err) {
+        console.log(err)
         res.json({
             Message: err.message,
             Data: 0,
