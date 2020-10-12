@@ -372,14 +372,15 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
         companyObj.registrationValidUpto = new Date(data.registrationValidUpto);
 
         $scope.model = companyObj;
-        console.log( companyObj)
-
-       
         setTimeout(() => {
 
             $("#modal-lg-company").modal("toggle");
             $scope.$apply()
         },500)
+    }
+    $scope.closeModal = function(e) {
+        // $("#modal-lg-company").modal("toggle");
+        $scope.model = {};
     }
     $scope.GetBankData = function(data) {
         console.log(data.bank);
