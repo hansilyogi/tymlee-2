@@ -167,8 +167,8 @@ router.post("/customerSignIn", async function(req, res, next) {
 router.post("/changePassword", async function(req, res, next) {
     const { emailID, _id, password,confirmPassword } = req.body;
     try {
-        if (!vendorId) throw new Error('Invalid customer provided.')
-        let Customer = await customerMasterSchema.findOne(JSON.parse(JSON.stringify({_id, emailID})));
+        if (!_id) throw new Error('Invalid customer provided.')
+        let Customer = await customerMasterSchema.findOne(JSON.parse(JSON.stringify({_id})));
         if (Customer) {
             Customer.password = password;
             await Customer.save();
