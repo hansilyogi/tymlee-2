@@ -369,7 +369,11 @@ router.post("/getAllCustomer", async function(req, res, next) {
         let customerData = await customerMasterSchema.find({ _id: { $in: customer } });
         let data = [];
         for (let obj of customerData) {
-            let appointments = await bookingMasterSchema.find({ companyId: req.body.companyId, customerId: obj._id }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+            let appointments = await bookingMasterSchema.find({ companyId: req.body.companyId, customerId: obj._id })
+                .populate('customerId')
+                .populate('inventoryId')
+                .populate('serviceProviderId')
+                .populate('bookingSlotId');
             obj.set('appointments', appointments, { strict: false });
             data.push(obj);
         }
@@ -387,13 +391,19 @@ router.post("/getAllCustomer", async function(req, res, next) {
 
 router.post("/getTodayAppointment", async function(req, res, next) {
     try {
-        let data = await bookingMasterSchema.find({
-            companyId: req.body.companyId,
-            appointmentDate: {
-                $lt: new Date(),
-                $gte: new Date(new Date().setDate(new Date().getDate() - 1))
+        let {companyId, serviceProviderId} = req.body;
+        if (!companyId ) throw new Error('Invalid Company!')
+        let filter = {
+            companyId: companyId,
+            bookingDate: {
+                $gte:moment('2020-10-12').startOf('day').format(),
+                $lt: moment('2020-10-12').endOf('day').format(),
             }
-        }).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
+        }
+        if (serviceProviderId) {
+            filter.serviceProviderId = serviceProviderId
+        }
+        let data = await bookingMasterSchema.find(filter).populate('customerId').populate('inventoryId').populate('serviceProviderId').populate('bookingSlotId');
         res
             .status(200)
             .json({ Message: "All Appointment Data!", Data: data, IsSuccess: true });

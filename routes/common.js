@@ -136,7 +136,16 @@ exports.s3getImage = function (req, res, next) {
 };
 async function findAndUpdateCustomerOTP(mobileNo, otp) {
   try {
-    return await Customer.find({ $or: [{ mobileNo: mobileNo }, { mobileNo: '91' + mobileNo }] }).update([{$set: {oTP: otp.toString(), oTPSentOn: new Date()}}])
+    let customer = await Customer.findOne({ $or: [{ mobileNo: mobileNo }, { mobileNo: '91' + mobileNo }] });
+    if (customer) {
+      customer.oTP = otp.toString();
+      customer.oTPSentOn = new Date()
+      let updatedCustomer = await customer.save()
+      return updatedCustomer;
+    } else {
+      throw new Error('No Data found with pass mobile number')
+    }
+    //.update([{$set: {oTP: otp.toString(), oTPSentOn: new Date()}}])
   } catch(err) {
     throw new Error(err)
   }
@@ -144,7 +153,16 @@ async function findAndUpdateCustomerOTP(mobileNo, otp) {
 
 async function findAndUpdateVendorOTP(mobileNo, otp) {
   try {
-    return await CompanyMaster.find({ $or: [{ phone: mobileNo }, { phone: '91' + mobileNo }] }).update([{$set: {otp: otp.toString(), oTPSentOn: new Date()}}])
+    let vendor = await CompanyMaster.findOne({ $or: [{ adminMobile: mobileNo }, { adminMobile: '91' + mobileNo }] });
+    if (vendor) {
+      vendor.otp = otp.toString();
+      vendor.oTPSentOn = new Date()
+      let updatedVendor = await vendor.save()
+      return updatedVendor;
+    } else {
+      throw new Error('No Data found with pass mobile number')
+    }
+    //.update([{$set: {otp: otp.toString(), oTPSentOn: new Date()}}])
   } catch(err) {
     throw new Error(err)
   }
@@ -156,12 +174,13 @@ exports.sendOTP = async function (req, res, next) {
     if (!mobileNumber || !type) throw new Error('Invalid Number or Type!')
     const otp = Math.floor(100000 + Math.random() * 900000);
     let isFound = false;
+    let data = null;
     if (type == 'customer') {
-      let data = await findAndUpdateCustomerOTP(mobileNumber, otp);
-      isFound = data && data.nModified ? true : false;
+      data = await findAndUpdateCustomerOTP(mobileNumber, otp);    
+      isFound = data && data.id ? true : false;
     } else if(type == 'vendor') {
-      let data = await findAndUpdateVendorOTP(mobileNumber, otp);
-      isFound = data && data.nModified ? true : false;
+      data = await findAndUpdateVendorOTP(mobileNumber, otp);
+      isFound = data && data.id ? true : false;
     } else {
       res.status(500).json({
         status: false,
@@ -189,6 +208,13 @@ exports.sendOTP = async function (req, res, next) {
           res.status(200)
           .json({
             status: true,
+            Data: {
+              _id: data._id,
+            firstName:data.firstName,
+            lastName:data.lastName,
+            mobileNo:data.mobileNo,
+            emailID:data.emailID,
+            },
             otp: body.MessageData[0].MessageParts[0].Text,
           })
         }
