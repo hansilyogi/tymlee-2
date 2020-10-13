@@ -222,8 +222,8 @@ router.post("/VendorSignUp", fieldset, async function(req, res, next) {
                 phone: phone,
                 fax: fax,
                 url: url,
-                supportEmail: supportEmail,
-                adminEmail: adminEmail,
+                supportEmail: (supportEmail).toLowerCase(),
+                adminEmail: (adminEmail).toLowerCase(),
                 adminMobile: adminMobile,
                 adminPassword: adminPassword,
                 gstinNo: gstinNo,
@@ -239,16 +239,26 @@ router.post("/VendorSignUp", fieldset, async function(req, res, next) {
                 },
                 companyType: companyType,
                 personName: personName,
-                personPhoto: req.files !== undefined ? (req.files.personPhoto == undefined ?
-                    null : req.files.personPhoto[0].path) : null,
-                aadharCard: req.files !== undefined ? (req.files.aadharCard == undefined ?
-                    null : req.files.aadharCard[0].path) : null,
-                panCard: req.files !== undefined ? (req.files.panCard == undefined ? null : req.files.panCard[0].path) : null,
-                cancelledCheque: req.files !== undefined ? (req.files.cancelledCheque == undefined ?
-                    null : req.files.cancelledCheque[0].path) : null,
+                aadharCard: aadharCard,
+                aadharCardAttachment: aadharCardAttachment || '',
+                companyLogo: companyLogo || '',
+                companyLogoAttachment: companyLogoAttachment || '',
+                personPhoto: personPhoto || '',
+                personPhotoAttachment: personPhotoAttachment || '',
+                panCard: panCard || '',
+                panCardAttachment:panCardAttachment || '',
+                cancelledCheque: cancelledCheque || '',
+                cancelledChequeAttachment:cancelledChequeAttachment || '',
+                // personPhoto: req.files !== undefined ? (req.files.personPhoto == undefined ?
+                //     null : req.files.personPhoto[0].path) : null,
+                // aadharCard: req.files !== undefined ? (req.files.aadharCard == undefined ?
+                //     null : req.files.aadharCard[0].path) : null,
+                // panCard: req.files !== undefined ? (req.files.panCard == undefined ? null : req.files.panCard[0].path) : null,
+                // cancelledCheque: req.files !== undefined ? (req.files.cancelledCheque == undefined ?
+                //     null : req.files.cancelledCheque[0].path) : null,
+                // companyLogo: req.files !== undefined ? (req.files.companyLogo == undefined ?
+                //         null : req.files.companyLogo[0].path) : null,
                 weekStartDay: weekStartDay,
-                companyLogo: req.files !== undefined ? (req.files.companyLogo == undefined ?
-                    null : req.files.companyLogo[0].path) : null,
                 cancellationPolicy: cancellationPolicy,
                 companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto,
@@ -285,7 +295,7 @@ router.post("/VendorSignIn", async function(req, res, next) {
     console.log('--->>>--------req.body', req.body);
     try {
         let company = await companyMasterSchema.find({
-            adminEmail: adminEmail,
+            adminEmail: adminEmail.toLowerCase(),
             adminPassword: adminPassword,
         });
         if (company.length == 1) {
@@ -502,7 +512,17 @@ router.post("/updateCustomerStatus", async function(req, res, next) {
                 booking.activityStatus = activityStatus;
                 if (activityStatus.toLocaleLowerCase() == 'completed') {
                     booking.status = 'Completed';
-                }
+                    booking.serviceCompletedTime = new Date()
+                } else if (activityStatus.toLocaleLowerCase() == 'arrived') {
+                    booking.status = 'Arrived';
+                    booking.serviceStartedTime = new Date()
+                } else if (activityStatus.toLocaleLowerCase() == 'completed') {
+                    booking.status = 'started';
+                    // booking.serviceCompletedTime = new Date()
+                } else if (activityStatus.toLocaleLowerCase() == 'no show') {
+                    booking.status = 'No Show';
+                    // booking.serviceCompletedTime = new Date()
+                } 
             }
             await booking.save()
             res

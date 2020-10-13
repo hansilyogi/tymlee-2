@@ -25,6 +25,7 @@ angular.module("TimelyModule")
             function (error) {
                 console.log(error);
                 $scope.btnsave = false;
+                alert(error.data.Message || "Unable to Save State");
             }
         );
 
@@ -76,6 +77,7 @@ angular.module("TimelyModule")
                 },
                 function (error) {
                     console.log("Internal Server");
+                    alert(error.data.Message || "Unable to Save State");
                 }
             );
         }

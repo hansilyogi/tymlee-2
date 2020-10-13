@@ -101,10 +101,17 @@ router.get('/completeBooking/:customerId', async function(req, res, next) {
     }
 });
 router.get('/getImage/:uploadId', commonController.download)
+router.get('/cutomers', async function(req, res, next) {
+    try {
+
+    } catch(err) {
+        res.status(400).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+})
 router.post('/customerSignUp', async function(req, res, next) {
     const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
     try {
-        let existCustomer = await customerMasterSchema.find({ mobileNo: mobileNo });
+        let existCustomer = await customerMasterSchema.find({ $or: {mobileNo: mobileNo, emailID: emailID} });
         if (existCustomer.length == 1) {
             res.status(200).json({
                 Message: "Customer Already Registered!",
@@ -117,7 +124,7 @@ router.post('/customerSignUp', async function(req, res, next) {
                 firstName: firstName,
                 lastName: lastName,
                 mobileNo: mobileNo,
-                emailID: emailID,
+                emailID: emailID.toLowerCase(),
                 password: password,
                 address1: address1,
                 address2: address2,
@@ -141,7 +148,7 @@ router.post("/customerSignIn", async function(req, res, next) {
     const { emailID, password } = req.body;
     try {
         let Customer = await customerMasterSchema.findOne({
-            emailID: emailID,
+            emailID: emailID.toLowerCase(),
             password: password,
             isVerified: true,
             isActive: true,
