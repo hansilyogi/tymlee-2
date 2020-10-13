@@ -302,7 +302,7 @@ router.post('/getCityByLatLang',async function(req, res, next) {
                     "IsSuccess": true,
                     "isServiceExist": false,
                     "Message": "City Data!",
-                    Data: []
+                    Data: cityData
                 })
             }
         }
