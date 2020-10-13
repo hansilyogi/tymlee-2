@@ -52,7 +52,7 @@
                                             </a>
                                         </td>
                                         <td>{{data.businessCategoryName}}</td>
-                                        <td>{{data.startDate | date:"MM/dd/yyyy"}}</td>
+                                        <td>{{data.startDate | date:"dd/MM/yyyy"}}</td>
                                         <td>₹{{data.bookingAmt}}</td>
                                         <td>₹{{data.clientAmt}}</td>
                                         <td>₹{{data.refundAmt}}</td>
@@ -119,14 +119,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Client Amount</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" required="" ng-model="ClientAmount" placeholder="0" autocomplete="off">
+                                    <input type="number" step="0.01" min="0" max="{{BookingAmount}}" class="form-control form-control-sm" required="" ng-model="ClientAmount" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Refund Amount</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control form-control-sm" required="" ng-model="RefundAmount" placeholder="0" autocomplete="off">
+                                    <input type="number" step="0.01" min="0" max="{{ClientAmount}}" class="form-control form-control-sm" required="" ng-model="RefundAmount" placeholder="0" autocomplete="off">
 
                                 </div>
                             </div>

@@ -5,7 +5,7 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     $scope.BusinessCategoryList = [];
     $scope.MemberShipTypeList = [];
     $scope.PayThroughList = ['UPI', 'Credit Card', 'Debit Card', 'NetBanking'];
-    $scope.MessageList = ['Prop', 'Patnership', 'Pvt.Ltd', 'LLp', 'LTD'];
+    $scope.MessageList = ['Proprietorship', 'Partnership', ' Private Limited', ' LLP', 'Limited'];
     $scope.WeekStartDayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     $scope.CityList = [];
     $scope.BankDataList = [];
@@ -17,9 +17,10 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     };
     $scope.tabs = [
         { id: 1, name: 'Vendor Detail', key:"vendorInfo", active: false },
+        { id: 1, name: 'Contact Us', key:"contactus", active: false },
         { id: 2, name: 'Bank Detail', key:"bank", active: false },
-        { id: 3, name: 'ID Proof', key:'idProof',  active: false },
-        { id: 4, name: 'Login Detail', key:"login", active: false },
+        { id: 3, name: 'KYC', key:'kyc',  active: false },
+        { id: 4, name: 'Admin Login', key:"adminlogin", active: false },
         { id: 5, name: 'Notes', key:"notes", active: false }  
     ];
     $scope.selectedTab = $scope.tabs[0];
