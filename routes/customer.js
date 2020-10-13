@@ -278,26 +278,29 @@ router.post('/getCityByLatLang',async function(req, res, next) {
         let cityNames = [];
         if (d && d.length) {
             d.forEach(element => {
-                cityNames.push((element.city).toLowerCase())  
+                cityNames.push((element.city))  
             });
-            let cityData = await cityMasterSchema.find().lean(); //{cityName: {$in: cityNames}}
+            let cityData = await cityMasterSchema.find({cityName: {$in: cityNames}}).lean(); //{cityName: {$in: cityNames}}
             if (cityData && cityData.length) {
-                let data = [] ;
-                cityData.map((item) => {
-                    let isServiceExist = false
-                    if (cityNames.indexOf((item.cityName).toLowerCase()) >= 0) {
-                        isServiceExist = true;
-                    }
-                    data.push({...item, isServiceExist})
-                })
+                let data = cityData ;
+                // cityData.map((item) => {
+                //     let isServiceExist = false
+                //     if (cityNames.indexOf((item.cityName).toLowerCase()) >= 0) {
+                //         isServiceExist = true;
+                //     }
+                //     data.push({...item, isServiceExist})
+                // })
                 return res.status(200).json({
                     "IsSuccess": true,
                     "Message": "City Data!",
+                    "isServiceExist": false,
                     Data: data
                 })
             } else {
+                cityData = await cityMasterSchema.find().lean();
                 return res.status(200).json({
                     "IsSuccess": true,
+                    "isServiceExist": false,
                     "Message": "City Data!",
                     Data: []
                 })
