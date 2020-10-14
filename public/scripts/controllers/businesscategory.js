@@ -4,6 +4,13 @@ app.controller('BusinessCategoryController', function($scope, $http) {
     $scope.DataList = [];
     $scope.MessageList = ['Restaurant', 'Spa/Saloon', 'Beauty Parlour', 'Hospitals'];
 
+    $scope.add = function() {
+        if($scope.adding != null){
+            $scope.MessageList.push($scope.adding);
+            $scope.MessageList.append($scope.adding);
+        }
+    };
+
     $scope.submitBusinessCategory = function() {
         let trimFileName = ($scope.BusinessCategory).split(" ").join("");
         let imgURL = `${imageroute}/customer/uploader`;
