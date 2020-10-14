@@ -464,6 +464,7 @@ router.post("/getCityMaster", async function(req, res, next) {
 router.post("/deleteCityMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
+        let companies = await companyMasterSchema.find({cityMasterId: ObjectId(id)}).select('_id');
         let data = await cityMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
@@ -1085,6 +1086,75 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
             }
         }
         res.status(200).json({ Message: "Data Added!", Data: 1, IsSuccess: true });
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post("/updateInventory", async function(req, res, next) {
+    const {
+        id,
+        companyId,
+        inventoryName,
+        inventoryDescription,
+        appointmentMinutes,
+        multipleService,
+        rateType,
+        rateAmt,
+        inventoryNotes1Name,
+        inventoryNotes1,
+        inventoryNotes2Name,
+        inventoryNotes2,
+        inventoryNotes3Name,
+        inventoryNotes3,
+        inventoryAvailable,
+    } = req.body;
+    try {
+            let inventory  = await companyInventoryMasterSchema.findById({_id: id});
+
+            // inventory.companyId = companyId || '',
+            inventory.inventoryName = inventoryName || '';
+            inventory.inventoryDescription = inventoryDescription || '';
+            inventory.appointmentMinutes = appointmentMinutes || '';
+            // inventory.multipleServiceProvider = multipleServiceProvider || false ;
+            inventory.rateType = rateType || '';
+            inventory.rateAmt = rateAmt || '';
+            inventory.inventoryNotes1Name = inventoryNotes1Name || '';
+            inventory.inventoryNotes1 = inventoryNotes1 || '';
+            inventory.inventoryNotes2Name = inventoryNotes2Name || '';
+            inventory.inventoryNotes2 = inventoryNotes2 || '';
+            inventory.inventoryNotes3Name = inventoryNotes3Name || '';
+            inventory.inventoryNotes3 = inventoryNotes3 || '';
+            inventory.inventoryAvailable = inventoryAvailable || false;
+            let status = await inventory.save()
+            return res.status(200).json({
+                IsSuccess: true,
+                Data: status
+            })    
+    } catch (err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+});
+
+router.post("/removeInventory", async function(req, res, next) {
+    const {
+        id,
+    } = req.body;
+    if (!id) throw new Error('Invalid Inventory!')
+    try {
+            let inventory  = await companyInventoryMasterSchema.findByIdAndRemove({_id: id});
+            return res.status(200).json({
+                IsSuccess: true,
+                Data: inventory
+            })    
     } catch (err) {
         res.json({
             Message: err.message,

@@ -1,6 +1,6 @@
-app.controller('AddCompanyInventoryController', function($scope, $http) {
+app.controller('AddCompanyInventoryController', function ($scope, $http) {
     $scope.imageroute = imageroute;
-    $scope.Id = "0";
+    $scope.Id = undefined;
     $scope.DataList = [];
     $scope.SelectedDataList = [];
     $scope.RateTypeList = ['Fixed', 'Variable'];
@@ -8,7 +8,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     $scope.datano = true;
     $scope.toggleyes = false;
     $scope.companies = [];
-    $scope.AddData = function() {
+    $scope.AddData = function () {
         // $scope.SelectedDataList = [];
         // $scope.SelectedDataList.push({ iventoryName: $scope.InventoryName, inventorydec: $scope.InventoryDescription, name: $scope.ServiceProviderName, description: $scope.ServiceProviderDescription, appointmentmin: $scope.AppointmentMinutesData, rateamount: $scope.RateAmountData, ratetype: $scope.RateTypeData });
         // console.log($scope.SelectedDataList);
@@ -25,26 +25,27 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
         $scope.RateTypeData = "";
     }
 
-    $scope.DeleteDataList = function(i) {
+    $scope.DeleteDataList = function (i) {
         $scope.SelectedDataList.splice(i, 1);
         // console.log($scope.SelectedDataList);
     }
 
-    $scope.init = function() {
+    $scope.init = function () {
         let role = sessionStorage.getItem("Role");
         $scope.companyId = null;
         if (role == 'company') {
             $scope.companyId = sessionStorage.getItem("SessionId");
+            $scope.loadCompanyInventory();
         } else {
             $scope.loadCompany();
         }
 
     };
-    $scope.submitCompanyInventory = function() {
+    $scope.submitCompanyInventory = function () {
         if ($scope.toggleyes == false) {
             var inventory = {
                 "id": $scope.Id,
-                "companyId":  $scope.companyId, //"5f04587fdd1ead1304d025ad",
+                "companyId": $scope.companyId, //"5f04587fdd1ead1304d025ad",
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "appointmentMinutes": $scope.AppointmentMinutes,
@@ -57,14 +58,13 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "inventoryNotes2": $scope.InventoryNotes2,
                 "inventoryNotes3Name": $scope.InventoryNotes3Name,
                 "inventoryNotes3": $scope.InventoryNotes3
-
             };
             // console.log(inventory);
         }
         if ($scope.toggleyes == true) {
             var json = [];
 
-            angular.forEach($scope.SelectedDataList, function(value, key) {
+            angular.forEach($scope.SelectedDataList, function (value, key) {
                 var data = {
 
                     "serviceProviderName": $scope.SelectedDataList[key]["name"],
@@ -89,26 +89,28 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
                 "serviceProvider": json
             }
         }
+        let actionUrl = $scope.Id ? '/admin/updateInventory' : '/admin/addInventoryAndServiceProvider';
         $http({
-            url: imageroute + "/admin/addInventoryAndServiceProvider",
+            url: imageroute + actionUrl,
             method: "POST",
             data: inventory,
             cache: false,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
-        }).then(function(response) {
-                if (response.data.Data == 1) {
-                    alert("Company Inventory Saved!");
-                    $("#modal-lg").modal("toggle");
-                    $scope.Clear();
-                    $scope.SelectedDataList = [];
-                    // $scope.GetCity();
+        }).then(function (response) {
+            if (response.data.IsSuccess) {
+                alert("Company Inventory Saved!");
+                $("#modal-lg").modal("toggle");
+                $scope.Clear();
+                $scope.loadCompanyInventory();
+                $scope.SelectedDataList = [];
+                // $scope.GetCity();
 
-                } else {
-                    $scope.btnsave = false;
-                    alert("Unable to Save Company Inventory");
-                }
-            },
-            function(error) {
+            } else {
+                $scope.btnsave = false;
+                alert("Unable to Save Company Inventory");
+            }
+        },
+            function (error) {
                 console.log(error);
                 $scope.btnsave = false;
             }
@@ -116,7 +118,7 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     }
 
 
-    $scope.tooglelistner = function() {
+    $scope.tooglelistner = function () {
         if ($scope.toggleyes == true) {
             $scope.defaultInventory = false;
             $scope.serviceProvider = true;
@@ -178,21 +180,55 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
     //     }
     // }
 
-    // $scope.EditData = function(data) {
-    //     $('#modal-lg').modal();
-    //     console.log(data);
-    //     $scope.Id = data._id;
-    //     $scope.BusinessCategory = data.businessCategoryName;
-    //     $scope.StartDate = new Date(data.startDate);
-    //     $scope.BookingAmount = data.bookingAmt;
-    //     $scope.ClientAmount = data.clientAmt;
-    //     $scope.RefundAmount = data.refundAmt;
-    //     $scope.CGSTPercent = data.csgtPercent;
-    //     $scope.SGSTPercent = data.sgstPercent;
-    //     $scope.IGSTPercent = data.igstPercent;
-    // }
+    $scope.EditData = function (data) {
+        $('#modal-lg').modal();
+        console.log(data);
+        $scope.Id = data._id;
+        $scope.InventoryName = data.inventoryName;
+        $scope.InventoryDescription = data.inventoryDescription;
+        $scope.companyId = data.companyId;
+        $scope.AppointmentMinutes = data.appointmentMinutes;
+        $scope.RateType = data.rateType;
+        $scope.RateAmount = data.rateAmt;
+        $scope.InventoryNotes1Name = data.inventoryNotes1Name;
+        $scope.InventoryNotes1 = data.inventoryNotes1;
+        $scope.InventoryNotes2 = data.inventoryNotes2;
+        $scope.InventoryNotes2Name = data.inventoryNotes2Name;
+        $scope.InventoryNotes3Name = data.inventoryNotes3;
+        $scope.InventoryNotes3 = data.inventoryNotes3Name;
+        // $scope.BusinessCategory = data.businessCategoryName;
+        // $scope.StartDate = new Date(data.startDate);
+        // $scope.BookingAmount = data.bookingAmt;
+        // $scope.ClientAmount = data.clientAmt;
+        // $scope.RefundAmount = data.refundAmt;
+        // $scope.CGSTPercent = data.csgtPercent;
+        // $scope.SGSTPercent = data.sgstPercent;
+        // $scope.IGSTPercent = data.igstPercent;
 
-    $scope.loadCompany = function() {
+
+    }
+
+    $scope.loadCompanyInventory = function () {
+        $http({
+            url: imageroute + "/admin/getInventoryByCompanyId",
+            method: "POST",
+            cache: false,
+            data: { companyId: $scope.companyId },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function (response) {
+                if (response.data.Data.length >= 1) {
+                    $scope.inventories = response.data.Data;
+                } else {
+                    $scope.companies = [];
+                }
+            },
+            function (error) {
+                console.log("Internal Server");
+            }
+        );
+    }
+    $scope.loadCompany = function () {
         $http({
             url: imageroute + "/admin/getCompanyMaster",
             method: "POST",
@@ -200,20 +236,20 @@ app.controller('AddCompanyInventoryController', function($scope, $http) {
             data: {},
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
-            function(response) {
+            function (response) {
                 if (response.data.Data.length >= 1) {
                     $scope.companies = response.data.Data;
                 } else {
                     $scope.companies = [];
                 }
             },
-            function(error) {
+            function (error) {
                 console.log("Internal Server");
             }
         );
     }
-    $scope.Clear = function() {
-        $scope.Id = 0;
+    $scope.Clear = function () {
+        $scope.Id = undefined;
         $scope.InventoryName = "";
         $scope.InventoryDescription = "";
         $scope.AppointmentMinutes = "";

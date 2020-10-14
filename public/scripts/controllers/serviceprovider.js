@@ -136,20 +136,19 @@ app.controller('ServiceProviderController', function($scope, $http) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
             $http({
-                url: imageroute + "/admin/deleteServiceProvider",
+                url: imageroute + "/admin/removeInventory",
                 method: "POST",
                 cache: false,
                 data: { id: id },
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
-                    if (response.data.Data == 1) {
+                    if (response.data.IsSuccess) {
                         alert("Delete Successfully !");
-                        $scope.GetVendor();
+                        $scope.loadServiceProvider();
 
                     } else {
                         alert("Data Not deleted !");
-                        $scope.GetVendor();
                     }
                 },
                 function(error) {
