@@ -152,7 +152,7 @@ router.post("/customerSignIn", async function(req, res, next) {
             password: password,
             isVerified: true,
             isActive: true,
-        }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode image').populate('image');
+        }).select('firstName lastName mobileNo emailID address1 address2 city state zipcode image password').populate('image');
         if (Customer) {
             res.status(200).json({
                 Message: "Customer  Login!",
