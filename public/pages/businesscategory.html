@@ -89,7 +89,6 @@
                 </div>
                 <form ng-submit="submitBusinessCategory()">
                     <div class="modal-body">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -99,14 +98,21 @@
                                             <option ng-repeat="sel in MessageList"
                                                 ng-selected="BusinessCategory == sel" value="{{sel}}">
                                                 {{sel}}</option>
-                                      </select>
+                                    </select>
+                                    <br>
+                                    <button onclick="myFunction()">Add New Category</button>
+                                    <br>
+                                    <div id='addnew' style="display: none;">
+                                        <br>
+                                        <input type="text" ng-model="adding">
+                                        <button type="submit" ng-click="add()">Add</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Start Date</label>
                                     <input type="date" class="form-control form-control-sm" ng-model="StartDate" required="" placeholder="Start Date" autocomplete="off">
-
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -169,3 +175,14 @@
         <!-- /.modal-content -->
     </div>
 </div>
+
+<script>
+    function myFunction() {
+  var x = document.getElementById("addnew");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>

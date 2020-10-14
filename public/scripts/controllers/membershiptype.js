@@ -5,6 +5,12 @@ app.controller('MembershipController', function($scope, $http) {
     $scope.MessageList = ['Free', 'Standard', 'Enterprise'];
     $scope.MemberType = $scope.MessageList[0];
 
+    $scope.add_type = function() {
+        if($scope.adding != null){
+        $scope.MessageList.push($scope.adding);
+        $scope.MessageList.append($scope.adding);
+        }
+    };
 
     $scope.submitMemberShipType = function() {
         var preForm = new FormData();
