@@ -1,6 +1,6 @@
 app.controller('MembershipController', function($scope, $http) {
     $scope.imageroute = imageroute;
-    $scope.Id = "0";
+    $scope.Id = null;
     $scope.DataList = [];
     $scope.MessageList = ['Free', 'Standard', 'Enterprise'];
     $scope.MemberType = $scope.MessageList[0];
@@ -15,63 +15,72 @@ app.controller('MembershipController', function($scope, $http) {
     $scope.submitMemberShipType = function() {
         var preForm = new FormData();
         angular.forEach($scope.files, function(file) {
-            preForm.append("registrationIcon", file);
+            preForm.append("upload", file);
         });
-        preForm.append("id", $scope.Id);
-        preForm.append("membershipType", $scope.MemberType);
-        preForm.append("registrationFee", $scope.RegistrationFee);
-        preForm.append("csgtPercent", $scope.CGSTPercent);
-        preForm.append("sgstPercent", $scope.SGSTPercent);
-        preForm.append("igstPercent", $scope.IGSTPercent);
-        preForm.append("benefitList", $scope.BenefitList);
-        if ($scope.Id != "0") {
 
+        let data = {
+            id: $scope.Id,
+            membershipType: $scope.MemberType,
+            csgtPercent: $scope.CGSTPercent,
+            sgstPercent: $scope.SGSTPercent,
+            igstPercent: $scope.IGSTPercent,
+            benefitList:$scope.BenefitList,
+            registrationFee: $scope.RegistrationFee
+        };
+
+        if ($scope.files && $scope.files.length) {
             $http({
-                url: imageroute + "/admin/UpdateMembershipType",
+                url: imageroute + "/customer/uploader",
                 method: "POST",
                 data: preForm,
                 transformRequest: angular.identity,
                 headers: { "Content-Type": undefined, "Process-Data": false },
-            }).then(function(response) {
-                    if (response.data.Data == 1) {
-                        alert("Membership Type Saved!");
-                        $("#modal-lg").modal("toggle");
-                        $scope.GetMembershipType();
-
+            })
+                .then(function (result) {
+                    if (result && result.data && result.data.status) {
+                        $scope.files = undefined
+                        data.registrationIcon = `customer/getImage/${result.data.data[0]._id}`;
+                        data.attachment = result.data.data[0]._id;
+                        $scope.updateMembershipData(data)
                     } else {
                         $scope.btnsave = false;
-                        alert("Unable to Save Membership Type");
+                        alert('File not Found');
                     }
                 },
-                function(error) {
-                    console.log(error);
-                    $scope.btnsave = false;
-                }
-            );
+                    function (error) {
+                        console.log(error);
+                        $scope.btnsave = false;
+                    }
+                );
         } else {
-            $http({
-                url: imageroute + "/admin/addMembershipType",
-                method: "POST",
-                data: preForm,
-                transformRequest: angular.identity,
-                headers: { "Content-Type": undefined, "Process-Data": false },
-            }).then(function(response) {
-                    if (response.data.Data == 1) {
-                        alert("Membership Type Saved!");
-                        $("#modal-lg").modal("toggle");
-                        $scope.GetMembershipType();
-
-                    } else {
-                        $scope.btnsave = false;
-                        alert("Unable to Save Membership Type");
-                    }
-                },
-                function(error) {
-                    console.log(error);
-                    $scope.btnsave = false;
-                }
-            );
+            $scope.updateMembershipData(data)
         }
+    }
+
+    $scope.updateMembershipData = function(data) {
+        let actionUrl = data.id ? '/admin/UpdateMembershipType' : '/admin/addMembershipType'
+        $http({
+            url: imageroute + actionUrl,
+            method: "POST",
+            data: data,
+            // transformRequest: angular.identity,
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(function(response) {
+                if (response.data.Data == 1) {
+                    alert("Membership Type Saved!");
+                    $("#modal-lg").modal("toggle");
+                    $scope.GetMembershipType();
+
+                } else {
+                    $scope.btnsave = false;
+                    alert(response.data.Message || "Unable to Save Membership Type");
+                }
+            },
+            function(error) {
+                console.log(error);
+                $scope.btnsave = false;
+            }
+        );
     }
 
     $scope.GetMembershipType = function() {

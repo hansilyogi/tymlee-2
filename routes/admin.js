@@ -108,7 +108,7 @@ router.post("/adminSignIn", async function(req, res, next) {
     const { userName, password } = req.body;
     try {
         let admin = await adminLoginSchema.find({
-            userName: userName,
+            userName: userName.toLowerCase(),
             password: password,
             isActive: true,
         });
@@ -156,7 +156,7 @@ router.post("/companySignIn", async function(req, res, next) {
     }
 });
 
-router.post("/addMembershipType", uploadmembership.single("registrationIcon"), async function(req, res, next) {
+router.post("/addMembershipType", async function(req, res, next) {
     const {
         membershipType,
         registrationFee,
@@ -164,9 +164,14 @@ router.post("/addMembershipType", uploadmembership.single("registrationIcon"), a
         sgstPercent,
         igstPercent,
         benefitList,
+        registrationIcon,
+        attachment
     } = req.body;
     try {
-        const file = req.file;
+        let checkType = await membershipTypeMstSchema.countDocuments({membershipType : membershipType})
+        if (checkType) {
+            throw new Error(`${membershipType} Membership type already exist!`)
+        } 
         var membership = new membershipTypeMstSchema({
             _id: new config.mongoose.Types.ObjectId(),
             membershipType: membershipType,
@@ -174,10 +179,11 @@ router.post("/addMembershipType", uploadmembership.single("registrationIcon"), a
             csgtPercent: csgtPercent,
             sgstPercent: sgstPercent,
             igstPercent: igstPercent,
-            registrationIcon: file == undefined ? null : file.path,
+            registrationIcon: registrationIcon || '',
             benefitList: benefitList,
+            attachment: attachment
         });
-        membership.save();
+        await membership.save();
         res
             .status(200)
             .json({ Message: "Membership Type Added!", Data: 1, IsSuccess: true });
@@ -205,7 +211,7 @@ router.post("/MembershipType", async function(req, res, next) {
     }
 });
 
-router.post("/UpdateMembershipType", uploadmembership.single("registrationIcon"), async function(req, res, next) {
+router.post("/UpdateMembershipType",  async function(req, res, next) {
     try {
         const {
             id,
@@ -215,31 +221,26 @@ router.post("/UpdateMembershipType", uploadmembership.single("registrationIcon")
             sgstPercent,
             igstPercent,
             benefitList,
+            registrationIcon,
+            attachment
         } = req.body;
-        const file = req.file;
-        if (file == undefined) {
-            var data = {
-                membershipType: membershipType,
-                registrationFee: registrationFee,
-                csgtPercent: csgtPercent,
-                sgstPercent: sgstPercent,
-                igstPercent: igstPercent,
-                benefitList: benefitList,
-            };
-
-            let datas = await membershipTypeMstSchema.findByIdAndUpdate(id, data);
-        } else {
-            var data = {
-                membershipType: membershipType,
-                registrationFee: registrationFee,
-                csgtPercent: csgtPercent,
-                sgstPercent: sgstPercent,
-                igstPercent: igstPercent,
-                registrationIcon: file.path,
-                benefitList: benefitList,
-            };
-            let datas = await membershipTypeMstSchema.findByIdAndUpdate(id, data);
-        }
+        let checkType = await membershipTypeMstSchema.countDocuments({membershipType : membershipType, _id: {$ne : ObjectId(id)} })
+        if (checkType) {
+            throw new Error(`${membershipType} Membership type already exist!`)
+        } 
+        var data = {
+            membershipType: membershipType,
+            registrationFee: registrationFee,
+            csgtPercent: csgtPercent,
+            sgstPercent: sgstPercent,
+            igstPercent: igstPercent,
+       
+            benefitList: benefitList,
+            registrationIcon : registrationIcon || undefined,
+            attachment: attachment || undefined
+        };
+        let datas = await membershipTypeMstSchema.findByIdAndUpdate(id, JSON.parse(JSON.stringify(data)));
+        
         res.status(200).json({
             Message: "Membership Type Updated !",
             Data: 1,
@@ -404,6 +405,19 @@ router.post("/deleteCategoryMaster", async function(req, res, next) {
 router.post("/addCityMaster", async function(req, res, next) {
     try {
         const { id, cityCode, cityName, stateId } = req.body;
+        let checkFilterCondition = {}
+        if (_id) {
+            checkFilterCondition._id = {$ne: ObjectId(_id)}
+        }
+        checkFilterCondition['$or']  = [{ 
+                'cityCode': cityCode, 
+                'cityName': cityName
+            }]
+        let isExist = await cityMasterSchema.countDocuments(checkFilterCondition)
+        if(isExist) {
+            throw new Error(`City ${stateName} or ${cityCode} must be uniq!`)
+        }
+
         if (id == "0") {
             var citymaster = new cityMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
