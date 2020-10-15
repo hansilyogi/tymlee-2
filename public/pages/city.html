@@ -37,6 +37,7 @@
                                         <th>City name</th>
                                         <th>State name</th>
                                         <th>State code</th>
+                                        <th>Is Active</th>
                                         <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
@@ -47,6 +48,10 @@
                                         <td>{{data.cityName}}</td>
                                         <td>{{data.stateId.stateName}}</td>
                                         <td>{{data.stateId.stateCode}}</td>
+                                        <td>
+                                            <span class="badge badge-info" ng-show="data.status">Yes</span>
+                                            <span class="badge badge-danger" ng-show="!data.status">No</span>
+                                        </td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -110,6 +115,12 @@
                                                 ng-selected="stateId == sel" value="{{sel._id}}">
                                                 {{sel.stateName}}</option>
                                       </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Is Active</label><br/>
+                                    <input ng-model="status" type="checkbox" name="status"/>
                                 </div>
                             </div>
                         </div>

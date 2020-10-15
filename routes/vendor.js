@@ -106,7 +106,7 @@ router.get("/serviceProvider/:companyId", async function (req, res, next) {
 router.get("/profile/:vendorId", async function(req, res, next) {
     const { vendorId } = req.params;
     try {
-        let company = await companyMasterSchema.findById({_id: vendorId});
+        let company = await companyMasterSchema.findById({_id: vendorId, active: true});
                 res.status(200).json({
                     Message: "vendor profile.",
                     Data: company,
@@ -164,7 +164,7 @@ router.post("/getAppointmentByDate", async function(req, res, next) {
         });
     }
 })
-router.post("/VendorSignUp", fieldset, async function(req, res, next) {
+router.post("/VendorSignUp", async function(req, res, next) {
     const {
         doj,
         businessCategoryId,
@@ -297,6 +297,7 @@ router.post("/VendorSignIn", async function(req, res, next) {
         let company = await companyMasterSchema.find({
             adminEmail: adminEmail.toLowerCase(),
             adminPassword: adminPassword,
+            active: true,
         });
         if (company.length == 1) {
             if (company[0].active && moment().isBefore(moment(company[0].registrationValidUpto).format('YYYY-MM-DD'))) {
@@ -345,7 +346,7 @@ router.post("/changePassword", async function(req, res, next) {
 
 router.post("/getCity", async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find();
+        let data = await cityMasterSchema.find({status: true});
         res
             .status(200)
             .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
@@ -360,7 +361,7 @@ router.post("/getCity", async function(req, res, next) {
 
 router.post("/getCategory", async function(req, res, next) {
     try {
-        let data = await categoryMasterSchema.find();
+        let data = await categoryMasterSchema.find({isActive: true});
         res
             .status(200)
             .json({ Message: "Catergory Master Data!", Data: data, IsSuccess: true });

@@ -41,7 +41,8 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                         sgstPercent: $scope.SGSTPercent,
                         igstPercent: $scope.IGSTPercent,
                         businessIcon: `customer/getImage/${response.data.data[0]._id}` || undefined,
-                        attachment: response.data.data[0]._id || undefined
+                        attachment: response.data.data[0]._id || undefined,
+                        isActive: $scope.IsActive
                     }
                     
                     $scope.saveBusiness(postURL, reqData);
@@ -60,7 +61,8 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                 csgtPercent: $scope.CGSTPercent,
                 sgstPercent: $scope.SGSTPercent,
                 igstPercent: $scope.IGSTPercent,
-                businessIcon: undefined
+                businessIcon: undefined,
+                isActive: $scope.IsActive
             }
             $scope.files = undefined;
             $scope.saveBusiness(postURL, reqData);
@@ -153,6 +155,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
         $scope.CGSTPercent = data.csgtPercent;
         $scope.SGSTPercent = data.sgstPercent;
         $scope.IGSTPercent = data.igstPercent;
+        $scope.IsActive = data.isActive;
     }
 
 

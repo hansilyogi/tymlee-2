@@ -9,7 +9,8 @@ app.controller('CityController', function($scope, $http) {
             "cityCode": $scope.CityCode,
             "cityName": $scope.CityName,
             // "stateCode": $scope.StateCode,
-            "stateId": $scope.stateId
+            "stateId": $scope.stateId,
+            "status": $scope.status
         };
         $http({
             url: imageroute + "/admin/addCityMaster",
@@ -95,6 +96,7 @@ app.controller('CityController', function($scope, $http) {
         $scope.CityCode = data.cityCode;
         $scope.CityName = data.cityName;
         $scope.stateId = data.stateId._id;
+        $scope.status = data.status
         // $scope.StateCode = data.stateCode;
     }
     $scope.loadStates = function () {
@@ -126,6 +128,7 @@ app.controller('CityController', function($scope, $http) {
         $scope.CityName = "";
         $scope.StateName = "";
         $scope.StateCode = "";
+        $scope.status = ""
         $scope.loadStates()
     }
     $scope.Clear();

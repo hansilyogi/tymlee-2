@@ -282,7 +282,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         sgstPercent,
         igstPercent,
         businessIcon,
-        attachment
+        attachment,
+        isActive
     } = req.body;
     try {
         const file = req.file;
@@ -297,7 +298,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
             sgstPercent: sgstPercent,
             igstPercent: igstPercent,
             businessIcon: businessIcon || undefined, //file == undefined ? null : file.path,
-            attachment: attachment || undefined
+            attachment: attachment || undefined,
+            isActive: isActive
         });
         await categorymaster.save();
 
@@ -341,7 +343,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             sgstPercent,
             igstPercent,
             businessIcon, 
-            attachment
+            attachment,
+            isActive
         } = req.body;
         // const file = req.file;
         if (businessIcon == undefined) {
@@ -354,6 +357,7 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 csgtPercent: csgtPercent,
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
+                isActive: isActive
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         } else {
@@ -367,7 +371,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
                 businessIcon: businessIcon, //file.path,
-                attachment: attachment
+                attachment: attachment,
+                isActive: isActive
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         }
@@ -389,7 +394,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
 router.post("/deleteCategoryMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await categoryMasterSchema.findByIdAndRemove(id);
+        if (!id) throw new Error('Invalid Category!')
+        let data = await categoryMasterSchema.findByIdAndUpdate(id, {$set: {isActive: false}});
         res
             .status(200)
             .json({ Message: "Category Master Deleted!", Data: 1, IsSuccess: true });
@@ -404,7 +410,7 @@ router.post("/deleteCategoryMaster", async function(req, res, next) {
 
 router.post("/addCityMaster", async function(req, res, next) {
     try {
-        const { id, cityCode, cityName, stateId } = req.body;
+        const { id, cityCode, cityName, stateId, status } = req.body;
         let checkFilterCondition = {}
         if (_id) {
             checkFilterCondition._id = {$ne: ObjectId(_id)}
@@ -423,14 +429,16 @@ router.post("/addCityMaster", async function(req, res, next) {
                 _id: new config.mongoose.Types.ObjectId(),
                 cityCode: cityCode,
                 cityName: cityName,
-                stateId: stateId
+                stateId: stateId,
+                status: status
             });
             await citymaster.save();
         } else {
             var citymaster = {
                 cityCode: cityCode,
                 cityName: cityName,
-                stateId: stateId
+                stateId: stateId,
+                status: status
             };
             let data = await cityMasterSchema.findByIdAndUpdate(id, citymaster);
         }
@@ -448,7 +456,7 @@ router.post("/addCityMaster", async function(req, res, next) {
 
 router.post("/getCityMaster", async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find().populate('stateId');
+        let data = await cityMasterSchema.find({status: true}).populate('stateId')
         res
             .status(200)
             .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
@@ -464,8 +472,9 @@ router.post("/getCityMaster", async function(req, res, next) {
 router.post("/deleteCityMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let companies = await companyMasterSchema.find({cityMasterId: ObjectId(id)}).select('_id');
-        let data = await cityMasterSchema.findByIdAndRemove(id);
+        let companies = await companyMasterSchema.find({cityMasterId: ObjectId(id)}).update( { $set: { active: false}});
+        
+        let data = await cityMasterSchema.find(id).update({$set: {status: false}});
         res
             .status(200)
             .json({ Message: "City Master Deleted!", Data: 1, IsSuccess: true });
@@ -795,7 +804,7 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
 router.post("/getCompanyMaster", async function(req, res, next) {
     try {
         const {_id} = req.body
-        let filterCriteria = JSON.parse(JSON.stringify({_id}))
+        let filterCriteria = JSON.parse(JSON.stringify({_id, active:true}))
         let data = await companyMasterSchema
             .find(filterCriteria)
             .populate("businessCategoryId", " businessCategoryName")

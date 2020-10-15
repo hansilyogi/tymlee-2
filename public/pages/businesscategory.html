@@ -40,6 +40,7 @@
                                         <th>CGST %</th>
                                         <th>SGST %</th>
                                         <th>IGST %</th>
+                                        <th>Is Active</th>
                                         <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
@@ -59,6 +60,10 @@
                                         <td>{{data.csgtPercent}}%</td>
                                         <td>{{data.sgstPercent}}%</td>
                                         <td>{{data.igstPercent}}%</td>
+                                        <td>
+                                            <span class="badge badge-info" ng-show="data.isActive">Yes</span>
+                                            <span class="badge badge-danger" ng-show="!data.isActive">No</span>
+                                        </td>
                                         <td width=10%>
 
                                             <button type="button" class="btn btn-info btn-sm btn-flat" data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i class="fa fa-edit"></i>
@@ -157,10 +162,16 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Registration Icon</label><br>
                                     <input type="file" file-input="files" class="btn-sm form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Active</label><br>
+                                    <input type="checkbox" ng-model="IsActive">
                                 </div>
                             </div>
 

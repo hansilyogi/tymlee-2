@@ -261,7 +261,7 @@ router.post('/getState', async function (req, res, next) {
 
 router.post('/getCity', async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find({ stateId: req.body.stateId });
+        let data = await cityMasterSchema.find({ stateId: req.body.stateId, status: true });
         res.status(200).json({
             Message: "City Data!",
             Data: data,
@@ -287,7 +287,7 @@ router.post('/getCityByLatLang',async function(req, res, next) {
             d.forEach(element => {
                 cityNames.push((element.city))  
             });
-            let cityData = await cityMasterSchema.find({cityName: {$in: cityNames}}).lean(); //{cityName: {$in: cityNames}}
+            let cityData = await cityMasterSchema.find({status: true, cityName: {$in: cityNames}}).lean(); //{cityName: {$in: cityNames}}
             if (cityData && cityData.length) {
                 let data = cityData ;
                 // cityData.map((item) => {
@@ -304,7 +304,7 @@ router.post('/getCityByLatLang',async function(req, res, next) {
                     Data: data
                 })
             } else {
-                cityData = await cityMasterSchema.find().lean();
+                cityData = await cityMasterSchema.find({status: true}).lean();
                 return res.status(200).json({
                     "IsSuccess": true,
                     "isServiceExist": false,
@@ -382,7 +382,7 @@ router.post('/getTermNCondition', async function(req, res, next) {
 
 router.post('/getCategoryMaster', async function(req, res, next) {
     try {
-        let data = await categoryMasterSchema.find();
+        let data = await categoryMasterSchema.find({isActive: true});
         res
             .status(200)
             .json({ Message: "Catergory Master Data!", Data: data, IsSuccess: true });
@@ -406,7 +406,7 @@ router.post('/getCategoryByCity', async function (req, res, next) {
             })
         }
         
-        let data = await companyMasterSchema.find({ cityMasterId: cityId })
+        let data = await companyMasterSchema.find({ cityMasterId: cityId, active: true })
             // .select('_id active')
             .populate({
                 path: 'businessCategoryId'
@@ -450,7 +450,7 @@ router.post('/getCategoryByCity', async function (req, res, next) {
 router.post('/getCompanyMasterByBusinessCategoryId', async function(req, res, next) {
     try {
         const { businessCategoryId, cityMasterId } = req.body;
-        let conditions = JSON.parse(JSON.stringify({businessCategoryId, cityMasterId}));
+        let conditions = JSON.parse(JSON.stringify({businessCategoryId, cityMasterId, active: true,}));
         let data = await companyMasterSchema.find(conditions)
             .populate('businessCategoryId', ' businessCategoryName')
             .populate('cityMasterId');
@@ -892,7 +892,7 @@ router.post("/getCategoriesInfo", async function(req, res, next) {
         let results = [];
         if (categories && categories.length) {
             let promise = categories.map(async category => {
-                let companies = await companyMasterSchema.find({ businessCategoryId: category._id }).populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId').lean();
+                let companies = await companyMasterSchema.find({ businessCategoryId: category._id, active: true, }).populate('businessCategoryId', ' businessCategoryName').populate('cityMasterId').lean();
                 if (companies && companies.length) {
                     let innerPromise = companies.map(async company => {
                         let services = await companyServicesProviderSchema.find({
