@@ -109,9 +109,9 @@ router.get('/cutomers', async function(req, res, next) {
     }
 })
 router.post('/customerSignUp', async function(req, res, next) {
-    const { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
+    let { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
     try {
-        let existCustomer = await customerMasterSchema.find({ $or: {mobileNo: mobileNo, emailID: emailID} });
+        let existCustomer = await customerMasterSchema.find({ $or: [{mobileNo: mobileNo, emailID: emailID}] });
         if (existCustomer.length == 1) {
             res.status(200).json({
                 Message: "Customer Already Registered!",
@@ -124,7 +124,7 @@ router.post('/customerSignUp', async function(req, res, next) {
                 firstName: firstName,
                 lastName: lastName,
                 mobileNo: mobileNo,
-                emailID: emailID.toLowerCase(),
+                emailID: (emailID).toLowerCase(),
                 password: password,
                 address1: address1,
                 address2: address2,
@@ -134,7 +134,7 @@ router.post('/customerSignUp', async function(req, res, next) {
                 isActive: true,
                 isVerified: true
             });
-            newCustomer.save();
+            await newCustomer.save();
             res
                 .status(200)
                 .json({ Message: "Customer Registered!", Data: 1, IsSuccess: true });
