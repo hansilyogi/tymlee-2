@@ -39,6 +39,8 @@ var categoryMasterSchema = new mongoose.Schema({
      required:true
  },
  attachment: {
+    // required:false,
+    // default:null,
     type: mongoose.Types.ObjectId,
     ref: 'ClientUpload'
 },

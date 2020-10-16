@@ -26,7 +26,7 @@ app.controller('CityController', function($scope, $http) {
 
                 } else {
                     $scope.btnsave = false;
-                    alert("Unable to Save City");
+                    alert(response.data.Message || "Unable to Save City");
                 }
             },
             function(error) {
@@ -77,7 +77,7 @@ app.controller('CityController', function($scope, $http) {
                         $scope.GetCity();
 
                     } else {
-                        alert("Data Not deleted !");
+                        alert(response.data.Message || "Data Not deleted !");
                         $scope.GetCity();
                     }
                 },

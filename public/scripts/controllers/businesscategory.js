@@ -84,7 +84,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
 
                 } else {
                     $scope.btnsave = false;
-                    alert("Unable to Save Business Category");
+                    alert(response.data.Message || "Unable to Save Business Category");
                 }
             },
             function(error) {
@@ -133,7 +133,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                         $scope.GetBusinessCategoryType();
 
                     } else {
-                        alert("Data Not deleted !");
+                        alert(response.data.Message || "Data Not deleted !");
                         $scope.GetBusinessCategoryType();
                     }
                 },

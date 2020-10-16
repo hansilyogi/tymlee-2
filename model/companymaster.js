@@ -5,6 +5,10 @@ var companyMasterSchema = new mongoose.Schema({
     companyCode: {
         type: String
     },
+    // membershipId: {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'membershipTypeMst'
+    // },
     doj: {
         type: Date
     },

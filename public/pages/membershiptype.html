@@ -91,21 +91,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Member type</label>
-                                    <select class="form-control form-control-sm" ng-init="" ng-model="MemberType" required>
-                                        <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in MessageList"
-                                                ng-selected="MemberType == sel" value="{{sel}}">
-                                                {{sel}}</option>
-                                    </select>
-                                    <br>
-                                    <button onclick="myFunction()">Add New Category</button>
-                                    <br>
-                                    <div id='addnew' style="display: none;">
-                                        <br>
-                                        <input type="text" ng-model="adding">
-                                        <button type="submit" ng-click="add_type()">Add</button>
-                                    </div>
+                                    <label>Membership type</label>
+                                    <input type="text" class="form-control form-control-sm" ng-model="MemberType" required placeholder="Membership Type" autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -158,14 +145,3 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
-<script>
-    function myFunction() {
-  var x = document.getElementById("addnew");
-  if (x.style.display === "block") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "block";
-  }
-}
-</script>

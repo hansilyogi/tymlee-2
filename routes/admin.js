@@ -21,7 +21,7 @@ var bookingMasterSchema = require("../model/booking");
 var registrationFeesSchema = require('../model/registrationfees');
 const { ObjectId } = require("mongodb");
 const stateController = require('./states/controller');
-config = require("../config");
+let config = require("../config");
 
 //image uploading
 var membershiplocation = multer.diskStorage({
@@ -168,7 +168,7 @@ router.post("/addMembershipType", async function(req, res, next) {
         attachment
     } = req.body;
     try {
-        let checkType = await membershipTypeMstSchema.countDocuments({membershipType : membershipType})
+        let checkType = await membershipTypeMstSchema.countDocuments({membershipType : { $regex: new RegExp("^" + membershipType.toLowerCase(), "i") }})
         if (checkType) {
             throw new Error(`${membershipType} Membership type already exist!`)
         } 
@@ -224,7 +224,7 @@ router.post("/UpdateMembershipType",  async function(req, res, next) {
             registrationIcon,
             attachment
         } = req.body;
-        let checkType = await membershipTypeMstSchema.countDocuments({membershipType : membershipType, _id: {$ne : ObjectId(id)} })
+        let checkType = await membershipTypeMstSchema.countDocuments({membershipType :  { $regex: new RegExp("^" + membershipType.toLowerCase(), "i") }, _id: {$ne : ObjectId(id)} })
         if (checkType) {
             throw new Error(`${membershipType} Membership type already exist!`)
         } 
@@ -286,7 +286,15 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         isActive
     } = req.body;
     try {
-        const file = req.file;
+        let checkFilterCondition = {};
+        checkFilterCondition['$or']  = [
+            {'businessCategoryName':  { $regex: new RegExp("^" + businessCategoryName.toLowerCase(), "i") }}, 
+            // {'stateName': stateName}
+    ];
+    let isExist = await categoryMasterSchema.countDocuments(checkFilterCondition)
+    if(isExist) {
+        throw new Error(`Category Already Exist!`)
+    }
         var categorymaster = new categoryMasterSchema({
             _id: new config.mongoose.Types.ObjectId(),
             businessCategoryName: businessCategoryName,
@@ -347,6 +355,20 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             isActive
         } = req.body;
         // const file = req.file;
+
+        let checkFilterCondition = {};
+        checkFilterCondition['$or']  = [
+            {'businessCategoryName':  { $regex: new RegExp("^" + businessCategoryName.toLowerCase(), "i") }}, 
+            // {'stateName': stateName}
+        ];
+        if (id) {
+            _id:{$ne: ObjectId(id)}
+        }
+    let isExist = await categoryMasterSchema.countDocuments(checkFilterCondition)
+    if(isExist) {
+        throw new Error(`Category Already Exist!`)
+    }
+
         if (businessIcon == undefined) {
             var data = {
                 businessCategoryName: businessCategoryName,
@@ -395,6 +417,10 @@ router.post("/deleteCategoryMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
         if (!id) throw new Error('Invalid Category!')
+        let isExist = await companyMasterSchema.countDocuments({businessCategoryId: ObjectId(id)})
+        if (isExist) {
+            throw new Error('Vendor already Exist!')
+        }
         let data = await categoryMasterSchema.findByIdAndUpdate(id, {$set: {isActive: false}});
         res
             .status(200)
@@ -412,16 +438,15 @@ router.post("/addCityMaster", async function(req, res, next) {
     try {
         const { id, cityCode, cityName, stateId, status } = req.body;
         let checkFilterCondition = {}
-        if (_id) {
-            checkFilterCondition._id = {$ne: ObjectId(_id)}
+        if (id) {
+            checkFilterCondition._id = {$ne: ObjectId(id)}
         }
-        checkFilterCondition['$or']  = [{ 
-                'cityCode': cityCode, 
-                'cityName': cityName
-            }]
+        checkFilterCondition['$or']  = [
+                { 'cityCode':   { $regex: new RegExp("^" + cityCode.toLowerCase(), "i") }},
+                {'cityName': { $regex: new RegExp("^" + cityName.toLowerCase(), "i") }}]
         let isExist = await cityMasterSchema.countDocuments(checkFilterCondition)
         if(isExist) {
-            throw new Error(`City ${stateName} or ${cityCode} must be uniq!`)
+            throw new Error(`City Name ${cityName} or Code ${cityCode} must be uniq!`)
         }
 
         if (id == "0") {
@@ -456,7 +481,7 @@ router.post("/addCityMaster", async function(req, res, next) {
 
 router.post("/getCityMaster", async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find({status: true}).populate('stateId')
+        let data = await cityMasterSchema.find().populate('stateId').sort('cityName')
         res
             .status(200)
             .json({ Message: "City Master Data!", Data: data, IsSuccess: true });
@@ -472,9 +497,11 @@ router.post("/getCityMaster", async function(req, res, next) {
 router.post("/deleteCityMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let companies = await companyMasterSchema.find({cityMasterId: ObjectId(id)}).update( { $set: { active: false}});
-        
-        let data = await cityMasterSchema.find(id).update({$set: {status: false}});
+        let companies = await companyMasterSchema.countDocuments({cityMasterId: ObjectId(id)});
+        if (companies) {
+            throw new Error("Company Exist in the City!")
+        }
+        let data = await cityMasterSchema.findByIdAndUpdate(id, {status: false});
         res
             .status(200)
             .json({ Message: "City Master Deleted!", Data: 1, IsSuccess: true });
@@ -563,6 +590,7 @@ router.post("/deleteCityBusinessCategory", async function(req, res, next) {
 router.post("/addCompanyMaster", async function(req, res, next) {
     const {
         doj,
+        membershipId,
         businessCategoryId,
         companyName,
         addressLine1,
@@ -608,7 +636,7 @@ router.post("/addCompanyMaster", async function(req, res, next) {
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
         let existCompany = await companyMasterSchema.find({
-            companyName: companyName,
+            companyName: { $regex: new RegExp("^" + companyName.toLowerCase(), "i") },
         });
         if (existCompany.length == 1) {
             res.status(200).json({
@@ -698,6 +726,7 @@ router.post("/addCompanyMaster", async function(req, res, next) {
 router.post("/updateCompanyMaster", async function(req, res, next) {
     const {
         _id,
+        membershipId,
         doj,
         businessCategoryId,
         companyName,
@@ -741,6 +770,16 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
         notes
     } = req.body;
     try {   
+        
+        let filter = {
+            _id: {$ne: ObjectId(_id)},
+            companyName: { $regex: new RegExp("^" + companyName.toLowerCase(), "i") }
+        }
+        
+        let isExist = await companyMasterSchema.countDocuments(filter)
+        if (isExist) {
+            throw new Error(`Company name ${companyName} already Exist!`)
+        }
         var datas = {
             doj: doj,
             businessCategoryId: businessCategoryId,
@@ -803,8 +842,8 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
 
 router.post("/getCompanyMaster", async function(req, res, next) {
     try {
-        const {_id} = req.body
-        let filterCriteria = JSON.parse(JSON.stringify({_id, active:true}))
+        // const {_id} = req.body
+        let filterCriteria = JSON.parse(JSON.stringify({}))
         let data = await companyMasterSchema
             .find(filterCriteria)
             .populate("businessCategoryId", " businessCategoryName")
@@ -829,7 +868,11 @@ router.post("/getCompanyMaster", async function(req, res, next) {
 router.post("/deleteCompanyMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await companyMasterSchema.findByIdAndRemove(id);
+        let data = await companyMasterSchema.findById(id);
+        if (data) {
+            data.active = false;
+            await data.save();
+        }
         res
             .status(200)
             .json({ Message: "Company Master Deleted!", Data: 1, IsSuccess: true });

@@ -123,7 +123,7 @@ app.controller('MembershipController', function($scope, $http) {
                         $scope.GetMembershipType();
 
                     } else {
-                        alert("Data Not deleted !");
+                        alert(response.data.Message || "Data Not deleted !");
                         $scope.GetMembershipType();
                     }
                 },

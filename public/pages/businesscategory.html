@@ -98,20 +98,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Category Name</label>
-                                    <select class="form-control form-control-sm" ng-model="BusinessCategory" ng-init="" required>
-                                        <option value="" disabled>Nothing Selected</option>
-                                            <option ng-repeat="sel in MessageList"
-                                                ng-selected="BusinessCategory == sel" value="{{sel}}">
-                                                {{sel}}</option>
-                                    </select>
-                                    <br>
-                                    <button onclick="myFunction()">Add New Category</button>
-                                    <br>
-                                    <div id='addnew' style="display: none;">
-                                        <br>
-                                        <input type="text" ng-model="adding">
-                                        <button type="submit" ng-click="add()">Add</button>
-                                    </div>
+                                    <input type="text" class="form-control form-control-sm" ng-model="BusinessCategory" placeholder="Category Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -187,13 +174,3 @@
     </div>
 </div>
 
-<script>
-    function myFunction() {
-  var x = document.getElementById("addnew");
-  if (x.style.display === "block") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "block";
-  }
-}
-</script>
