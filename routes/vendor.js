@@ -404,11 +404,12 @@ router.post("/getTodayAppointment", async function(req, res, next) {
     try {
         let {companyId, serviceProviderId} = req.body;
         if (!companyId ) throw new Error('Invalid Company!')
+        console.log('start', moment().startOf('day').format(), 'end', moment().endOf('day').format())
         let filter = {
             companyId: companyId,
             bookingDate: {
-                $gte:moment('2020-10-12').startOf('day').format(),
-                $lt: moment('2020-10-12').endOf('day').format(),
+                $gte:moment().startOf('day').format(),
+                $lt: moment().endOf('day').format(),
             }
         }
         if (serviceProviderId) {
