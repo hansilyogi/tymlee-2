@@ -24,10 +24,10 @@ exports.create = async (req, res, next) => {
         if (_id) {
             checkFilterCondition._id = {$ne: ObjectId(_id)}
         }
-        checkFilterCondition['$or']  = [{ 
-                'stateCode': stateCode, 
-                'stateName': stateName
-            }]
+        checkFilterCondition['$or']  = [
+                {'stateCode': stateCode}, 
+                {'stateName': stateName}
+        ];
         let isExist = await StateMaster.countDocuments(checkFilterCondition)
         if(isExist) {
             throw new Error(`State ${stateName} or ${stateCode} must be uniq!`)
@@ -54,8 +54,13 @@ exports.removeItem = async (req, res, next) => {
     try {
         let { stateId } = req.params;
         if (!stateId) throw new Error('Invalide data supplide!')
-        let cities = await citymaster.remove({'stateId': stateId})
-        let states = await StateMaster.remove({ '_id': stateId });
+        let cities = await citymaster.countDocuments({'stateId': stateId})
+        if (cities) {
+            throw new Error("State can't be removed as City Exist!")
+        }
+        let states = await StateMaster.findOne({ '_id': stateId });
+        state.status = false;
+        await state.save();
 
         res.status(200).json({
             IsSuccess: true,
