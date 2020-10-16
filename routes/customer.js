@@ -261,7 +261,12 @@ router.post('/getState', async function (req, res, next) {
 
 router.post('/getCity', async function(req, res, next) {
     try {
-        let data = await cityMasterSchema.find({ stateId: req.body.stateId, status: true });
+        let {stateId} = req.body;
+        let filter = {
+            stateId: stateId,
+            status: true
+        }
+        let data = await cityMasterSchema.find(JSON.parse(JSON.stringify(filter)));
         res.status(200).json({
             Message: "City Data!",
             Data: data,
