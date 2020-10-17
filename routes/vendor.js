@@ -408,7 +408,7 @@ router.post("/getTodayAppointment", async function(req, res, next) {
         let filter = {
             companyId: companyId,
             bookingDate: {
-                $gte:moment().startOf('day').format(),
+                $gte: moment().startOf('day').format(),
                 $lt: moment().endOf('day').format(),
             }
         }

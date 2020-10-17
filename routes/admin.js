@@ -268,9 +268,7 @@ router.post("/DeleteMembershipType", async function(req, res, next) {
         if (compnayCount) {
             throw new Error('Company exist with this membership!')
         }
-        let data = await membershipTypeMstSchema.findOne(id);
-        data.isActive = false;
-        await data.save();
+        let data = await membershipTypeMstSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Membership Type Deleted!", Data: 1, IsSuccess: true });
@@ -433,7 +431,7 @@ router.post("/deleteCategoryMaster", async function(req, res, next) {
         if (isExist) {
             throw new Error('Vendor already Exist!')
         }
-        let data = await categoryMasterSchema.findByIdAndUpdate(id, {$set: {isActive: false}});
+        let data = await categoryMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Category Master Deleted!", Data: 1, IsSuccess: true });
@@ -513,7 +511,7 @@ router.post("/deleteCityMaster", async function(req, res, next) {
         if (companies) {
             throw new Error("Company Exist in the City!")
         }
-        let data = await cityMasterSchema.findByIdAndUpdate(id, {status: false});
+        let data = await cityMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "City Master Deleted!", Data: 1, IsSuccess: true });
@@ -881,11 +879,8 @@ router.post("/getCompanyMaster", async function(req, res, next) {
 router.post("/deleteCompanyMaster", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await companyMasterSchema.findById(id);
-        if (data) {
-            data.active = false;
-            await data.save();
-        }
+        if (!id) throw new Error('Invalid Company Id!');
+        let data = await companyMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
             .json({ Message: "Company Master Deleted!", Data: 1, IsSuccess: true });

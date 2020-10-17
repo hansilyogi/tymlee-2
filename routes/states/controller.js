@@ -58,9 +58,8 @@ exports.removeItem = async (req, res, next) => {
         if (cities) {
             throw new Error("State can't be removed as City Exist!")
         }
-        let states = await StateMaster.findOne({ '_id': stateId });
-        state.status = false;
-        await state.save();
+        let states = await StateMaster.findByIdAndRemove(stateId);
+       
 
         res.status(200).json({
             IsSuccess: true,
