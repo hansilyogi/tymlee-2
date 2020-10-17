@@ -263,8 +263,10 @@ router.post('/getCity', async function(req, res, next) {
     try {
         let {stateId} = req.body;
         let filter = {
-            stateId: stateId,
             status: true
+        }
+        if (stateId) {
+            filter.stateId = ObjectId(stateId)
         }
         let data = await cityMasterSchema.find(JSON.parse(JSON.stringify(filter)));
         res.status(200).json({
