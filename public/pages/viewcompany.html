@@ -276,6 +276,20 @@
                                     <div class="tab-panels">
                                         <section id="info" class="tab-panel" ng-show="selectedTab.key == 'vendorInfo'">
                                             <div class="row">
+                                                <div class="col-sm-3  form-group">
+                                                    <label>Membership Type</label>
+                                                    <select class="form-control form-control-sm" ng-init=""
+                                                        ng-model="model.membershipId" required>
+                                                        <option value="" disabled>Nothing Selected</option>
+                                                        <option ng-repeat="sel in MemberShipTypeList"
+                                                            ng-selected="model.membershipId == sel"
+                                                            value="{{sel._id}}">
+                                                            {{sel.membershipType}}</option>
+                                                    </select>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-3 ">
                                                     <div class="form-group">
                                                         <label>Business Category</label>

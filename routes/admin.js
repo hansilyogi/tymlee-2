@@ -198,7 +198,12 @@ router.post("/addMembershipType", async function(req, res, next) {
 
 router.post("/MembershipType", async function(req, res, next) {
     try {
-        let data = await membershipTypeMstSchema.find();
+        let filter = {};
+        let {isActive} = req.body;
+        if (isActive) {
+            filter.isActive = isActive;
+        }
+        let data = await membershipTypeMstSchema.find(JSON.parse(JSON.stringify(filter)));
         res
             .status(200)
             .json({ Message: " Membership Type Data!", Data: data, IsSuccess: true });
@@ -258,7 +263,14 @@ router.post("/UpdateMembershipType",  async function(req, res, next) {
 router.post("/DeleteMembershipType", async function(req, res, next) {
     try {
         const { id } = req.body;
-        let data = await membershipTypeMstSchema.findByIdAndRemove(id);
+        if (!id) {throw new Error('Invaild Membership id!')}
+        let compnayCount = await companyMasterSchema.countDocuments({membershipId: ObjectId(id)}); 
+        if (compnayCount) {
+            throw new Error('Company exist with this membership!')
+        }
+        let data = await membershipTypeMstSchema.findOne(id);
+        data.isActive = false;
+        await data.save();
         res
             .status(200)
             .json({ Message: "Membership Type Deleted!", Data: 1, IsSuccess: true });
@@ -632,7 +644,6 @@ router.post("/addCompanyMaster", async function(req, res, next) {
         cancelledChequeAttachment,
         notes
     } = req.body;
-    console.log(req.body);
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
         let existCompany = await companyMasterSchema.find({
@@ -647,6 +658,7 @@ router.post("/addCompanyMaster", async function(req, res, next) {
         } else {
             var companymaster = new companyMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
+                membershipId: membershipId,
                 companyCode: "comp" + a,
                 doj: doj,
                 businessCategoryId: businessCategoryId,
@@ -781,6 +793,7 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
             throw new Error(`Company name ${companyName} already Exist!`)
         }
         var datas = {
+            membershipId:membershipId,
             doj: doj,
             businessCategoryId: businessCategoryId,
             companyName: companyName,
