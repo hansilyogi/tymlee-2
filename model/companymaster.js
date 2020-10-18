@@ -35,10 +35,12 @@ var companyMasterSchema = new mongoose.Schema({
         type: String
     },
     mapLocation: {
-        type: String
+        type: String,
+        required: true
     },
     phone: {
-        type: String
+        type: String,
+        required: true
     },
     fax: {
         type: String
