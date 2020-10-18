@@ -10,6 +10,10 @@ var customerMasterSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    gender: {
+        type:String,
+        required:true
+    },
     mobileNo:{
         type:String,
         required:true

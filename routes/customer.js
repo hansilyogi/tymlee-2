@@ -109,7 +109,7 @@ router.get('/cutomers', async function(req, res, next) {
     }
 })
 router.post('/customerSignUp', async function(req, res, next) {
-    let { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
+    let { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode, gender } = req.body;
     try {
         let existCustomer = await customerMasterSchema.find({ $or: [{mobileNo: mobileNo, emailID: emailID}] });
         if (existCustomer.length == 1) {
@@ -132,7 +132,8 @@ router.post('/customerSignUp', async function(req, res, next) {
                 state: state,
                 zipcode: zipcode,
                 isActive: true,
-                isVerified: true
+                isVerified: true,
+                gender: gender
             });
             await newCustomer.save();
             res
@@ -330,25 +331,12 @@ router.post('/getCityByLatLang',async function(req, res, next) {
         })     
     }
 });
-router.post('/updateCustomer', uploadcustomer.single("image"), async function(req, res, next) {
-    const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode } = req.body;
+router.post('/updateCustomer', async function(req, res, next) {
+    const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode, gender,image } = req.body;
     try {
         const file = req.file;
-        if (file == undefined) {
-            var data = ({
-                firstName: firstName,
-                lastName: lastName,
-                mobileNo: mobileNo,
-                emailID: emailID,
-                password: password,
-                address1: address1,
-                address2: address2,
-                city: city,
-                state: state,
-                zipcode: zipcode
-            });
-        } else {
-            var data = ({
+        
+            var data = JSON.parse(JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
                 mobileNo: mobileNo,
@@ -359,9 +347,24 @@ router.post('/updateCustomer', uploadcustomer.single("image"), async function(re
                 city: city,
                 state: state,
                 zipcode: zipcode,
-                image: file.path
-            });
-        }
+                gender: gender,
+                image: image || undefined
+            })) ;
+        
+            // var data = ({
+            //     firstName: firstName,
+            //     lastName: lastName,
+            //     mobileNo: mobileNo,
+            //     emailID: emailID,
+            //     password: password,
+            //     address1: address1,
+            //     address2: address2,
+            //     city: city,
+            //     state: state,
+            //     zipcode: zipcode,
+            //     image: image
+            // });
+        
         let datas = await customerMasterSchema.findByIdAndUpdate(id, data);
         res
             .status(200)
@@ -695,7 +698,7 @@ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
             $or: [ { status:  "pending"}, { status: "confirm" } ],
             bookingDate: { $gte: moment().startOf('day').format() } 
         })
-        .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2')
+        .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2 mapLocation phone')
         .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')
         .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate')
         .sort({ 'bookingDate': -1 });
