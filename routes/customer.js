@@ -108,6 +108,36 @@ router.get('/cutomers', async function(req, res, next) {
         res.status(400).json({ Message: err.message, Data: 0, IsSuccess: false });
     }
 })
+router.get('/search-serviceprovider/:categoryId/:search', async function(req, res, next) {
+    try {
+        let {categoryId, search} = req.params;
+        if (!categoryId || !search) { throw new Error('Invalid Service provider request')}
+        let companies = await companyMasterSchema.find({businessCategoryId: ObjectId(categoryId)}).select('_id');
+        let companyIds = [];
+        if (companies &&  companies.length) {
+            companies.map((item, i) => {
+                console.log(i)
+                if (item._id) { 
+                    companyIds.push(item._id)
+                }
+            })  
+            console.log('map done')
+            let serviceP = await companyServicesProviderSchema.find({
+                companyId: {$in: companyIds},
+                serviceProviderName: new RegExp(search.toLowerCase(), "i")});
+            return res.status(200).json({
+                IsSuccess: true,
+                Data: serviceP
+            })
+        }
+        res.status(200).json({
+            IsSuccess: true,
+            Data: []
+        })
+    } catch(err) {
+        res.status(400).json({ Message: err.message, Data: 0, IsSuccess: false });
+    }
+})
 router.post('/customerSignUp', async function(req, res, next) {
     let { firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode, gender } = req.body;
     try {
