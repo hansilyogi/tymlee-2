@@ -6,6 +6,10 @@ var categoryMasterSchema = new mongoose.Schema({
      type:String,
      required:true
  },
+ appointmentLabel: {
+     type: String,
+     default: "Appointment"
+ },
  startDate:{
      type:Date,
      required:true

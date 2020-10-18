@@ -42,8 +42,8 @@ var bookingMasterSchema = new mongoose.Schema({
         ref: 'bookingSlotMaster'
     },
     appointmentDate: {
-        type: String,
-        set: date => formatDate(date)
+        type: Date,
+        default: Date.now
     },
     appointmentTime: {
         type: String

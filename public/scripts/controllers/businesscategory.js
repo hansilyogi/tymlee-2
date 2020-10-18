@@ -42,7 +42,8 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                         igstPercent: $scope.IGSTPercent,
                         businessIcon: `customer/getImage/${response.data.data[0]._id}` || undefined,
                         attachment: response.data.data[0]._id || undefined,
-                        isActive: $scope.IsActive
+                        isActive: $scope.IsActive,
+                        appointmentLabel: $scope.appointmentLabel
                     }
                     
                     $scope.saveBusiness(postURL, reqData);
@@ -62,7 +63,8 @@ app.controller('BusinessCategoryController', function($scope, $http) {
                 sgstPercent: $scope.SGSTPercent,
                 igstPercent: $scope.IGSTPercent,
                 businessIcon: undefined,
-                isActive: $scope.IsActive
+                isActive: $scope.IsActive,
+                appointmentLabel: $scope.appointmentLabel
             }
             $scope.files = undefined;
             $scope.saveBusiness(postURL, reqData);
@@ -156,6 +158,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
         $scope.SGSTPercent = data.sgstPercent;
         $scope.IGSTPercent = data.igstPercent;
         $scope.IsActive = data.isActive;
+        $scope.appointmentLabel = data.appointmentLabel;
     }
 
 
@@ -169,6 +172,7 @@ app.controller('BusinessCategoryController', function($scope, $http) {
         $scope.CGSTPercent = "";
         $scope.SGSTPercent = "";
         $scope.IGSTPercent = "";
+        $scope.appointmentLabel = "";
         angular.element("input[type='file']").val(null);
     }
     $scope.Clear();

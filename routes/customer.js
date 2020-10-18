@@ -693,7 +693,7 @@ router.post('/getUpcomingByCustomerID', async function(req, res, next) {
         let data = await bookingMasterSchema.find({ 
             customerId: customerId, 
             $or: [ { status:  "pending"}, { status: "confirm" } ],
-            bookingDate: { $gte: moment().utc().format() } 
+            bookingDate: { $gte: moment().startOf('day').format() } 
         })
         .populate('companyId', '_id companyName personName personPhoto companyLogo addressLine1 addressLine2')
         .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription')

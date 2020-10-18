@@ -293,7 +293,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         igstPercent,
         businessIcon,
         attachment,
-        isActive
+        isActive,
+        appointmentLabel
     } = req.body;
     try {
         let checkFilterCondition = {};
@@ -308,6 +309,7 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         var categorymaster = new categoryMasterSchema({
             _id: new config.mongoose.Types.ObjectId(),
             businessCategoryName: businessCategoryName,
+            appointmentLabel: appointmentLabel,
             startDate: startDate,
             bookingAmt: bookingAmt,
             clientAmt: clientAmt,
@@ -362,7 +364,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             igstPercent,
             businessIcon, 
             attachment,
-            isActive
+            isActive,
+            appointmentLabel
         } = req.body;
         // const file = req.file;
 
@@ -372,7 +375,7 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             // {'stateName': stateName}
         ];
         if (id) {
-            _id:{$ne: ObjectId(id)}
+            checkFilterCondition._id = {$ne: ObjectId(id)}
         }
     let isExist = await categoryMasterSchema.countDocuments(checkFilterCondition)
     if(isExist) {
@@ -389,7 +392,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 csgtPercent: csgtPercent,
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
-                isActive: isActive
+                isActive: isActive,
+                appointmentLabel: appointmentLabel
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         } else {
@@ -404,7 +408,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 igstPercent: igstPercent,
                 businessIcon: businessIcon, //file.path,
                 attachment: attachment,
-                isActive: isActive
+                isActive: isActive,
+                appointmentLabel: appointmentLabel
             };
             let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
         }
