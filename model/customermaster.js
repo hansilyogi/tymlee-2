@@ -66,6 +66,9 @@ var customerMasterSchema = new mongoose.Schema({
         default:true
     },
     image:{
+        type: String
+    },
+    imageAttachment: {
         type: mongoose.Types.ObjectId,
         ref: 'ClientUpload'
     },

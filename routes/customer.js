@@ -332,10 +332,9 @@ router.post('/getCityByLatLang',async function(req, res, next) {
     }
 });
 router.post('/updateCustomer', async function(req, res, next) {
-    const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode, gender,image } = req.body;
+    const { id, firstName, lastName, mobileNo, emailID, password, address1, address2, city, state, zipcode, gender, image, imageAttachment } = req.body;
     try {
-        const file = req.file;
-        
+       
             var data = JSON.parse(JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
@@ -348,7 +347,8 @@ router.post('/updateCustomer', async function(req, res, next) {
                 state: state,
                 zipcode: zipcode,
                 gender: gender,
-                image: image || undefined
+                image: image || undefined,
+                imageAttachment: imageAttachment || undefined
             })) ;
         
             // var data = ({

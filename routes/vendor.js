@@ -144,6 +144,36 @@ router.get("/customer", async function (req, res, next) {
         });
     }
 })
+router.get("/company-customer/:companyId/:name", async function (req, res, next) {
+    try {
+        let { companyId, name } = req.params;
+        if (!companyId) throw new Error('Invalid companyId!');
+        console.log(name)
+        let customers = await bookingMasterSchema.find({
+            companyId: ObjectId(companyId),   
+        })
+        .populate({
+            path: 'customerId',
+            select: '_id mobileNo firstName lastName emailID address1 address2 city state zipcode',
+            match: {
+                $or: 
+                [{firstName: new RegExp("^" + name.toLowerCase(), "i")},
+                {lastName: new RegExp("^" + name.toLowerCase(), "i")}]
+            },
+        }).exec()
+        // .select('_id mobileNo firstName lastName emailID address1 address2 city state zipcode');
+        res.status(200).json({
+            Message: "company customer data",
+            Data: customers,
+            IsSuccess: true,
+        })
+    } catch (err) {
+        res.json({
+            Message: err.message || err,
+            IsSuccess: false,
+        });
+    }
+})
 router.post("/getAppointmentByDate", async function(req, res, next) {
     try {
 
@@ -503,7 +533,7 @@ router.post("/getBookingReports", async function(req, res, next) {
 
 router.post("/updateCustomerStatus", async function(req, res, next) {
     try {
-        let { _id, status, activityStatus} = req.body;
+        let { _id, status, activityStatus, amount, totalAmt, taxableValue} = req.body;
         if (!_id) {
             throw new Error('Invalid data Passed, Booking required and pass status or activity status!')
         }
@@ -515,13 +545,16 @@ router.post("/updateCustomerStatus", async function(req, res, next) {
             if (activityStatus) {
                 booking.activityStatus = activityStatus;
                 if (activityStatus.toLocaleLowerCase() == 'completed') {
+                    booking.amount = amount || 0,
+                    booking.taxableValue = taxableValue || 0,
+                    booking.totalAmt = totalAmt || 0,
                     booking.status = 'Completed';
                     booking.serviceCompletedTime = new Date()
                 } else if (activityStatus.toLocaleLowerCase() == 'arrived') {
                     booking.status = 'Arrived';
                     booking.serviceStartedTime = new Date()
-                } else if (activityStatus.toLocaleLowerCase() == 'completed') {
-                    booking.status = 'started';
+                } else if (activityStatus.toLocaleLowerCase() == 'started') {
+                    booking.status = 'Started';
                     // booking.serviceCompletedTime = new Date()
                 } else if (activityStatus.toLocaleLowerCase() == 'no show') {
                     booking.status = 'No Show';
