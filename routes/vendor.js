@@ -148,19 +148,27 @@ router.get("/company-customer/:companyId/:name", async function (req, res, next)
     try {
         let { companyId, name } = req.params;
         if (!companyId) throw new Error('Invalid companyId!');
-        console.log(name)
-        let customers = await bookingMasterSchema.find({
+        let bookingCustomer = await bookingMasterSchema.find({
             companyId: ObjectId(companyId),   
         })
+        .populate('companyId', '_id companyName addressLine1 addressLine2 companyLogo notes phone mapLocation')
+        .populate('inventoryId', '_id inventoryName rateAmt inventoryDescription')
+        .populate('serviceProviderId', '_id serviceProviderName serviceProviderDescription rateAmt')
+        .populate('bookingSlotId', '_id dayName slotName fromTime toTime rate')
         .populate({
             path: 'customerId',
-            select: '_id mobileNo firstName lastName emailID address1 address2 city state zipcode',
+            select: '_id mobileNo firstName lastName emailID address1 address2 city state zipcode imageAttachment',
             match: {
-                $or: 
-                [{firstName: new RegExp("^" + name.toLowerCase(), "i")},
-                {lastName: new RegExp("^" + name.toLowerCase(), "i")}]
+                $or: [
+                    {firstName: new RegExp("^" + name.toLowerCase(), "i")},
+                    {lastName: new RegExp("^" + name.toLowerCase(), "i")}
+                ]
             },
-        }).exec()
+        });
+        let customers;
+        if (bookingCustomer && bookingCustomer.length) {
+            customers = bookingCustomer.filter(data => data.customerId)
+        }
         // .select('_id mobileNo firstName lastName emailID address1 address2 city state zipcode');
         res.status(200).json({
             Message: "company customer data",
