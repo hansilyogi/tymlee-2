@@ -69,11 +69,13 @@ router.get("/serviceProvider/:companyId", async function (req, res, next) {
     const { companyId } = req.params;
     try {
         if (!companyId) { throw new Error('Invalid CompanyId') }
-        let filter = JSON.parse(JSON.stringify({ companyId: companyId.toString }));
+        let filter = { companyId: ObjectId(companyId) };
         filter.serviceProviderAvailable = true;
+        // console.log(JSON.stringify(JSON.stringify(filter)))
         let ss = await companyServicesProviderSchema.find(filter)
             .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
             .populate('inventoryId').lean();
+        // console.log(ss)
         if (ss && ss.length) {
             await Promise.all(
                 ss.map(async (item, i) => {
