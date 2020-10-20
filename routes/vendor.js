@@ -239,8 +239,18 @@ router.post("/VendorSignUp", _uploader.fields([
         if (existCompany.length >= 1) {
             throw new Error('Company already Exist!')
         }
-
-        if (!req.files.personPhoto || !req.files.companyLogo || !req.files.panCard || !req.files.cancelledCheque) {
+        let requestedData = {
+            bank: {
+                bankName: req.body.bankName,
+                bankBranchName: req.body.bankBranchName,
+                bankAddress: req.body.bankAddress,
+                bankCity: req.body.bankCity,
+                bankState: req.body.bankState,
+                bankAccountNo: req.body.bankAccountNo,
+                bankIfscCode: req.body.bankIfscCode,
+            },
+        }
+        if (!req.files.personPhoto || !req.files.companyLogo || !req.files.panCard || !req.files.cancelledCheque || !req.files.aadharCard) {
             console.log('in error re', req)
             return next('No files was attached!');
         }
@@ -249,6 +259,7 @@ router.post("/VendorSignUp", _uploader.fields([
         files = files.concat(req.files.companyLogo)
         files = files.concat(req.files.panCard)
         files = files.concat(req.files.cancelledCheque)
+        files = files.concat(req.files.aadharCard)
         commonController.uploadDocuments(files, Object.keys(req.files)).then(async e => {
             let attachmentData = {}
             e.map((item, i) => {
@@ -266,7 +277,7 @@ router.post("/VendorSignUp", _uploader.fields([
                 // cancelledChequeAttachment,
             });
             var a = Math.floor(100000 + Math.random() * 900000);
-            let companyData = { ...req.body, ...attachmentData, companyCode: "comp" + a };
+            let companyData = { ...req.body, ...requestedData, ...attachmentData, companyCode: "comp" + a };
 
             var companymaster = new companyMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
@@ -274,6 +285,7 @@ router.post("/VendorSignUp", _uploader.fields([
             });
             let companyDoc = await companymaster.save();
             res.status(200).json({
+                IsdSuccess: true,
                 companyDoc
             })
         })
