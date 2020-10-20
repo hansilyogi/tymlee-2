@@ -138,7 +138,6 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
 
     function companyFileUploader(data) {
             let promise = data.map((item) => {
-                debugger
                 var preForm = new FormData();
                 // preForm.append('key', item.value);
                 preForm.append('upload', item.value);

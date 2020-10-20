@@ -286,3 +286,79 @@ async function verifyOTP(req, res, next) {
   }
 }
 exports.verifyOTP = verifyOTP;
+
+
+async function uploadDocuments(files, fileKeys) {
+  try {
+    var
+      finalResult = [],
+      uploadPath = appConfig.uploads.path,
+      clientUploadPath = path.join(uploadPath, String(`${appConfig.awsConfig.bucketName}`));
+    return new Promise((resolve, reject) => {
+      let chain = files.reduce(function (promise, file) {
+       
+        var
+          originalName = file.originalname,
+          tempPath = file.path,
+          mimeType = file.mimetype,
+          fileSize = file.size,
+          finalPath = path.join(clientUploadPath, file.filename);
+
+        return promise.then(function (results) {
+          return Q.nfcall(fs.rename, tempPath, finalPath)
+            .then(function () {
+              return asyncFsRead(finalPath);
+            })
+            .then(function (data) {
+              const params = {
+                Body: data,
+                Bucket: appConfig.awsConfig.bucketName, //process.env.BUCKET_NAME, 
+                Key: `${appConfig.awsConfig.bucketName}/${file.filename}`,
+                ContentType: file.mimetype,
+                ServerSideEncryption: 'AES256',
+              }
+              console.log( path.relative(uploadPath, finalPath), params)
+              return awsS3Client.putObject(params).promise();
+            })
+            .then(function () {
+              return Q.nfcall(ClientUpload.create.bind(ClientUpload), {
+                // createdBy: req.user,
+                // createdByEmail: req.email,
+                name: originalName,
+                mimeType: mimeType,
+                path: path.relative(uploadPath, finalPath),
+                size: fileSize
+              });
+            })
+            .then(function (doc) {
+              // console.log('=======', doc.id)
+              finalResult.push({
+                name: originalName,
+                mimeType: mimeType,
+                filename: file.filename,
+                fileSize: file.size,
+                ...doc.resultProperties
+              });
+              return finalResult;
+            });
+        })
+        
+      },
+      Q.nfcall(mkdirp, clientUploadPath).then(function () {
+        return [];
+      })); 
+      chain.then(function (results) {
+        resolve(results);
+      }).catch((err) => {
+        throw new Error(err)
+      });
+    });
+
+
+  } catch (err) {
+    console.log(err)
+    throw new Error(err)
+  }
+}
+
+exports.uploadDocuments = uploadDocuments;

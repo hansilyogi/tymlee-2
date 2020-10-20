@@ -154,5 +154,18 @@ var companyMasterSchema = new mongoose.Schema({
     notes: String
 
 });
-
+// companyMasterSchema.statics = {
+//     createNewFile: async function(){
+//         let Modal = this;
+//         let obj = {
+//             // createdBy: req.user,
+//             // createdByEmail: req.email,
+//             name: data.originalName,
+//             mimeType: data.mimeType,
+//             path: data.path
+//             // size: fileSize
+//         }
+//         new Modal(obj).save();
+//     }
+// }
 module.exports = mongoose.model('companyMaster', companyMasterSchema);

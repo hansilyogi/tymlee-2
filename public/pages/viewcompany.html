@@ -102,7 +102,7 @@
                         <div class="card-header">
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                 data-target="#modal-lg-company" ng-click="Clear()">
-                                <i class="fa fa-plus"></i> &nbsp;Add New Company
+                                <i class="fa fa-plus"></i> &nbsp;Add New Vendor
                             </button>
                         </div>
 
@@ -111,9 +111,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Company Logo</th>
-                                        <th>Company Code</th>
-                                        <th>Company Name</th>
+                                        <th>Vendor Logo</th>
+                                        <th>Vendor Code</th>
+                                        <th>Vendor Name</th>
                                         <th>Phone</th>
                                         <th>Active</th>
                                         <th style="width: 40px">Action</th>
@@ -255,7 +255,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-lg">Company</h4>
+                    <h4 class="modal-title text-lg">Vendor</h4>
                     <button type="button" class="close" ng-click="closeModal($event)" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -305,7 +305,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Company Name</label>
+                                                        <label>Vendor Name</label>
                                                         <input type="text" style="text-transform: lowercase;"
                                                             class="form-control form-control-sm"
                                                             ng-model="model.companyName" required=""
@@ -322,7 +322,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Company Logo</label>
+                                                        <label>Vendor Logo</label>
                                                         <input type="file" class="btn-sm form-control-sm"
                                                             file-input="CompanyLogo">
                                                     </div>
@@ -366,7 +366,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Company Type</label>
+                                                        <label>Vendor Type</label>
                                                         <select class="form-control form-control-sm" ng-init=""
                                                             ng-model="model.companyType" required>
                                                             <option value="" disabled>Nothing Selected</option>
@@ -386,7 +386,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Gstin No</label>
+                                                        <label>GSTIN No</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             ng-model="model.gstinNo" placeholder="Gstin No"
                                                             autocomplete="off">
@@ -422,7 +422,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Company Html Page</label>
+                                                        <label>Vendor Html Page</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             ng-model="model.companyHtmlPage"
                                                             placeholder="Company Html Page" autocomplete="off">
@@ -601,7 +601,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Pan Cards</label>
+                                                        <label>Pan Card</label>
                                                         <input type="file" class="btn-sm form-control-sm"
                                                             file-input="PanCard">
                                                     </div>

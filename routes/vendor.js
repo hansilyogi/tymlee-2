@@ -14,10 +14,21 @@ var customerMasterSchema = require("../model/customermaster");
 var companyInventoryMaster = require('../model/companyinventorymaster')
 var companyServicesProviderSchema = require("../model/companyservicesprovider");
 const { ObjectId } = require('mongodb');
+let commonController = require('./common')
 var a = Math.floor(100000 + Math.random() * 900000);
+var rootDir = path.normalize(__dirname + '../../../');
+var _uploader = multer({
+    dest: path.join(rootDir, 'tmp'),
+    // maxCount: config.uploads.maxCount,
+    // limits: { // 1GB
+    //   fieldSize: 1048576000,
+    //   fileSize: 1048576000
+    // }
+  });
 
-config = require("../config");
-
+const config = require("../config");
+const {appConfig} = require('../app_config');
+const { forEach } = require("lodash");
 //image uploading
 
 var filestorage = multer.diskStorage({
@@ -39,6 +50,15 @@ var fieldset = finalstorage.fields([
     { name: "cancelledCheque", maxCount: 1 },
     { name: "companyLogo", maxCount: 1 },
 ]);
+
+
+var storage = multer.memoryStorage({
+    destination: function(req, file, callback) {
+        callback(null, '');
+    }
+});
+var multipleUpload = multer({  dest: path.join(appConfig.root, 'tmp')}).array('file');
+var upload = multer({ storage: storage }).single('file');
 
 /* APIS listing. */
 
@@ -160,8 +180,8 @@ router.get("/company-customer/:companyId/:name", async function (req, res, next)
             select: '_id mobileNo firstName lastName emailID address1 address2 city state zipcode imageAttachment',
             match: {
                 $or: [
-                    {firstName: new RegExp("^" + name.toLowerCase(), "i")},
-                    {lastName: new RegExp("^" + name.toLowerCase(), "i")}
+                    {firstName: new RegExp(name.toLowerCase(), "i")},
+                    {lastName: new RegExp(name.toLowerCase(), "i")}
                 ]
             },
         });
@@ -204,122 +224,59 @@ router.post("/getAppointmentByDate", async function(req, res, next) {
         });
     }
 })
-router.post("/VendorSignUp", async function(req, res, next) {
-    const {
-        doj,
-        businessCategoryId,
-        companyName,
-        addressLine1,
-        addressLine2,
-        cityMasterId,
-        zipcode,
-        mapLocation,
-        phone,
-        fax,
-        url,
-        supportEmail,
-        adminEmail,
-        adminMobile,
-        adminPassword,
-        gstinNo,
-        paNo,
-        bankName,
-        bankBranchName,
-        bankAddress,
-        bankCity,
-        bankState,
-        bankAccountNo,
-        bankIfscCode,
-        companyType,
-        personName,
-        weekStartDay,
-        cancellationPolicy,
-        companyHtmlPage,
-        registrationValidUpto,
-    } = req.body;
+
+router.post("/VendorSignUp", _uploader.fields([
+    { name: 'personPhoto', maxCount: 1 },
+    { name: 'companyLogo', maxCount: 1 },
+    { name: 'panCard', maxCount: 1 },
+    { name: 'cancelledCheque', maxCount: 1 },
+    { name: 'aadharCard', maxCount: 1 }
+]), async function (req, res, next) {
     try {
         let existCompany = await companyMasterSchema.find({
-            companyName: companyName,
+            companyName: req.body.companyName,
         });
-        if (existCompany.length == 1) {
-            res.status(200).json({
-                Message: "Company Name Already Registered!",
-                Data: 0,
-                IsSuccess: true,
+        if (existCompany.length >= 1) {
+            throw new Error('Company already Exist!')
+        }
+
+        if (!req.files.personPhoto || !req.files.companyLogo || !req.files.panCard || !req.files.cancelledCheque) {
+            console.log('in error re', req)
+            return next('No files was attached!');
+        }
+        let files = [];
+        files = files.concat(req.files.personPhoto);
+        files = files.concat(req.files.companyLogo)
+        files = files.concat(req.files.panCard)
+        files = files.concat(req.files.cancelledCheque)
+        commonController.uploadDocuments(files, Object.keys(req.files)).then(async e => {
+            let attachmentData = {}
+            e.map((item, i) => {
+                let keys = Object.keys(req.files)
+                var attachmentKey = `${keys[i]}Attachment`;
+                attachmentData[keys[i]] = `customer/getImage/${item._id}` //item.path;
+                attachmentData[attachmentKey] = item._id;
+                // companyLogo,
+                // companyLogoAttachment,
+                // personPhoto,
+                // personPhotoAttachment,
+                // panCard,
+                // panCardAttachment,
+                // cancelledCheque,
+                // cancelledChequeAttachment,
             });
-        } else {
+            var a = Math.floor(100000 + Math.random() * 900000);
+            let companyData = { ...req.body, ...attachmentData, companyCode: "comp" + a };
+
             var companymaster = new companyMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
-                companyCode: "comp" + a,
-                doj: doj,
-                businessCategoryId: businessCategoryId,
-                companyName: companyName,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                cityMasterId: cityMasterId,
-                zipcode: zipcode,
-                mapLocation: mapLocation,
-                phone: phone,
-                fax: fax,
-                url: url,
-                supportEmail: (supportEmail).toLowerCase(),
-                adminEmail: (adminEmail).toLowerCase(),
-                adminMobile: adminMobile,
-                adminPassword: adminPassword,
-                gstinNo: gstinNo,
-                paNo: paNo,
-                bank: {
-                    bankName: bankName,
-                    bankBranchName: bankBranchName,
-                    bankAddress: bankAddress,
-                    bankCity: bankCity,
-                    bankState: bankState,
-                    bankAccountNo: bankAccountNo,
-                    bankIfscCode: bankIfscCode,
-                },
-                companyType: companyType,
-                personName: personName,
-                aadharCard: aadharCard,
-                aadharCardAttachment: aadharCardAttachment || '',
-                companyLogo: companyLogo || '',
-                companyLogoAttachment: companyLogoAttachment || '',
-                personPhoto: personPhoto || '',
-                personPhotoAttachment: personPhotoAttachment || '',
-                panCard: panCard || '',
-                panCardAttachment:panCardAttachment || '',
-                cancelledCheque: cancelledCheque || '',
-                cancelledChequeAttachment:cancelledChequeAttachment || '',
-                // personPhoto: req.files !== undefined ? (req.files.personPhoto == undefined ?
-                //     null : req.files.personPhoto[0].path) : null,
-                // aadharCard: req.files !== undefined ? (req.files.aadharCard == undefined ?
-                //     null : req.files.aadharCard[0].path) : null,
-                // panCard: req.files !== undefined ? (req.files.panCard == undefined ? null : req.files.panCard[0].path) : null,
-                // cancelledCheque: req.files !== undefined ? (req.files.cancelledCheque == undefined ?
-                //     null : req.files.cancelledCheque[0].path) : null,
-                // companyLogo: req.files !== undefined ? (req.files.companyLogo == undefined ?
-                //         null : req.files.companyLogo[0].path) : null,
-                weekStartDay: weekStartDay,
-                cancellationPolicy: cancellationPolicy,
-                companyHtmlPage: companyHtmlPage,
-                registrationValidUpto: registrationValidUpto,
+                ...companyData
             });
-            var datas = await companymaster.save();
-            if (adminMobile) {
-                //send otp
-            }
-            console.log(datas);
-            if (datas) {
-                res
-                    .status(200)
-                    .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
-            } else {
-                res.status(200).json({
-                    Message: "Company Master Not Added!",
-                    Data: 0,
-                    IsSuccess: true,
-                });
-            }
-        }
+            let companyDoc = await companymaster.save();
+            res.status(200).json({
+                companyDoc
+            })
+        })
     } catch (err) {
         res.json({
             Message: err.message,

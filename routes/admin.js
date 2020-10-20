@@ -650,7 +650,7 @@ router.post("/addCompanyMaster", async function(req, res, next) {
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
         let existCompany = await companyMasterSchema.find({
-            companyName: { $regex: new RegExp("^" + companyName.toLowerCase(), "i") },
+            companyName: { $regex: new RegExp(companyName.toLowerCase(), "i") },
         });
         if (existCompany.length == 1) {
             res.status(200).json({
