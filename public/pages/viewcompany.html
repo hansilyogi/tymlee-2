@@ -138,7 +138,7 @@
                                         <td width=10%>
                                             <button type="button" class="btn btn-info btn-flat btn-sm "
                                                 data-toggle="modal" ng-click="getCurrentCompany(data, $index)"><i
-                                                    class="fa fa-eye"></i>
+                                                    class="fa fa-edit"></i>
                                             </button>
                                             <!-- <button type="button" class="btn btn-info btn-sm btn-flat"
                                                 title="Bank Detail" data-toggle="modal" data-target="#modal-lg"
@@ -475,7 +475,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Map Location</label>
+                                                        <label>Map Location &nbsp;<i class="fa  fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Set your google map location. e.g. http://maps.google.com/maps?daddr=23.012109,72.4757344"></i></label>
+           
                                                         <input type="text" class="form-control form-control-sm"
                                                             ng-model="model.mapLocation" placeholder="Map Location"
                                                             autocomplete="off" required>

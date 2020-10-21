@@ -427,6 +427,8 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
         $scope.CancellationPolicy = "";
         $scope.CompanyHtmlPage = "";
         $scope.RegistrationValidUpto = "";
+
+        $('[data-toggle="tooltip"]').tooltip()
     }
     $scope.Clear();
 
