@@ -113,7 +113,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title text-lg">Booking Slot</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="Clear()">
                 <span aria-hidden="true">&times;</span>
                      </button>
                 </div>
@@ -121,7 +121,7 @@
                     <div class="modal-body">
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
                                     <select class="form-control form-control-sm" ng-change="GetInventory()" ng-model="CompanyId" ng-init="">
@@ -131,7 +131,7 @@
                                                 {{sel.companyName}}</option>
                                       </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Inventory Name</label>
@@ -143,7 +143,7 @@
                                       </select>
                                 </div>
                             </div>
-                            <div class="col-md-6" ng-show="VisibleData">
+                            <div class="col-md-6" >
                                 <div class="form-group">
                                     <label>Service Provider Name</label>
                                     <select class="form-control form-control-sm" ng-model="ServiceProviderId" ng-init="">
@@ -154,22 +154,40 @@
                                       </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Day Name</label>
+                                    <label>Day Name </label>
+                                    <br/>
                                     <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="DayName" placeholder="Monday" autocomplete="off"> -->
-                                    <select class="form-control form-control-sm" ng-model="DayName" ng-init="">
+                                    <!-- <select class="form-control form-control-sm" ng-model="DayName" ng-init="">
                                         <option value="" disabled>Nothing Selected</option>
                                                 <option ng-repeat="day in weekDays"
                                                     ng-selected="DayName == day" value="{{day}}">
                                                     {{day}}</option>
-                                      </select>
+                                      </select> -->
+                                      <div class="form-check form-check-inline" ng-repeat="day in weekDays">
+                                        <input class="form-check-input" type="checkbox"  ng-model="selectedDays[day]"
+                                             
+                                            id="inlineCheckbox-{{day}}" >
+                                        <label class="form-check-label" for="inlineCheckbox-{{day}}">{{day}}</label>
+                                      </div>
+                                      <!-- <label ng-repeat="(k,v) in weekDays">
+                                        <input type="checkbox" ng-model="selectedDays[v]">
+                                           {{ v }}
+                                      </label> -->
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Slot Name</label>
                                     <input type="text" class="form-control form-control-sm" required="" ng-model="SlotName" placeholder="Slot Name" autocomplete="off">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Appointment Count</label>
+                                    <input type="number" class="form-control form-control-sm" required="" ng-model="AppointmentCount" placeholder="Appointment Count" autocomplete="off">
 
                                 </div>
                             </div>
@@ -189,13 +207,6 @@
                                     <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="ToTime" autocomplete="off"> -->
                                     <input type="time" class="form-control form-control-sm" ng-model="ToTime" [name="ToTime" ] [required="true" ]
                                         [ng-required="true" ]>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Appointment Count</label>
-                                    <input type="number" class="form-control form-control-sm" required="" ng-model="AppointmentCount" placeholder="Appointment Count" autocomplete="off">
-
                                 </div>
                             </div>
                             <!-- <div class="col-md-12">

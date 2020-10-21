@@ -299,7 +299,7 @@ router.post("/addCategoryMaster", async function(req, res, next) {
     try {
         let checkFilterCondition = {};
         checkFilterCondition['$or']  = [
-            {'businessCategoryName':  { $regex: new RegExp("^" + businessCategoryName.toLowerCase(), "i") }}, 
+            {'businessCategoryName':  { $regex: new RegExp(businessCategoryName.toLowerCase(), "i") }}, 
             // {'stateName': stateName}
     ];
     let isExist = await categoryMasterSchema.countDocuments(checkFilterCondition)
@@ -858,8 +858,8 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
 
 router.post("/getCompanyMaster", async function(req, res, next) {
     try {
-        // const {_id} = req.body
-        let filterCriteria = JSON.parse(JSON.stringify({}))
+        const {_id} = req.body
+        let filterCriteria = JSON.parse(JSON.stringify({_id}))
         let data = await companyMasterSchema
             .find(filterCriteria)
             .populate("businessCategoryId", " businessCategoryName")
@@ -1084,7 +1084,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
         inventoryName,
         inventoryDescription,
         appointmentMinutes,
-        multipleServiceProviderRequired,
+        multipleService,
         rateType,
         rateAmt,
         inventoryNotes1Name,
@@ -1097,14 +1097,20 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
         serviceProvider,
     } = req.body;
     try {
-        if (!multipleServiceProviderRequired) {
+        let isExist = await companyInventoryMasterSchema.countDocuments({
+            inventoryName:   { $regex: new RegExp(inventoryName.toLowerCase(), "i") }
+        })
+        if (isExist) {
+            throw new Error('Inventory Already Exist!')
+        }
+        if (!multipleService) {
             var companyInventory = new companyInventoryMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 companyId: companyId,
                 inventoryName: inventoryName,
                 inventoryDescription: inventoryDescription,
                 appointmentMinutes: appointmentMinutes,
-                multipleServiceProviderRequired: multipleServiceProviderRequired,
+                multipleServiceProviderRequired: multipleService,
                 rateType: rateType,
                 rateAmt: rateAmt,
                 inventoryNotes1Name: inventoryNotes1Name,
@@ -1116,39 +1122,50 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
                 inventoryAvailable: true,
             });
             await companyInventory.save();
+            var companyServicesProvider = new companyServicesProviderSchema({
+                _id: new config.mongoose.Types.ObjectId(),
+                companyId: companyId,//serviceProvider[i].companyId,
+                inventoryId: companyInventory._id,
+                serviceProviderName: inventoryName,//serviceProvider[i].serviceProviderName,
+                serviceProviderDescription: inventoryDescription,//serviceProvider[i].serviceProviderDescription,
+                appointmentMinutes: appointmentMinutes,//serviceProvider[i].appointmentMinutes,
+                rateType: rateType,//serviceProvider[i].rateType,
+                rateAmt: rateAmt,//serviceProvider[i].rateAmt,
+            });
+            await companyServicesProvider.save();
         } else {
             var companyInventory = new companyInventoryMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 companyId: companyId,
                 inventoryName: inventoryName,
                 inventoryDescription: inventoryDescription,
-                appointmentMinutes: multipleServiceProviderRequired == true ? null : appointmentMinutes,
-                multipleServiceProviderRequired: multipleServiceProviderRequired,
-                rateType: multipleServiceProviderRequired == true ? null : rateType,
-                rateAmt: multipleServiceProviderRequired == true ? null : rateAmt,
-                inventoryNotes1Name: multipleServiceProviderRequired == true ? null : inventoryNotes1Name,
-                inventoryNotes1: multipleServiceProviderRequired == true ? null : inventoryNotes1,
-                inventoryNotes2Name: multipleServiceProviderRequired == true ? null : inventoryNotes2Name,
-                inventoryNotes2: multipleServiceProviderRequired == true ? null : inventoryNotes2,
-                inventoryNotes3Name: multipleServiceProviderRequired == true ? null : inventoryNotes3Name,
-                inventoryNotes3: multipleServiceProviderRequired == true ? null : inventoryNotes3,
-                inventoryAvailable: multipleServiceProviderRequired == true ? null : inventoryAvailable,
+                appointmentMinutes: appointmentMinutes,
+                multipleServiceProviderRequired: multipleService,
+                rateType: rateType,//multipleService == true ? null : rateType,
+                rateAmt: rateAmt,//multipleService == true ? null : rateAmt,
+                inventoryNotes1Name: multipleService == true ? null : inventoryNotes1Name,
+                inventoryNotes1: multipleService == true ? null : inventoryNotes1,
+                inventoryNotes2Name: multipleService == true ? null : inventoryNotes2Name,
+                inventoryNotes2: multipleService == true ? null : inventoryNotes2,
+                inventoryNotes3Name: multipleService == true ? null : inventoryNotes3Name,
+                inventoryNotes3: multipleService == true ? null : inventoryNotes3,
+                inventoryAvailable: multipleService == true ? null : inventoryAvailable,
             });
             companyInventory.save();
 
-            for (i = 0; i < serviceProvider.length; i++) {
-                var companyServicesProvider = new companyServicesProviderSchema({
-                    _id: new config.mongoose.Types.ObjectId(),
-                    companyId: serviceProvider[i].companyId,
-                    inventoryId: companyInventory._id,
-                    serviceProviderName: serviceProvider[i].serviceProviderName,
-                    serviceProviderDescription: serviceProvider[i].serviceProviderDescription,
-                    appointmentMinutes: serviceProvider[i].appointmentMinutes,
-                    rateType: serviceProvider[i].rateType,
-                    rateAmt: serviceProvider[i].rateAmt,
-                });
-                await companyServicesProvider.save();
-            }
+            // for (i = 0; i < serviceProvider.length; i++) {
+            //     var companyServicesProvider = new companyServicesProviderSchema({
+            //         _id: new config.mongoose.Types.ObjectId(),
+            //         companyId: serviceProvider[i].companyId,
+            //         inventoryId: companyInventory._id,
+            //         serviceProviderName: serviceProvider[i].serviceProviderName,
+            //         serviceProviderDescription: serviceProvider[i].serviceProviderDescription,
+            //         appointmentMinutes: serviceProvider[i].appointmentMinutes,
+            //         rateType: serviceProvider[i].rateType,
+            //         rateAmt: serviceProvider[i].rateAmt,
+            //     });
+            //     await companyServicesProvider.save();
+            // }
         }
         res.status(200).json({ Message: "Data Added!", Data: 1, IsSuccess: true });
     } catch (err) {
@@ -1179,13 +1196,20 @@ router.post("/updateInventory", async function(req, res, next) {
         inventoryAvailable,
     } = req.body;
     try {
+        let isExist = await companyInventoryMasterSchema.countDocuments({
+            _id: {$ne: ObjectId(id)},
+            inventoryName:   { $regex: new RegExp(inventoryName.toLowerCase(), "i") }
+        })
+        if (isExist) {
+            throw new Error('Inventory Already Exist!')
+        }
             let inventory  = await companyInventoryMasterSchema.findById({_id: id});
 
             // inventory.companyId = companyId || '',
             inventory.inventoryName = inventoryName || '';
             inventory.inventoryDescription = inventoryDescription || '';
             inventory.appointmentMinutes = appointmentMinutes || '';
-            // inventory.multipleServiceProvider = multipleServiceProvider || false ;
+            inventory.multipleServiceProviderRequired = multipleService || false ;
             inventory.rateType = rateType || '';
             inventory.rateAmt = rateAmt || '';
             inventory.inventoryNotes1Name = inventoryNotes1Name || '';
@@ -1215,6 +1239,10 @@ router.post("/removeInventory", async function(req, res, next) {
     } = req.body;
     if (!id) throw new Error('Invalid Inventory!')
     try {
+            let isServiceProvider = await companyServicesProviderSchema.countDocuments({inventoryId: ObjectId(id)})
+            if (isServiceProvider) {
+                throw new Error ('Service provoder are exist!')
+            }
             let inventory  = await companyInventoryMasterSchema.findByIdAndRemove({_id: id});
             return res.status(200).json({
                 IsSuccess: true,
@@ -1291,16 +1319,40 @@ router.post("/addServiceProvider", async function(req, res, next) {
     }
 })
 
+router.post("/removeServiceProvider", async function(req, res, next) {
+    try {
+        const {id} = req.body;
+        if (!id) throw new Error('Invalid Service Provider!')
+        // let criteria = JSON.parse(JSON.stringify({_id: id}))
+        let isExist = await bookingSlotMasterSchema.countDocuments({serviceProviderId: ObjectId(id)})
+        if (isExist){
+            throw new Error('Booking Slots are Exist!')
+        }
+        var companyServicesProvider = await companyServicesProviderSchema.findByIdAndRemove(id)
+        .populate('companyId', '_id companyCode companyName')
+        .populate('inventoryId', '_id inventoryName')
+        res.status(200)
+        .json({ Message: "Data Found!", Data: companyServicesProvider, IsSuccess: true });
+
+    } catch(err) {
+        res.json({
+            Message: err.message,
+            Data: 0,
+            IsdSuccess: false,
+        });
+    }
+})
+
 router.post("/getInventoryByCompanyId", async function(
     req,
     res,
     next
 ) {
     try {
-        const { companyId } = req.body;
-        let data = await companyInventoryMasterSchema.find({
-            companyId: companyId,
-        });
+        const { companyId, multipleServiceProviderRequired } = req.body;
+        let filter = JSON.parse(JSON.stringify({companyId, multipleServiceProviderRequired}))
+        console.log(filter)
+        let data = await companyInventoryMasterSchema.find(filter);
         res
             .status(200)
             .json({ Message: "Data Found!", Data: data, IsSuccess: true });
@@ -1429,7 +1481,7 @@ router.post("/getSlot", async function(req, res, next) {
 });
 
 router.post("/addSlot", async function (req, res, next) {
-    const {
+    let {
         id,
         companyId,
         inventoryId,
@@ -1442,61 +1494,70 @@ router.post("/addSlot", async function (req, res, next) {
         rate,
     } = req.body;
     try {
-        let exisitingBookingSlots = await bookingSlotMasterSchema.find({
-            inventoryId: inventoryId,
-            companyId: companyId,
-            dayName: dayName
-        }).lean();
-        function checkexhistingSlot() {
-            let format = 'HH:mm';
-            let beforeTime = moment(fromTime, format)
-            let afterTime = moment(toTime, format);
-            return Promise.all(
-                exisitingBookingSlots.map((slot) => {
-                    let slotStartTime = moment(`${slot.fromTime}`, format);
-                    let slotEndTime = moment(`${slot.toTime}`, format);
-                    if (slotStartTime.isSame(beforeTime) || slotStartTime.isBetween(beforeTime, afterTime) || slotEndTime.isSame(afterTime) || slotEndTime.isBetween(beforeTime, afterTime)) {
-                        throw new Error('Sloat Already Available!')
+        let days = Object.keys(dayName)
+        if (days && !Array.isArray(days)) {
+            days = [days];
+        }
+        let p = Promise.all(
+            days.map(async (dayName) => {
+                let exisitingBookingSlots = await bookingSlotMasterSchema.find({
+                    inventoryId: inventoryId,
+                    companyId: companyId,
+                    dayName: dayName
+                }).lean();
+                function checkexhistingSlot() {
+                    let format = 'HH:mm';
+                    let beforeTime = moment(fromTime, format)
+                    let afterTime = moment(toTime, format);
+                    return Promise.all(
+                        exisitingBookingSlots.map((slot) => {
+                            let slotStartTime = moment(`${slot.fromTime}`, format);
+                            let slotEndTime = moment(`${slot.toTime}`, format);
+                            if (slotStartTime.isSame(beforeTime) || slotStartTime.isBetween(beforeTime, afterTime) || slotEndTime.isSame(afterTime) || slotEndTime.isBetween(beforeTime, afterTime)) {
+                                throw new Error('Sloat Already Available!')
+                            }
+                        })
+                    );
+                }
+                let isExist = await checkexhistingSlot();
+                if (serviceProviderId) {
+                    var slot = new bookingSlotMasterSchema({
+                        _id: new config.mongoose.Types.ObjectId(),
+                        companyId: companyId,
+                        inventoryId: inventoryId,
+                        serviceProviderId: serviceProviderId,
+                        dayName: dayName,
+                        slotName: slotName,
+                        fromTime: fromTime,
+                        toTime: toTime,
+                        appointmentCount: appointmentCount,
+                        rate: rate || 50,
+                    });
+                } else {
+                    let serviceProviderId = await companyServicesProviderSchema.findOne({
+                        inventoryId: inventoryId,
+                        companyId: companyId,
+                    }).select('_id');
+                    if (!serviceProviderId) {
+                        res.status(400).json({ IsSuccess: false, Message: "Invalid Service Provider!" })
                     }
-                })
-            );
-        }
-        let isExist = await checkexhistingSlot();
-        if (serviceProviderId) {
-            var slot = new bookingSlotMasterSchema({
-                _id: new config.mongoose.Types.ObjectId(),
-                companyId: companyId,
-                inventoryId: inventoryId,
-                serviceProviderId: serviceProviderId,
-                dayName: dayName,
-                slotName: slotName,
-                fromTime: fromTime,
-                toTime: toTime,
-                appointmentCount: appointmentCount,
-                rate: rate || 50,
-            });
-        } else {
-            let serviceProviderId = await companyServicesProviderSchema.findOne({
-                inventoryId: inventoryId,
-                companyId: companyId,
-            }).select('_id');
-            if (!serviceProviderId) {
-                res.status(400).json({ IsSuccess: false, Message: "Invalid Service Provider!" })
-            }
-            var slot = new bookingSlotMasterSchema({
-                _id: new config.mongoose.Types.ObjectId(),
-                companyId: companyId,
-                inventoryId: inventoryId,
-                serviceProviderId: serviceProviderId,
-                dayName: dayName,
-                slotName: slotName,
-                fromTime: fromTime,
-                toTime: toTime,
-                appointmentCount: appointmentCount,
-                rate: rate || 50,
-            });
-        }
-        await slot.save();
+                    var slot = new bookingSlotMasterSchema({
+                        _id: new config.mongoose.Types.ObjectId(),
+                        companyId: companyId,
+                        inventoryId: inventoryId,
+                        serviceProviderId: serviceProviderId,
+                        dayName: dayName,
+                        slotName: slotName,
+                        fromTime: fromTime,
+                        toTime: toTime,
+                        appointmentCount: appointmentCount,
+                        rate: rate || 50,
+                    });
+                }
+                await slot.save();
+            })
+        )
+        await p;
         res.status(200).json({ Message: "Slot Added!", Data: 1, IsSuccess: true });
     } catch (err) {
         res.status(400).json({

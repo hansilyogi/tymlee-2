@@ -8,6 +8,7 @@ var companyInventoryMasterSchema = new mongoose.Schema({
     },
     inventoryName: {
         type: String,
+        unique: true,
         required: true
     },
     inventoryDescription: {

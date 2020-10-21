@@ -77,7 +77,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title text-lg">Inventory</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" aria-label="Close" ng-click="closeModal()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -103,17 +103,28 @@
 
                                 </div>
                             </div>
-                            <!-- <div class="col-md-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Multiple Service Provider</label> &nbsp;
-                                    <div class="row col-md-6">
+                                    <!-- <div class="row col-md-6">
                                         <input type="radio" ng-model="toggleyes" ng-click="tooglelistner()" ng-value="true"> &nbsp;
                                         <div style="margin-top:-4px;">Yes</div> &nbsp;&nbsp;
                                         <input type="radio" ng-model="toggleyes" ng-click="tooglelistner()" ng-value="false" ng-checked="datano"> &nbsp;
                                         <div style="margin-top:-4px;">No</div>
-                                    </div>
+                                    </div> -->
+
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="materialInline1" name="inlineMaterialRadiosExample" ng-value="true" ng-model="multipleService">
+                                        <label class="form-check-label" for="materialInline1">Yes</label>
+                                      </div>
+                                      
+                                      <!-- Material inline 2 -->
+                                      <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="materialInline2" name="inlineMaterialRadiosExample" ng-value="false" ng-model="multipleService">
+                                        <label class="form-check-label" for="materialInline2">No</label>
+                                      </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                             <div class="col-md-3" ng-if="!companyId">
                                 <div class="form-group">
@@ -210,7 +221,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="serviceProvider">
+                        <div ng-show="serviceProvider && false">
                             <div id="companno" class="mt-3">
                                 <div class="row">
                                     <div class="col-md-3">

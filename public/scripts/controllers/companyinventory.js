@@ -25,10 +25,10 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.RateTypeData = "";
     }
 
-    $scope.DeleteDataList = function (i) {
-        $scope.SelectedDataList.splice(i, 1);
-        // console.log($scope.SelectedDataList);
-    }
+    // $scope.DeleteDataList = function (i) {
+    //     $scope.SelectedDataList.splice(i, 1);
+    //     // console.log($scope.SelectedDataList);
+    // }
 
     $scope.init = function () {
         let role = sessionStorage.getItem("Role");
@@ -42,14 +42,14 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
 
     };
     $scope.submitCompanyInventory = function () {
-        if ($scope.toggleyes == false) {
+        // if ($scope.toggleyes == false) {
             var inventory = {
                 "id": $scope.Id,
                 "companyId": $scope.companyId, //"5f04587fdd1ead1304d025ad",
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "appointmentMinutes": $scope.AppointmentMinutes,
-                // "multipleServiceProviderRequired": $scope.toggleyes,
+                "multipleService": $scope.multipleService,
                 "rateType": $scope.RateType,
                 "rateAmt": $scope.RateAmount,
                 "inventoryNotes1Name": $scope.InventoryNotes1Name,
@@ -60,35 +60,34 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
                 "inventoryNotes3": $scope.InventoryNotes3
             };
             // console.log(inventory);
-        }
-        if ($scope.toggleyes == true) {
-            var json = [];
+        // }
+        // if ($scope.toggleyes == true) {
+        //     var json = [];
 
-            angular.forEach($scope.SelectedDataList, function (value, key) {
-                var data = {
-
-                    "serviceProviderName": $scope.SelectedDataList[key]["name"],
-                    "serviceProviderDescription": $scope.SelectedDataList[key]["description"],
-                    "appointmentMinutes": $scope.SelectedDataList[key]["appointmentmin"],
-                    "rateType": $scope.SelectedDataList[key]["ratetype"],
-                    "rateAmt": $scope.SelectedDataList[key]["rateamount"]
-                }
-                json.push(data);
-            });
-            var inventory = {
-                "companyId": $scope.companyId,
-                "inventoryName": $scope.InventoryName,
-                "inventoryDescription": $scope.InventoryDescription,
-                // "multipleServiceProviderRequired": $scope.toggleyes,
-                "inventoryNotes1Name": $scope.InventoryNotes1Name,
-                "inventoryNotes1": $scope.InventoryNotes1,
-                "inventoryNotes2Name": $scope.InventoryNotes2Name,
-                "inventoryNotes2": $scope.InventoryNotes2,
-                "inventoryNotes3Name": $scope.InventoryNotes3Name,
-                "inventoryNotes3": $scope.InventoryNotes3,
-                "serviceProvider": json
-            }
-        }
+        //     angular.forEach($scope.SelectedDataList, function (value, key) {
+        //         var data = {
+        //             "serviceProviderName": $scope.SelectedDataList[key]["name"],
+        //             "serviceProviderDescription": $scope.SelectedDataList[key]["description"],
+        //             "appointmentMinutes": $scope.SelectedDataList[key]["appointmentmin"],
+        //             "rateType": $scope.SelectedDataList[key]["ratetype"],
+        //             "rateAmt": $scope.SelectedDataList[key]["rateamount"]
+        //         }
+        //         json.push(data);
+        //     });
+        //     var inventory = {
+        //         "companyId": $scope.companyId,
+        //         "inventoryName": $scope.InventoryName,
+        //         "inventoryDescription": $scope.InventoryDescription,
+        //         "multipleServiceProviderRequired":  $scope.multipleServiceProviderRequired,
+        //         "inventoryNotes1Name": $scope.InventoryNotes1Name,
+        //         "inventoryNotes1": $scope.InventoryNotes1,
+        //         "inventoryNotes2Name": $scope.InventoryNotes2Name,
+        //         "inventoryNotes2": $scope.InventoryNotes2,
+        //         "inventoryNotes3Name": $scope.InventoryNotes3Name,
+        //         "inventoryNotes3": $scope.InventoryNotes3,
+        //         "serviceProvider": json
+        //     }
+        // }
         let actionUrl = $scope.Id ? '/admin/updateInventory' : '/admin/addInventoryAndServiceProvider';
         $http({
             url: imageroute + actionUrl,
@@ -107,7 +106,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
 
             } else {
                 $scope.btnsave = false;
-                alert("Unable to Save Company Inventory");
+                alert(response.data.Message || "Unable to Save Company Inventory");
             }
         },
             function (error) {
@@ -153,36 +152,34 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
     // $scope.GetBusinessCategoryType();
 
 
-    // $scope.DeleteData = function(id) {
-    //     var result = confirm("Are you sure you want to delete this ?");
-    //     if (result) {
-    //         $http({
-    //             url: imageroute + "/admin/deleteCategoryMaster",
-    //             method: "POST",
-    //             cache: false,
-    //             data: { id: id },
-    //             headers: { "Content-Type": "application/json; charset=UTF-8" },
-    //         }).then(
-    //             function(response) {
-    //                 if (response.data.Data == 1) {
-    //                     alert("Delete Successfully !");
-    //                     $scope.GetBusinessCategoryType();
+    $scope.DeleteData = function(id) {
+        var result = confirm("Are you sure you want to delete this ?");
+        if (result) {
+            $http({
+                url: imageroute + "/admin/removeInventory",
+                method: "POST",
+                cache: false,
+                data: { id: id },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.IsSuccess) {
+                        alert("Delete Successfully !");
+                        $scope.init()
 
-    //                 } else {
-    //                     alert("Data Not deleted !");
-    //                     $scope.GetBusinessCategoryType();
-    //                 }
-    //             },
-    //             function(error) {
-    //                 console.log("Insternal Server");
-    //             }
-    //         );
-    //     }
-    // }
+                    } else {
+                        alert(response.data.Message || "Data Not deleted !");
+                    }
+                },
+                function(error) {
+                    console.log("Insternal Server");
+                }
+            );
+        }
+    }
 
     $scope.EditData = function (data) {
         $('#modal-lg').modal();
-        console.log(data);
         $scope.Id = data._id;
         $scope.InventoryName = data.inventoryName;
         $scope.InventoryDescription = data.inventoryDescription;
@@ -196,6 +193,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.InventoryNotes2Name = data.inventoryNotes2Name;
         $scope.InventoryNotes3Name = data.inventoryNotes3;
         $scope.InventoryNotes3 = data.inventoryNotes3Name;
+        $scope.multipleService = data.multipleServiceProviderRequired;
         // $scope.BusinessCategory = data.businessCategoryName;
         // $scope.StartDate = new Date(data.startDate);
         // $scope.BookingAmount = data.bookingAmt;
@@ -266,6 +264,12 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.AppointmentMinutesData = "";
         $scope.RateTypeData = "";
         $scope.RateAmountData = "";
+        $scope.multipleService = false;
+    }
+    $scope.closeModal = function(){
+        console.log('clear')
+        $('#modal-lg').modal("toggle");
+        $scope.Clear()
     }
     $scope.Clear();
     $scope.init();

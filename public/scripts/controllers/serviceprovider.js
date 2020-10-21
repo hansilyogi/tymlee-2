@@ -9,11 +9,13 @@ app.controller('ServiceProviderController', function($scope, $http) {
 
     $scope.onInit = function() {
         if (sessionStorage.getItem('Role') == 'company') {
-            $scope.CompanyId = sessionStorage.getItem('SessionId')
+            $scope.CompanyId = sessionStorage.getItem('SessionId');
+            $scope.loadInventory($scope.CompanyId)
+            $scope.model.companyId = $scope.CompanyId;
         }
-        console.log('hello')
         $scope.loadServiceProvider();
-        $scope.loadCompany();   
+        // $scope.loadCompany();   
+        
     }
     $scope.loadServiceProvider = function() {
         $scope.loading = true;
@@ -69,7 +71,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 url: imageroute + "/admin/getInventoryByCompanyId",
                 method: "POST",
                 cache: false,
-                data: {companyId},
+                data: {companyId , multipleServiceProviderRequired: true},
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
@@ -123,7 +125,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
     }
 
     $scope.EditData = function(serviceProvider) {   
-        $scope.loadCompany();
+        // $scope.loadCompany();
         $scope.loadInventory(serviceProvider.companyId._id)
         let providerObj = Object.assign(JSON.parse(JSON.stringify(serviceProvider)), {companyId: serviceProvider.companyId._id, inventoryId: serviceProvider.inventoryId._id})
         $scope.model = JSON.parse(JSON.stringify(providerObj));
@@ -136,7 +138,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
             $http({
-                url: imageroute + "/admin/removeInventory",
+                url: imageroute + "/admin/removeServiceProvider",
                 method: "POST",
                 cache: false,
                 data: { id: id },
@@ -148,7 +150,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                         $scope.loadServiceProvider();
 
                     } else {
-                        alert("Data Not deleted !");
+                        alert(response.data.Message || "Data Not deleted !");
                     }
                 },
                 function(error) {

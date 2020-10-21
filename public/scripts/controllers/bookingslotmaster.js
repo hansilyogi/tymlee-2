@@ -10,6 +10,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.MessageList = ['Restaurant', 'Salon', 'Beauty Parlour', 'Spa', 'Hospitals'];
     $scope.weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     $scope.CompanyId = undefined;
+    $scope.selectedDays = {}
     $scope.onInit = function() {
         if (sessionStorage.getItem('Role') == 'company') {
             $scope.CompanyId = sessionStorage.getItem('SessionId')
@@ -79,7 +80,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             "companyId": $scope.CompanyId,
             "inventoryId": $scope.InventoryId,
             "serviceProviderId": $scope.ServiceProviderId,
-            "dayName": $scope.DayName,
+            "dayName": $scope.selectedDays, //$scope.DayName,
             "slotName": $scope.SlotName,
             "fromTime": `${fromTimeHrs}:${fromTimeMinutes}`,
             "toTime": `${toTimeHrs}:${toTimeMinutes}`,
@@ -97,6 +98,7 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
                     alert("Booking Slot Saved!");
                     $("#modal-lg").modal("toggle");
                     $scope.GetBookingSlot();
+                    $scope.selectedDays = {}
                 } else {
                     $scope.btnsave = false;
                     alert("Unable to Save Booking Slot");
@@ -223,13 +225,15 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
     $scope.Clear = function() {
         $scope.Id = 0;
         $scope.DayName = "";
-        $scope.CompanyId = "";
+        // $scope.CompanyId = "";
         $scope.InventoryId = "";
         $scope.ServiceProviderId = "";
         $scope.FromTime = "";
         $scope.ToTime = "";
         $scope.AppointmentCount = "";
         $scope.Rate = "";
+        $scope.SlotName = "";
+        $scope.selectedDays = {}
     }
     $scope.Clear();
     $scope.onInit();
