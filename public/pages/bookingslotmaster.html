@@ -196,7 +196,7 @@
                                     <label>From Time</label>
                                     <!-- <input type="time" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="9" autocomplete="off"> -->
                                     <!-- <input type="text" class="form-control form-control-sm" required="" ng-model="FromTime" placeholder="FromTime" autocomplete="off"> -->
-                                    <input type="time" class="form-control form-control-sm" id="FromTime"  ng-model="FromTime" [name="FromTime" ] [required="true" ]
+                                    <input type="time" class="form-control form-control-sm" id="FromTime" ng-change="onFromTimeChange(FromTime)" ng-model="FromTime" name="FromTime" [required="true" ]
                                         [ng-required="true" ]>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@
                                     <!-- <input type="time" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="9" autocomplete="off">
                                          <input type="text" class="form-control form-control-sm" required="" ng-model="ToTime" placeholder="ToTime" autocomplete="off"> -->
                                     <input type="time" class="form-control form-control-sm" id="ToTime" ng-model="ToTime" [name="ToTime" ] [required="true" ]
-                                        [ng-required="true" ]>
+                                        [ng-required="true" ] readonly ng-disabled="true">
                                 </div>
                             </div>
                             <!-- <div class="col-md-12">

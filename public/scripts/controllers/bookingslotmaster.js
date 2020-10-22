@@ -69,26 +69,10 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
     }
-    
+    $scope.onFromTimeChange = function(fromTime) {
+        $scope.ToTime =  new Date(moment(fromTime).add($scope.DataList[0].inventoryId.appointmentMinutes, 'minutes').format())        
+    }
     $scope.submitbookingslot = function() {
-        let fromTimeHrs =  ($scope.FromTime.getHours() < 10 ?'0':'') + $scope.FromTime.getHours(); // new Date($scope.FromTime).getHours();
-        let fromTimeMinutes = ($scope.FromTime.getMinutes() < 10 ?'0':'') + $scope.FromTime.getMinutes();  //new Date($scope.FromTime).getMinutes();
-        let toTimeHrs = ($scope.ToTime.getHours() < 10 ?'0':'') + $scope.ToTime.getHours(); // new Date($scope.ToTime).getHours();
-        let toTimeMinutes = ($scope.ToTime.getMinutes() < 10 ?'0':'') + $scope.ToTime.getMinutes();  // new Date($scope.ToTime).getMinutes()
-        
-        let from_minutes = $scope.FromTime.getMinutes();
-        let from_hr = $scope.FromTime.getHours();
-        let from_year = $scope.FromTime.getFullYear();
-        let from_month = $scope.FromTime.getMonth();
-        let from_date = $scope.FromTime.getDate();
-        let from_seconds = $scope.FromTime.getSeconds();
-        let from_milli = $scope.FromTime.getMilliseconds();
-        
-        let new_date = new Date(from_year,from_month,from_date,from_hr,from_minutes,from_seconds,from_milli);
-        $scope.to_time = new_date;
-        
-        new_date.setMinutes(new_date.getMinutes() + $scope.DataList[0].inventoryId.appointmentMinutes);
-        
         // let to_time = from_time_complete.setMinutes($scope.DataList[0].inventoryId.appointmentMinutes);
         var json = {
             "id": $scope.Id,
@@ -97,8 +81,8 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             "serviceProviderId": $scope.ServiceProviderId,
             "dayName": $scope.selectedDays, //$scope.DayName,
             "slotName": $scope.SlotName,
-            "fromTime": `${fromTimeHrs}:${fromTimeMinutes}`,
-            "toTime": `${new_date.getHours()}:${new_date.getMinutes()}`,
+            "fromTime": moment($scope.FromTime).format('hh:mm'),
+            "toTime": moment($scope.ToTime).format('hh:mm'),
             "appointmentCount": $scope.AppointmentCount,
             "rate": 50,
             "appointmentMinutes": $scope.AppointmentMinutes
@@ -110,7 +94,6 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             cache: false,
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(function(response) {
-                $('#Totime').html(response.toTime);
                 if (response.data.Data == 1) {
                     alert("Booking Slot Saved!");
                     $("#modal-lg").modal("toggle");
