@@ -52,30 +52,42 @@ angular.module("TimelyModule")
             }
         );
     }
-
-
-
+    $scope.allowDelete = function(id) {
+        $http({
+            url: imageroute + "/admin/states/" + id,
+            method: "delete",
+            cache: false,
+            data: { id: id, allowDelete: false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function (response) {
+                if(response.data.allowDelete){
+                    $scope.DeleteData(id)
+                }
+            },
+            function (error) {
+                console.log("Internal Server");
+                alert(error.data.Message || "Unable to Save State");
+            }
+        );
+    }
     $scope.DeleteData = function (id) {
-        var res = true;
-        // var result = confirm("Are you sure you want to delete this ?");
-        if (res) {
+        var result = confirm("Are you sure you want to delete this ?");
+        if (result) {
             $http({
                 url: imageroute + "/admin/states/" + id,
                 method: "delete",
                 cache: false,
-                data: { id: id },
+                data: { id: id, allowDelete: true },
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function (response) {
-                    var result = confirm("Are you sure you want to delete this ?");
-                    if(result){
-                        if (response.data.IsSuccess) {
-                            alert("Delete Successfully !");
-                            $scope.loadStates();
-                        } else {
-                            alert("Data Not deleted !");
-                            $scope.loadStates();
-                        }
+                    if (response.data.IsSuccess) {
+                        alert("Delete Successfully !");
+                        $scope.loadStates();
+                    } else {
+                        alert("Data Not deleted !");
+                        $scope.loadStates();
                     }
                 },
                 function (error) {
