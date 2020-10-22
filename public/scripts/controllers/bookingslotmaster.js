@@ -69,8 +69,12 @@ app.controller('BookingSlotMasterController', function($scope, $http) {
             }
         );
     }
+
     $scope.onFromTimeChange = function(fromTime) {
-        $scope.ToTime =  new Date(moment(fromTime).add($scope.DataList[0].inventoryId.appointmentMinutes, 'minutes').format())        
+        if ($scope.InventoryId) {        
+            let inventory = $scope.InventoryList.filter(item => item.Inventory._id == $scope.InventoryId)
+            $scope.ToTime =  new Date(moment(fromTime).add(inventory[0].Inventory.appointmentMinutes, 'minutes').format())        
+        }
     }
     $scope.submitbookingslot = function() {
         // let to_time = from_time_complete.setMinutes($scope.DataList[0].inventoryId.appointmentMinutes);

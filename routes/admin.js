@@ -262,11 +262,16 @@ router.post("/UpdateMembershipType",  async function(req, res, next) {
 
 router.post("/DeleteMembershipType", async function(req, res, next) {
     try {
-        const { id } = req.body;
+        const { id, allowDelete } = req.body;
         if (!id) {throw new Error('Invaild Membership id!')}
         let compnayCount = await companyMasterSchema.countDocuments({membershipId: ObjectId(id)}); 
         if (compnayCount) {
             throw new Error('Company exist with this membership!')
+        }
+
+        if (!allowDelete) {
+            return res.status(200)
+            .json({ allowDelete: true, IsSuccess: true });
         }
         let data = await membershipTypeMstSchema.findByIdAndRemove(id);
         res
@@ -894,8 +899,19 @@ router.post("/getCompanyMaster", async function(req, res, next) {
 
 router.post("/deleteCompanyMaster", async function(req, res, next) {
     try {
-        const { id } = req.body;
+        const { id, allowDelete } = req.body;
         if (!id) throw new Error('Invalid Company Id!');
+        let inventoryCount = await companyInventoryMasterSchema.countDocuments({companyId:ObjectId(id)})
+        if (inventoryCount) {
+            throw new Error("Company has Inventories exist can't be detele")
+        }
+
+        if (!allowDelete) {
+            return res
+            .status(200)
+            .json({ allowDelete: true, IsSuccess: true });
+        }
+
         let data = await companyMasterSchema.findByIdAndRemove(id);
         res
             .status(200)
@@ -1246,13 +1262,19 @@ router.post("/updateInventory", async function(req, res, next) {
 
 router.post("/removeInventory", async function(req, res, next) {
     const {
-        id,
+        id, allowDelete
     } = req.body;
     if (!id) throw new Error('Invalid Inventory!')
     try {
             let isServiceProvider = await companyServicesProviderSchema.countDocuments({inventoryId: ObjectId(id)})
             if (isServiceProvider) {
                 throw new Error ('Service provoder are exist!')
+            }
+            if (!allowDelete) {
+                return res.status(200).json({
+                    IsSuccess: true,
+                    allowDelete: true
+                })    
             }
             let inventory  = await companyInventoryMasterSchema.findByIdAndRemove({_id: id});
             return res.status(200).json({
@@ -1332,12 +1354,16 @@ router.post("/addServiceProvider", async function(req, res, next) {
 
 router.post("/removeServiceProvider", async function(req, res, next) {
     try {
-        const {id} = req.body;
+        const {id, allowDelete} = req.body;
         if (!id) throw new Error('Invalid Service Provider!')
         // let criteria = JSON.parse(JSON.stringify({_id: id}))
         let isExist = await bookingSlotMasterSchema.countDocuments({serviceProviderId: ObjectId(id)})
         if (isExist){
             throw new Error('Booking Slots are Exist!')
+        }
+        if (!allowDelete) {
+            return res.status(200)
+            .json({ allowDelete: true, IsSuccess: true });
         }
         var companyServicesProvider = await companyServicesProviderSchema.findByIdAndRemove(id)
         .populate('companyId', '_id companyCode companyName')

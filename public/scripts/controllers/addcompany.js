@@ -176,7 +176,6 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     }
 
     $scope.submit = function() {
-        console.log($scope.model, JSON.stringify($scope.model))
         let files = []
         if ($scope.PersonImage != null && $scope.PersonImage.length > 0)
             files.push({key: 'personPhoto', value: $scope.PersonImage[0]});
@@ -328,6 +327,26 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     }
     $scope.GetCompany();
 
+    $scope.verifyDelete = function(id) {
+        $http({
+            url: imageroute + "/admin/deleteCompanyMaster",
+            method: "POST",
+            cache: false,
+            data: { id: id, allowDelete: false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.Data ) {
+                    $scope.DeleteData(id)
+                } else {
+                    alert(response.data.Message || "Data Not deleted !");
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
+    }
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {

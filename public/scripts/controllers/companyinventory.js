@@ -151,7 +151,26 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
     // }
     // $scope.GetBusinessCategoryType();
 
-
+    $scope.verifyDelete = function(id) {
+        $http({
+            url: imageroute + "/admin/removeInventory",
+            method: "POST",
+            cache: false,
+            data: { id: id, allowDelete: false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.IsSuccess) {
+                    $scope.DeleteData(id)
+                } else {
+                    alert(response.data.Message || "Data Not deleted !");
+                }
+            },
+            function(error) {
+                console.log("Insternal Server");
+            }
+        );
+    }
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
@@ -267,7 +286,6 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.multipleService = false;
     }
     $scope.closeModal = function(){
-        console.log('clear')
         $('#modal-lg').modal("toggle");
         $scope.Clear()
     }

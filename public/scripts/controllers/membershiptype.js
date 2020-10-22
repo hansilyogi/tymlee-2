@@ -105,8 +105,28 @@ app.controller('MembershipController', function($scope, $http) {
         );
     }
     $scope.GetMembershipType();
-
-
+    
+    $scope.verifyDelete = function(id) {
+        $http({
+            url: imageroute + "/admin/DeleteMembershipType",
+            method: "POST",
+            cache: false,
+            data: { id: id, allowDelete: false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.allowDelete) {
+                    $scope.DeleteData(id)
+                } else {
+                    alert(response.data.Message || "Data Not deleted !");
+                    $scope.GetMembershipType();
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
+            }
+        );
+    }
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {

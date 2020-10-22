@@ -108,10 +108,10 @@ app.controller('ServiceProviderController', function($scope, $http) {
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(function(response) {
             if (response.data.IsSuccess == 1) {
+                $scope.model = {};
                 alert("Service Provider Created!");
                 $("#modal-lg").modal("toggle");
                 $scope.loadServiceProvider();
-
             } else {
                 $scope.loading = false;
                 alert("Unable to Create Service provider");
@@ -134,6 +134,29 @@ app.controller('ServiceProviderController', function($scope, $http) {
         }, 350)
     }
 
+    $scope.verifyDelete = function(id) {
+            $http({
+                url: imageroute + "/admin/removeServiceProvider",
+                method: "POST",
+                cache: false,
+                data: { id: id, allowDelete: false },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.allowDelete) {
+                        $scope.DeleteData(id);
+
+                    } else {
+                        alert(response.data.Message || "Data Not deleted !");
+                    }
+                },
+                function(error) {
+                    console.log("Internal Server");
+                }
+            );
+        
+    }
+
     $scope.DeleteData = function(id) {
         var result = confirm("Are you sure you want to delete this ?");
         if (result) {
@@ -141,7 +164,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
                 url: imageroute + "/admin/removeServiceProvider",
                 method: "POST",
                 cache: false,
-                data: { id: id },
+                data: { id: id, allowDelete: true },
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
