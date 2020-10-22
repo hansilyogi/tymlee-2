@@ -2,6 +2,7 @@ app.controller('CityController', function($scope, $http) {
     $scope.imageroute = imageroute;
     $scope.Id = "0";
     $scope.DataList = [];
+    $scope.flag = 0;
     
     $scope.submitCity = function() {
         var json = {
@@ -21,6 +22,7 @@ app.controller('CityController', function($scope, $http) {
         }).then(function(response) {
                 if (response.data.Data == 1) {
                     alert("City Saved!");
+                    $scope.flag = 1;
                     $("#modal-lg").modal("toggle");
                     $scope.GetCity();
 
@@ -62,29 +64,34 @@ app.controller('CityController', function($scope, $http) {
 
 
     $scope.DeleteData = function(id) {
-        var result = confirm("Are you sure you want to delete this ?");
-        if (result) {
-            $http({
-                url: imageroute + "/admin/deleteCityMaster",
-                method: "POST",
-                cache: false,
-                data: { id: id },
-                headers: { "Content-Type": "application/json; charset=UTF-8" },
-            }).then(
-                function(response) {
-                    if (response.data.Data == 1) {
-                        alert("Delete Successfully !");
-                        $scope.GetCity();
+        if($scope.flag == 1){
+            alert('This city is assigned to one state');
+        }
+        else{
+            var result = confirm("Are you sure you want to delete this ?");
+            if (result) {
+                $http({
+                    url: imageroute + "/admin/deleteCityMaster",
+                    method: "POST",
+                    cache: false,
+                    data: { id: id },
+                    headers: { "Content-Type": "application/json; charset=UTF-8" },
+                }).then(
+                    function(response) {
+                        if (response.data.Data == 1) {
+                            alert("Delete Successfully !");
+                            $scope.GetCity();
 
-                    } else {
-                        alert(response.data.Message || "Data Not deleted !");
-                        $scope.GetCity();
+                        } else {
+                            alert(response.data.Message || "Data Not deleted !");
+                            $scope.GetCity();
+                        }
+                    },
+                    function(error) {
+                        console.log("Internal Server");
                     }
-                },
-                function(error) {
-                    console.log("Internal Server");
-                }
-            );
+                );
+            }
         }
     }
 

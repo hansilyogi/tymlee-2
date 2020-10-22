@@ -56,8 +56,9 @@ angular.module("TimelyModule")
 
 
     $scope.DeleteData = function (id) {
-        var result = confirm("Are you sure you want to delete this ?");
-        if (result) {
+        var res = true;
+        // var result = confirm("Are you sure you want to delete this ?");
+        if (res) {
             $http({
                 url: imageroute + "/admin/states/" + id,
                 method: "delete",
@@ -66,13 +67,15 @@ angular.module("TimelyModule")
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function (response) {
-                    if (response.data.IsSuccess) {
-                        alert("Delete Successfully !");
-                        $scope.loadStates();
-
-                    } else {
-                        alert("Data Not deleted !");
-                        $scope.loadStates();
+                    var result = confirm("Are you sure you want to delete this ?");
+                    if(result){
+                        if (response.data.IsSuccess) {
+                            alert("Delete Successfully !");
+                            $scope.loadStates();
+                        } else {
+                            alert("Data Not deleted !");
+                            $scope.loadStates();
+                        }
                     }
                 },
                 function (error) {

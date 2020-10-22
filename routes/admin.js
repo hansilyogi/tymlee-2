@@ -470,7 +470,8 @@ router.post("/addCityMaster", async function(req, res, next) {
                 cityCode: cityCode,
                 cityName: cityName,
                 stateId: stateId,
-                status: status
+                status: status,
+                flag : 0
             });
             await citymaster.save();
         } else {
