@@ -430,11 +430,16 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
 
 router.post("/deleteCategoryMaster", async function(req, res, next) {
     try {
-        const { id } = req.body;
+        const { id, allowDelete } = req.body;
         if (!id) throw new Error('Invalid Category!')
         let isExist = await companyMasterSchema.countDocuments({businessCategoryId: ObjectId(id)})
         if (isExist) {
             throw new Error('Vendor already Exist!')
+        }
+        if (!allowDelete) {
+            return  res
+            .status(200)
+            .json({  allowDelete: true, IsSuccess: true });
         }
         let data = await categoryMasterSchema.findByIdAndRemove(id);
         res
