@@ -62,37 +62,50 @@ app.controller('CityController', function($scope, $http) {
     }
     $scope.GetCity();
 
-
-    $scope.DeleteData = function(id) {
-        if($scope.flag == 1){
-            alert('This city is assigned to one state');
-        }
-        else{
-            var result = confirm("Are you sure you want to delete this ?");
-            if (result) {
-                $http({
-                    url: imageroute + "/admin/deleteCityMaster",
-                    method: "POST",
-                    cache: false,
-                    data: { id: id },
-                    headers: { "Content-Type": "application/json; charset=UTF-8" },
-                }).then(
-                    function(response) {
-                        if (response.data.Data == 1) {
-                            alert("Delete Successfully !");
-                            $scope.GetCity();
-
-                        } else {
-                            alert(response.data.Message || "Data Not deleted !");
-                            $scope.GetCity();
-                        }
-                    },
-                    function(error) {
-                        console.log("Internal Server");
-                    }
-                );
+    $scope.verifyDelete = function(id) {
+        $http({
+            url: imageroute + "/admin/deleteCityMaster",
+            method: "POST",
+            cache: false,
+            data: { id: id, allowDelete: false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        }).then(
+            function(response) {
+                if (response.data.allowDelete) {
+                    $scope.DeleteData(id)
+                }
+            },
+            function(error) {
+                console.log("Internal Server");
             }
+        );
+    }
+    $scope.DeleteData = function(id) {
+        var result = confirm("Are you sure you want to delete this ?");
+        if (result) {
+            $http({
+                url: imageroute + "/admin/deleteCityMaster",
+                method: "POST",
+                cache: false,
+                data: { id: id, allowDelete: true },
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            }).then(
+                function(response) {
+                    if (response.data.Data == 1) {
+                        alert("Delete Successfully !");
+                        $scope.GetCity();
+
+                    } else {
+                        alert(response.data.Message || "Data Not deleted !");
+                        $scope.GetCity();
+                    }
+                },
+                function(error) {
+                    console.log("Internal Server");
+                }
+            );
         }
+        
     }
 
     $scope.EditData = function(data) {

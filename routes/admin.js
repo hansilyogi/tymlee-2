@@ -512,10 +512,15 @@ router.post("/getCityMaster", async function(req, res, next) {
 
 router.post("/deleteCityMaster", async function(req, res, next) {
     try {
-        const { id } = req.body;
+        const { id, allowDelete } = req.body;
         let companies = await companyMasterSchema.countDocuments({cityMasterId: ObjectId(id)});
         if (companies) {
             throw new Error("Company Exist in the City!")
+        }
+        if (!allowDelete) {
+            return res
+            .status(200)
+            .json({ allowDelete: true, IsSuccess: true });
         }
         let data = await cityMasterSchema.findByIdAndRemove(id);
         res
