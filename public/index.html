@@ -30,6 +30,7 @@
     <script src="scripts/controllers/businesscategory.js"></script>
     <script src="scripts/controllers/city.js"></script>
     <script src="scripts/controllers/states/state.controller.js"></script>
+    <script src="scripts/controllers/vendor/vendor-profile.controller.js"></script>
     <script src="scripts/controllers/addcompany.js"></script>
     <script src="scripts/controllers/viewcustomer.js"></script>
     <script src="scripts/controllers/vendor.js"></script>
@@ -124,6 +125,13 @@
                                             </p>
                                         </a>
                                         <ul class="nav nav-treeview">
+                                            <li class="nav-item" ng-show="!IsVisible">
+                                                <a href="./vendor-profile" class="nav-link">
+                                                    <i class="fa fa-briefcase nav-icon"></i>
+                                                    <p>Profile</p>
+                                                    <!-- Vendor Profile -->
+                                                </a>
+                                            </li>
                                             <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./membershiptype" class="nav-link">
                                                     <i class="fa fa-users nav-icon"></i>

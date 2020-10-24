@@ -32,6 +32,17 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/dashboard.html",
             controller: "DashboardController",
         })
+        .when("/vendor-profile", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./scripts/controllers/vendor/vendor-profile.html",
+            controller: "VendorProfileController",
+        })
         .when("/membershiptype", {
             resolve: {
                 check: function() {

@@ -798,7 +798,7 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
         panCardAttachment,
         cancelledCheque,
         cancelledChequeAttachment,
-        notes
+        notes, bank
     } = req.body;
     try {   
         
@@ -831,13 +831,13 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
             gstinNo: gstinNo,
             paNo: paNo,
             bank: {
-                bankName: bankName,
-                bankBranchName: bankBranchName,
-                bankAddress: bankAddress,
-                bankCity: bankCity,
-                bankState: bankState,
-                bankAccountNo: bankAccountNo,
-                bankIfscCode: bankIfscCode,
+                bankName: bankName || bank.bankName,
+                bankBranchName: bankBranchName || bank.bankBranchName,
+                bankAddress: bankAddress || bank.bankAddress,
+                bankCity: bankCity || bank.bankCity,
+                bankState: bankState || bank.bankState,
+                bankAccountNo: bankAccountNo || bank.bankAccountNo,
+                bankIfscCode: bankIfscCode || bank.bankIfscCode,
             },
             companyType: companyType,
             personName: personName,
