@@ -84,6 +84,7 @@ var fieldset = finalstorage.fields([
 ]);
 
 /* APIS listing. */
+router.use('/offers', require('./offers'));
 router.get("/states", stateController.getAll);
 router.post('/states', stateController.create);
 router.delete('/states/:stateId', stateController.removeItem);

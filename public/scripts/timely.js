@@ -208,6 +208,17 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/sendnotification.html",
             controller: "SendNotificationController",
         })
+        .when("/offers", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./scripts/controllers/offers/offer.html",
+            controller: "OffersController",
+        })
         .when("/bill", {
             resolve: {
                 check: function() {

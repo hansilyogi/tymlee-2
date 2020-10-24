@@ -31,6 +31,7 @@
     <script src="scripts/controllers/city.js"></script>
     <script src="scripts/controllers/states/state.controller.js"></script>
     <script src="scripts/controllers/vendor/vendor-profile.controller.js"></script>
+    <script src="scripts/controllers/offers/offer.controller.js"></script>
     <script src="scripts/controllers/addcompany.js"></script>
     <script src="scripts/controllers/viewcustomer.js"></script>
     <script src="scripts/controllers/vendor.js"></script>
@@ -199,11 +200,18 @@
                                                     <p>Booking Slot</p>
                                                 </a>
                                             </li>
-                                            <li class="nav-item" ng-hide="IsVisible">
+                                            <li class="nav-item" ng-show="IsVisible">
                                                 <a href="./sendnotification" class="nav-link">
                                                     <i class="nav-icon fa fa-bell"></i>
 
                                                     <p>Send Notification</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="./offers" class="nav-link">
+                                                    <i class="fa fa-briefcase nav-icon"></i>
+                                                    <p>Offers</p>
+                                                    <!-- Vendor Profile -->
                                                 </a>
                                             </li>
                                         </ul>

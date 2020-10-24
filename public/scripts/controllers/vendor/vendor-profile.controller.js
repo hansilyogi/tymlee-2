@@ -122,7 +122,6 @@ angular.module("TimelyModule")
     }
 
     $scope.submit = function() {
-        debugger
         let files = []
         if ($scope.data.PersonImage != null && $scope.data.PersonImage.length > 0)
             files.push({key: 'personPhoto', value: $scope.data.PersonImage[0]});

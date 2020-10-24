@@ -30,7 +30,7 @@ exports.create = async (req, res, next) => {
         ];
         let isExist = await StateMaster.countDocuments(checkFilterCondition)
         if(isExist) {
-            throw new Error(`State ${stateName} or ${stateCode} must be uniq!`)
+            throw new Error(`State ${stateName} or ${stateCode} already Exist!`)
         }
         if (_id) {
             state = await StateMaster.findOneAndUpdate({ '_id': _id }, { stateCode, stateName }, { new: true });
