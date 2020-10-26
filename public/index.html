@@ -32,6 +32,8 @@
     <script src="scripts/controllers/states/state.controller.js"></script>
     <script src="scripts/controllers/vendor/vendor-profile.controller.js"></script>
     <script src="scripts/controllers/offers/offer.controller.js"></script>
+    <script src="scripts/controllers/bannerMaster/bannerMaster.controller.js"></script>
+    <script src="scripts/controllers/vendorBanners/vendorBanners.controller.js"></script>
     <script src="scripts/controllers/addcompany.js"></script>
     <script src="scripts/controllers/viewcustomer.js"></script>
     <script src="scripts/controllers/vendor.js"></script>
@@ -207,11 +209,23 @@
                                                     <p>Send Notification</p>
                                                 </a>
                                             </li>
+                                            <li class="nav-item" ng-show="IsVisible">
+                                                <a href="./banner-master" class="nav-link">
+                                                    <i class="nav-icon fa fa-bell"></i>
+                                                     <p>Banner Master</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="./vendorbanners" class="nav-link">
+                                                    <i class="fa fa-image nav-icon"></i>
+                                                    <p ng-if="IsVisible">Vendors Banners</p>
+                                                    <p ng-if="!IsVisible">My Banners</p>
+                                                </a>
+                                            </li>
                                             <li class="nav-item">
                                                 <a href="./offers" class="nav-link">
                                                     <i class="fa fa-briefcase nav-icon"></i>
                                                     <p>Offers</p>
-                                                    <!-- Vendor Profile -->
                                                 </a>
                                             </li>
                                         </ul>

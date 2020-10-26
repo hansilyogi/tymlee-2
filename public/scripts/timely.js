@@ -120,6 +120,17 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "./pages/viewcustomer.html",
             controller: "ViewCustomerController",
         })
+        .when("/vendorbanners", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./scripts/controllers/vendorBanners/vendorsBanners.html",
+            controller: "VendorBannersController",
+        })
         .when("/vendor", {
             resolve: {
                 check: function() {
@@ -218,6 +229,17 @@ app.config(function($routeProvider, $locationProvider) {
             },
             templateUrl: "./scripts/controllers/offers/offer.html",
             controller: "OffersController",
+        })
+        .when("/banner-master", {
+            resolve: {
+                check: function() {
+                    if (sessionStorage.getItem("SessionId") == null) {
+                        window.location.href = "./404";
+                    }
+                },
+            },
+            templateUrl: "./scripts/controllers/bannerMaster/bannerMaster.html",
+            controller: "BannerMastersController",
         })
         .when("/bill", {
             resolve: {
