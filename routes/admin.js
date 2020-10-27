@@ -4,6 +4,7 @@ var multer = require("multer");
 var path = require("path");
 const moment = require('moment');
 // const bcrypt = require('bcrypt');
+const razorPay = require('./razorPay/controller');
 var membershipTypeMstSchema = require("../model/membershiptypemst");
 var cityMasterSchema = require("../model/citymaster");
 var categoryMasterSchema = require("../model/categorymaster");
@@ -86,8 +87,10 @@ var fieldset = finalstorage.fields([
 /* APIS listing. */
 router.use('/offers', require('./offers'));
 router.use('/bannerMaster', require('./bannerMaster'));
+router.use('/vendorsBanners', require('./vendorsBanners'))
 router.get("/states", stateController.getAll);
 router.post('/states', stateController.create);
+router.post('/new-vendor-order', razorPay.generateOrderNoForVendor)
 router.delete('/states/:stateId', stateController.removeItem);
 router.post("/adminSignUp", async function(req, res, next) {
     const { userName, password } = req.body;

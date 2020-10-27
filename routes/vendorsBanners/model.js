@@ -61,13 +61,7 @@ var VendorBanners = new mongoose.Schema({
     emailDateTime: {
         type: Date,
         required: false,
-    },
-
-    offerCount: {
-        type: Number,
-        required: true
-    },
-    
+    },   
     isApproved: {
      type: Boolean,
      default: false,

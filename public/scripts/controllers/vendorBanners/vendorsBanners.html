@@ -4,12 +4,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Banners</h1>
+                    <h1>Vendor Banners</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Master</a></li>
-                        <li class="breadcrumb-item active">Banners</li>
+                        <li class="breadcrumb-item active">Vendor Banners</li>
                     </ol>
                 </div>
             </div>
@@ -23,10 +23,10 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header" ng-if="!isAdmin">
-                            <!-- <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                 data-target="#modal-vendor-lg" ng-click="closeModal()">
                                 <i class="fa fa-plus"></i> &nbsp;Add Banners
-                            </button> -->
+                            </button>
                         </div>
 
                         <div class="card-body">
@@ -35,33 +35,27 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>Name</th>
+                                        <th>Image</th>
                                         <th>Start Date</th>
                                         <th>End Date</th>
-                                        <th>Offer Count</th>
-                                        <th>Offer Terms</th>
                                         <th>Approved</th>
-                                        <th>Image</th>
-                                        <th style="width: 40px">Action</th>
+                                        <!-- <th style="width: 40px">Action</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="data in Banners" ng-if="Banners && Banners.length">
+                                    <tr ng-repeat="data in banners track by $index" ng-if="banners && banners.length">
                                         <td>{{$index+1}}</td>
-                                        <td>{{data.name}}</td>
+                                        <td>
+                                            <img src="{{data.bannerImage}}" style="width: 90px;height: 80px;"
+                                                ng-if="data.bannerImage" />
+                                        </td>
                                         <td>{{data.startDate | date}}</td>
                                         <td>{{data.endDate | date}}</td>
-                                        <td>{{data.offerCount}}</td>
-                                        <td>{{data.offerTerms}}</td>
                                         <td>
                                             <span class="badge badge-info" ng-if="data.isApproved"> Yes </span>
                                             <span class="badge badge-danger" ng-if="!data.isApproved"> No </span>
-                                        </td>
-                                        <td>
-                                            <img src="{{data.image}}" style="width: 90px;height: 80px;"
-                                                ng-if="data.image" />
-                                        </td>
-                                        <td width=10%>
+                                        </td>                                 
+                                        <!-- <td width=10%>
                                             <button type="button" class="btn btn-info btn-sm btn-flat"
                                                 data-toggle="modal" data-target="#modal-vendor-lg"
                                                 ng-click="onEdit(data)"><i class="fa fa-edit"></i>
@@ -71,11 +65,11 @@
                                                 data-toggle="modal" ng-click="delete(data._id)"><i
                                                     class="fa fa-trash"></i>
                                             </button>
-                                        </td>
+                                        </td> -->
                                     </tr>
-                                    <tr ng-if="!Banners.length">
-                                        <td class="" colspan="9">No Data Found</td>
-                                    </tr>
+                                    <!-- <tr ng-if="!banners || !banners.length">
+                                        <td class="" colspan="6">No Data Found</td>
+                                    </tr> -->
                                 </tbody>
                             </table>
 
@@ -85,51 +79,37 @@
                                     <tr>
                                         <th style="width: 10px">#</th>
                                         <th>Company</th>
-                                        <th>Name</th>
+                                        <th>Image</th>
                                         <th>start Date</th>
                                         <th>End Date</th>
-                                        <th>Offer Count</th>
-                                        <th>Offer Terms</th>
                                         <th>Approved</th>
-                                        <th>Image</th>
                                         <th style="width: 40px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="data in offers">
+                                    <tr ng-repeat="data in banners">
                                         <td>{{$index+1}}</td>
                                         <td>{{data.companyId.companyName }}</td>
-                                        <td>{{data.name}}</td>
+                                        <td>
+                                            <img src="{{data.bannerImage}}" style="width: 90px;height: 80px;"
+                                                ng-if="data.bannerImage" />
+                                        </td>
                                         <td>{{data.startDate | date}}</td>
                                         <td>{{data.endDate | date}}</td>
-                                        <td>{{data.offerCount}}</td>
-                                        <td>{{data.offerTerms}}</td>
                                         <td>
                                             <span class="badge badge-info" ng-if="data.isApproved"> Yes </span>
                                             <span class="badge badge-danger" ng-if="!data.isApproved"> No </span>
                                         </td>
-                                        <td>
-                                            <img src="{{data.image}}" style="width: 90px;height: 80px;"
-                                                ng-if="data.image" />
-                                        </td>
+                                        
                                         <td width=10%>
                                             <button type="button" class="btn btn-info btn-sm btn-flat"
-                                                ng-if="!data.isApproved" ng-click="approved(data)">Offer Approve
+                                                ng-if="!data.isApproved" ng-click="approved(data)">Banner Approve
                                             </button>
 
                                             <button type="button" class="btn btn-success btn-sm btn-flat"
                                                 ng-if="data.isApproved">
-                                                Offer Approved
+                                                Banner Approved
                                             </button>
-                                            <!-- <button type="button" class="btn btn-info btn-sm btn-flat"
-                                                data-toggle="modal" data-target="#modal-lg" ng-click="EditData(data)"><i
-                                                    class="fa fa-edit"></i>
-                                            </button>
-
-                                            <button type="button" class="btn btn-danger btn-sm btn-flat"
-                                                data-toggle="modal" ng-click="allowDelete(data._id)"><i
-                                                    class="fa fa-trash"></i>
-                                            </button> -->
                                         </td>
                                     </tr>
 
@@ -146,7 +126,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-lg">Offer</h4>
+                    <h4 class="modal-title text-lg">Vendors Banners</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -156,17 +136,51 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control form-control-sm" ng-model="model.name"
-                                        required autocomplete="off">
+                                    <label>Banner Size</label>
+                                    <!-- <input type="text" class="form-control form-control-sm" ng-model="model.bannerSize"
+                                        required autocomplete="off"> -->
 
+                                        <select class="form-control form-control-sm" ng-init="" ng-model="model.bannerSize" ng-change="model.UnitType = null; model.packageUnit=null" required>
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="sel in filterDataset.bannerSize"
+                                                    ng-selected="model.bannerSize == sel" value="{{sel}}">
+                                                    {{sel}}</option>
+                                          </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Offer Count</label>
+                                    <label>Package Type</label>
+                                    <!-- <input type="number" class="form-control form-control-sm" required
+                                        ng-model="model.packageType" autocomplete="off"> -->
+                                        <select class="form-control form-control-sm" ng-init="" ng-model="model.packageType" ng-change="model.UnitType = null; model.packageUnit=null" required>
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="sel in filterDataset.packageType"
+                                                    ng-selected="model.packageType == sel" value="{{sel}}">
+                                                    {{sel}}</option>
+                                          </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Unit Type</label>
+                                    <!-- <input type="number" class="form-control form-control-sm" required
+                                        ng-model="model.UnitType" autocomplete="off" > -->
+                                        
+                                        <select class="form-control form-control-sm" ng-init="" ng-model="model.UnitType" ng-change="getUniteValue(); onStartDateChange();" required>
+                                            <option value="" disabled>Nothing Selected</option>
+                                                <option ng-repeat="sel in unitTypes"
+                                                    ng-selected="model.UnitType == sel" value="{{sel}}" >
+                                                    {{sel}}</option>
+                                          </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Package Unite</label>
                                     <input type="number" class="form-control form-control-sm" required
-                                        ng-model="model.offerCount" autocomplete="off">
+                                        ng-model="model.packageUnit" autocomplete="off" readonly ng-disabled="true">
 
                                 </div>
                             </div>
@@ -176,38 +190,28 @@
                                 <div class="form-group">
                                     <label>Start Date</label>
                                     <input type="date" class="form-control form-control-sm" ng-model="model.startDate"
-                                        placeholder="Start Date" autocomplete="off">
+                                        placeholder="Start Date" autocomplete="off" ng-change="onStartDateChange()" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>End Date</label>
                                     <input type="date" class="form-control form-control-sm" ng-model="model.endDate"
-                                        placeholder="End Date" autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Offer Terms</label>
-                                    <textarea class="textarea" ng-model="model.offerTerms" placeholder="" style="width: 100%; 
-                                    height: 200px; 
-                                    font-size: 14px; 
-                                    line-height: 18px; 
-                                    border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                    <!-- <textarea class="form-control form-control-sm required" ></textarea> -->
+                                        placeholder="End Date" autocomplete="off" required readonly ng-disabled="true">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Is Active</label><br />
-                                    <input ng-model="model.isActive" type="checkbox" name="status" />
+                                    <label>Image</label><br />
+                                    <input type="file" class="btn-sm form-control-sm" id="bannerImage"
+                                        file-input="files.bannerImage" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Offer Image</label><br />
-                                    <input type="file" class="btn-sm form-control-sm" id="offerImage"
-                                        file-input="files.offerImage">
+                                    <label>URL</label><br />
+                                    <input type="text" class="form-control form-control-sm" ng-model="model.url"
+                                        placeholder="Banner URL" autocomplete="off" required>
                                 </div>
                             </div>
                         </div>
@@ -222,3 +226,4 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
