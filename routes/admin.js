@@ -658,7 +658,6 @@ router.post("/addCompanyMaster", async function(req, res, next) {
         personName,
         weekStartDay,
         cancellationPolicy,
-        companyHtmlPage,
         registrationValidUpto,
         aadharCard,
         aadharCardAttachment,
@@ -739,7 +738,6 @@ router.post("/addCompanyMaster", async function(req, res, next) {
                 // companyLogo: req.files.companyLogo == undefined ?
                 //     null : req.files.companyLogo[0].path,
                 cancellationPolicy: cancellationPolicy,
-                companyHtmlPage: companyHtmlPage,
                 registrationValidUpto: registrationValidUpto,
                 notes: notes || ''
             });
@@ -798,7 +796,6 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
         personName,
         weekStartDay,
         cancellationPolicy,
-        companyHtmlPage,
         registrationValidUpto,
         aadharCard,
         aadharCardAttachment,
@@ -856,7 +853,6 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
             personName: personName,
             weekStartDay: weekStartDay,
             cancellationPolicy: cancellationPolicy,
-            companyHtmlPage: companyHtmlPage,
             registrationValidUpto: registrationValidUpto,
             aadharCard: aadharCard || undefined,
             aadharCardAttachment: aadharCardAttachment || undefined,

@@ -107,7 +107,6 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
         preForm.append("personName", $scope.PersonName);
         preForm.append("weekStartDay", $scope.WeekStartDay);
         preForm.append("cancellationPolicy", $scope.CancellationPolicy);
-        preForm.append("companyHtmlPage", $scope.CompanyHtmlPage);
         preForm.append("registrationValidUpto", $scope.RegistrationValidUpto);
 
 
@@ -445,7 +444,6 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
         $scope.PersonName = "";
         $scope.WeekStartDay = "";
         $scope.CancellationPolicy = "";
-        $scope.CompanyHtmlPage = "";
         $scope.RegistrationValidUpto = "";
 
         $('[data-toggle="tooltip"]').tooltip()

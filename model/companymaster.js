@@ -140,9 +140,6 @@ var companyMasterSchema = new mongoose.Schema({
     cancellationPolicy: {
         type: String
     },
-    companyHtmlPage: {
-        type: String
-    },
     registrationValidUpto: {
         type: Date
     },
