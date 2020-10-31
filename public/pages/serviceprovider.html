@@ -111,7 +111,7 @@
                                 <div class="form-group">
                                     <label>Inventory</label>
                                     <select class="form-control form-control-sm" ng-model="model.inventoryId"
-                                        ng-chnage="onInverntorySelect(inventory)" required>
+                                        ng-change="onInverntorySelect()" required>
                                         <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="inventory in inventories"
                                             ng-selected="model.inventoryId == inventory._id" value="{{inventory._id}}">

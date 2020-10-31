@@ -337,7 +337,7 @@ app.controller('CompanyLoginController', function($scope, $http) {
                     sessionStorage.setItem("SessionId", $scope.DataList._id);
                     sessionStorage.setItem("Username", $scope.DataList.companyName);
                     sessionStorage.setItem("Role", "company");
-
+                    sessionStorage.setItem("t", $scope.DataList.bookingType);
                     window.location.href = "./#!/dashboard";
 
                 } else {

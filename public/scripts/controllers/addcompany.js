@@ -7,6 +7,7 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     $scope.PayThroughList = ['UPI', 'Credit Card', 'Debit Card', 'NetBanking'];
     $scope.MessageList = ['Proprietorship', 'Partnership', ' Private Limited', ' LLP', 'Limited'];
     $scope.WeekStartDayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    $scope.bookingTypeList = ['Appointment', 'Table']
     $scope.CityList = [];
     $scope.BankDataList = [];
     $scope.defaultshow = true;

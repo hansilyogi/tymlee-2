@@ -103,7 +103,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" ng-hide="isTableBooking">
                                 <div class="form-group">
                                     <label>Multiple Service Provider</label> &nbsp;
                                     <!-- <div class="row col-md-6">
@@ -125,7 +125,14 @@
                                       </div>
                                 </div>
                             </div>
-
+                            <div class="col-md-3" ng-show="isTableBooking">
+                                <div class="form-group">
+                                    <label>Number of Tables</label> &nbsp;
+                                    <input type="number" class="form-control form-control-sm" required
+                                            ng-model="tableCounts" placeholder="Number of tables"
+                                            autocomplete="off">
+                                </div>
+                            </div>
                             <div class="col-md-3" ng-if="!companyId">
                                 <div class="form-group">
                                     <label>Company</label> &nbsp;

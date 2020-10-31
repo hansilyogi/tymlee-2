@@ -20,6 +20,10 @@ var companyMasterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    bookingType: {
+        type: String,
+        default: 'Appointment'
+    },
     addressLine1: {
         type: String,
         required: true

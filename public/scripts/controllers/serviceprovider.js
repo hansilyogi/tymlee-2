@@ -10,6 +10,7 @@ app.controller('ServiceProviderController', function($scope, $http) {
     $scope.onInit = function() {
         if (sessionStorage.getItem('Role') == 'company') {
             $scope.CompanyId = sessionStorage.getItem('SessionId');
+            $scope.isTableBooking = sessionStorage.getItem("t") == 'Table';
             $scope.loadInventory($scope.CompanyId)
             $scope.model.companyId = $scope.CompanyId;
         }
@@ -91,14 +92,22 @@ app.controller('ServiceProviderController', function($scope, $http) {
 
     }
 
-    $scope.onInverntorySelect = function(inventory) {
+    $scope.onInverntorySelect = function() {
         // $scope.model.serviceProvidername = inventory
-        $scope.model.appointmentMinutes = inventory.appointmentMinutes
-        $scope.model.rateType = inventory.rateType;
-        $scope.model.rateAmt = inventory.rateAmt;
+        let inventory = $scope.inventories.filter(item => item._id == $scope.model.inventoryId)
+        if (inventory && inventory.length) {
+            $scope.model.appointmentMinutes = inventory[0].appointmentMinutes
+            $scope.model.rateType = inventory[0].rateType;
+            $scope.model.rateAmt = inventory[0].rateAmt;
+            $scope.model.totalTable = inventory[0].tableCounts;
+        }
+        $scope.model.isTableBooking = $scope.isTableBooking;
+        console.log($scope.model)
     }
 
     $scope.onSubmit = function(){
+        console.log($scope.model)
+        debugger
         $scope.loading = true;
         $http({
             url: imageroute + "/admin/addServiceProvider",
@@ -109,12 +118,13 @@ app.controller('ServiceProviderController', function($scope, $http) {
         }).then(function(response) {
             if (response.data.IsSuccess == 1) {
                 $scope.model = {};
-                alert("Service Provider Created!");
+                $scope.model.companyId = $scope.CompanyId;
+                alert("Service Provider saved!");
                 $("#modal-lg").modal("toggle");
                 $scope.loadServiceProvider();
             } else {
                 $scope.loading = false;
-                alert("Unable to Create Service provider");
+                alert(response.data.Message || "Unable to Create Service provider");
             }
         },
         function(error) {

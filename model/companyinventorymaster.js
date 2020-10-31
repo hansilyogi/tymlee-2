@@ -18,6 +18,11 @@ var companyInventoryMasterSchema = new mongoose.Schema({
     appointmentMinutes: {
         type: Number
     },
+    tableCounts: {
+        type: Number,
+        default: 0,
+        required: false
+    },
     multipleServiceProviderRequired: {
         type: Boolean,
         default: false

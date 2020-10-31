@@ -35,6 +35,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.companyId = null;
         if (role == 'company') {
             $scope.companyId = sessionStorage.getItem("SessionId");
+            $scope.isTableBooking = sessionStorage.getItem("t") == 'Table';
             $scope.loadCompanyInventory();
         } else {
             $scope.loadCompany();
@@ -49,7 +50,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
                 "inventoryName": $scope.InventoryName,
                 "inventoryDescription": $scope.InventoryDescription,
                 "appointmentMinutes": $scope.AppointmentMinutes,
-                "multipleService": $scope.multipleService,
+                "multipleService": $scope.isTableBooking ? true : $scope.multipleService,
                 "rateType": $scope.RateType,
                 "rateAmt": $scope.RateAmount,
                 "inventoryNotes1Name": $scope.InventoryNotes1Name,
@@ -57,7 +58,8 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
                 "inventoryNotes2Name": $scope.InventoryNotes2Name,
                 "inventoryNotes2": $scope.InventoryNotes2,
                 "inventoryNotes3Name": $scope.InventoryNotes3Name,
-                "inventoryNotes3": $scope.InventoryNotes3
+                "inventoryNotes3": $scope.InventoryNotes3,
+                "tableCounts": $scope.tableCounts
             };
             // console.log(inventory);
         // }
@@ -178,7 +180,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
                 url: imageroute + "/admin/removeInventory",
                 method: "POST",
                 cache: false,
-                data: { id: id },
+                data: { id: id , allowDelete: true},
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
@@ -213,6 +215,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
         $scope.InventoryNotes3Name = data.inventoryNotes3;
         $scope.InventoryNotes3 = data.inventoryNotes3Name;
         $scope.multipleService = data.multipleServiceProviderRequired;
+        $scope.tableCounts = data.tableCounts || undefined
         // $scope.BusinessCategory = data.businessCategoryName;
         // $scope.StartDate = new Date(data.startDate);
         // $scope.BookingAmount = data.bookingAmt;
@@ -267,6 +270,7 @@ app.controller('AddCompanyInventoryController', function ($scope, $http) {
     }
     $scope.Clear = function () {
         $scope.Id = undefined;
+        $scope.tableCounts = null;
         $scope.InventoryName = "";
         $scope.InventoryDescription = "";
         $scope.AppointmentMinutes = "";

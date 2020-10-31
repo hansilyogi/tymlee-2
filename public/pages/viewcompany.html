@@ -287,7 +287,16 @@
                                                             {{sel.membershipType}}</option>
                                                     </select>
                                                 </div>
-                                                
+                                                <div class="form-group">
+                                                    <label>Booking Type</label>
+                                                    <select class="form-control form-control-sm" ng-init=""
+                                                        ng-model="model.bookingType">
+                                                        <option value="" disabled>Nothing Selected</option>
+                                                        <option ng-repeat="sel in bookingTypeList"
+                                                            ng-selected="model.bookingType == sel" value="{{sel}}">
+                                                            {{sel}}</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-3 ">

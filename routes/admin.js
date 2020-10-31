@@ -304,7 +304,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
         businessIcon,
         attachment,
         isActive,
-        appointmentLabel
+        appointmentLabel,
+        appointmentType
     } = req.body;
     try {
         let checkFilterCondition = {};
@@ -329,7 +330,8 @@ router.post("/addCategoryMaster", async function(req, res, next) {
             igstPercent: igstPercent,
             businessIcon: businessIcon || undefined, //file == undefined ? null : file.path,
             attachment: attachment || undefined,
-            isActive: isActive
+            isActive: isActive,
+            appointmentType: appointmentType || 'Appointment'
         });
         await categorymaster.save();
 
@@ -375,7 +377,8 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
             businessIcon, 
             attachment,
             isActive,
-            appointmentLabel
+            appointmentLabel,
+            appointmentType
         } = req.body;
         // const file = req.file;
 
@@ -403,9 +406,10 @@ router.post("/updateCategoryMaster", async function(req, res, next) {
                 sgstPercent: sgstPercent,
                 igstPercent: igstPercent,
                 isActive: isActive,
-                appointmentLabel: appointmentLabel
+                appointmentLabel: appointmentLabel,
+                appointmentType: appointmentType
             };
-            let datas = await categoryMasterSchema.findByIdAndUpdate(id, data);
+            let datas = await categoryMasterSchema.findByIdAndUpdate(id, JSON.parse(JSON.stringify(data)));
         } else {
             var data = {
                 businessCategoryName: businessCategoryName,
@@ -666,7 +670,8 @@ router.post("/addCompanyMaster", async function(req, res, next) {
         panCardAttachment,
         cancelledCheque,
         cancelledChequeAttachment,
-        notes
+        notes,
+        bookingType
     } = req.body;
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
@@ -683,6 +688,7 @@ router.post("/addCompanyMaster", async function(req, res, next) {
             var companymaster = new companyMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 membershipId: membershipId,
+                bookingType: bookingType,
                 companyCode: "comp" + a,
                 doj: doj,
                 businessCategoryId: businessCategoryId,
@@ -763,6 +769,7 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
     const {
         _id,
         membershipId,
+        bookingType,
         doj,
         businessCategoryId,
         companyName,
@@ -819,6 +826,7 @@ router.post("/updateCompanyMaster", async function(req, res, next) {
         var datas = {
             membershipId:membershipId,
             doj: doj,
+            bookingType: bookingType,
             businessCategoryId: businessCategoryId,
             companyName: companyName,
             addressLine1: addressLine1,
@@ -1127,6 +1135,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
         inventoryNotes3,
         inventoryAvailable,
         serviceProvider,
+        tableCounts
     } = req.body;
     try {
         let isExist = await companyInventoryMasterSchema.countDocuments({
@@ -1152,6 +1161,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
                 inventoryNotes3Name: inventoryNotes3Name,
                 inventoryNotes3: inventoryNotes3,
                 inventoryAvailable: true,
+                tableCounts:tableCounts
             });
             await companyInventory.save();
             var companyServicesProvider = new companyServicesProviderSchema({
@@ -1182,6 +1192,7 @@ router.post("/addInventoryAndServiceProvider", async function(req, res, next) {
                 inventoryNotes3Name: multipleService == true ? null : inventoryNotes3Name,
                 inventoryNotes3: multipleService == true ? null : inventoryNotes3,
                 inventoryAvailable: multipleService == true ? null : inventoryAvailable,
+                tableCounts: tableCounts
             });
             companyInventory.save();
 
@@ -1226,6 +1237,7 @@ router.post("/updateInventory", async function(req, res, next) {
         inventoryNotes3Name,
         inventoryNotes3,
         inventoryAvailable,
+        tableCounts
     } = req.body;
     try {
         let isExist = await companyInventoryMasterSchema.countDocuments({
@@ -1251,6 +1263,7 @@ router.post("/updateInventory", async function(req, res, next) {
             inventory.inventoryNotes3Name = inventoryNotes3Name || '';
             inventory.inventoryNotes3 = inventoryNotes3 || '';
             inventory.inventoryAvailable = inventoryAvailable || false;
+            inventory.tableCounts = tableCounts || 0;
             let status = await inventory.save()
             return res.status(200).json({
                 IsSuccess: true,
@@ -1301,7 +1314,7 @@ router.post("/getServiceProvider", async function(req, res, next) {
         let criteria = JSON.parse(JSON.stringify({companyId}))
         var companyServicesProvider = await companyServicesProviderSchema.find(criteria)
         .populate('companyId', '_id companyCode companyName')
-        .populate('inventoryId', '_id inventoryName')
+        .populate('inventoryId', '_id inventoryName, tableCounts')
         res.status(200)
         .json({ Message: "Data Found!", Data: companyServicesProvider, IsSuccess: true });
 
@@ -1324,9 +1337,16 @@ router.post("/addServiceProvider", async function(req, res, next) {
             serviceProviderDescription,
             appointmentMinutes,
             rateType,
-            rateAmt} = req.body;
+            rateAmt,
+            isTableBooking, totalTable} = req.body;
             if ( !companyId ||  !inventoryId || !serviceProviderName || !serviceProviderDescription || !appointmentMinutes || !rateType || !rateAmt) {
                 throw new Error('Invalid Data pass!')
+            }
+            if (isTableBooking && !_id) {
+                let inventoriesCont = await companyServicesProviderSchema.countDocuments({inventoryId: inventoryId});
+                if (inventoriesCont+1 > totalTable ) {
+                    throw new Error('All tables are occupied!')
+                }
             }
             let data = {
                 companyId: companyId,
