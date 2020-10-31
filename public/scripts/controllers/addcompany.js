@@ -337,7 +337,7 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
             headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(
             function(response) {
-                if (response.data.Data ) {
+                if (response.data.IsSuccess ) {
                     $scope.DeleteData(id)
                 } else {
                     alert(response.data.Message || "Data Not deleted !");
@@ -355,11 +355,11 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
                 url: imageroute + "/admin/deleteCompanyMaster",
                 method: "POST",
                 cache: false,
-                data: { id: id },
+                data: { id: id,allowDelete: true },
                 headers: { "Content-Type": "application/json; charset=UTF-8" },
             }).then(
                 function(response) {
-                    if (response.data.Data == 1) {
+                    if (response.data.IsSuccess) {
                         alert("Delete Successfully !");
                         $scope.GetCompany();
 
