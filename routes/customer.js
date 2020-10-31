@@ -516,7 +516,7 @@ router.post("/getServiceListByCompanyId", async function(
         let filter = JSON.parse(JSON.stringify({companyId: companyId}))
         filter.serviceProviderAvailable = true;
         serviceProviders = await companyServicesProviderSchema.find(filter)
-        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode')
+        .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode')
         .populate('inventoryId');
         res.status(200)
             .json({ Message: "Data Found!", Data: serviceProviders, IsSuccess: true });

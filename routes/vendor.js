@@ -93,7 +93,7 @@ router.get("/serviceProvider/:companyId", async function (req, res, next) {
         filter.serviceProviderAvailable = true;
         // console.log(JSON.stringify(JSON.stringify(filter)))
         let ss = await companyServicesProviderSchema.find(filter)
-            .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation companyHtmlPage adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
+            .populate('companyId', '_id personName personPhoto companyName companyType active gstinNo addressLine1 addressLine2 cityMasterId companyCode mapLocation adminMobile businessCategoryId cancellationPolicy companyLogo phone weekStartDay zipcode lat long')
             .populate('inventoryId').lean();
         // console.log(ss)
         if (ss && ss.length) {
@@ -683,7 +683,6 @@ router.put("/profile/:vendorId", async function (req, res, next) {
         personName,
         weekStartDay,
         cancellationPolicy,
-        companyHtmlPage,
         registrationValidUpto,
     } = req.body;
     try {
@@ -716,7 +715,6 @@ router.put("/profile/:vendorId", async function (req, res, next) {
         company.personName = personName || company.personName;
         company.weekStartDay = weekStartDay || company.weekStartDay;
         company.cancellationPolicy = cancellationPolicy || company.cancellationPolicy;
-        company.companyHtmlPage = companyHtmlPage || company.companyHtmlPage;
         company.registrationValidUpto = registrationValidUpto || company.registrationValidUpto;
         await company.save()
         res.status(200).json({
