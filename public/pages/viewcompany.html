@@ -7,6 +7,9 @@
     /*
    Styling
   */
+  .extrick {
+      color : red;
+  }
     .cst-tab,
     .tabset>label {
         position: relative;
@@ -72,6 +75,12 @@
 
     .tabset {
         max-width: 65em;
+    }
+    @media screen and (min-width: 768px){
+        .logo_file {
+        padding: 0px !important;
+        width: 90px;
+        }
     }
 </style>
 
@@ -271,14 +280,14 @@
                         <br /><br />
                         <div class="col-md-12">
 
-                            <form class="form" name="companyForm" ng-submit="submit()">
+                            <form class="form" id="addvendor" name="companyForm" ng-submit="submitCompany()">
                                 <div class="tabset">
                                     <div class="tab-panels">
                                         <section id="info" class="tab-panel" ng-show="selectedTab.key == 'vendorInfo'">
                                             <div class="row">
-                                                <div class="col-sm-3  form-group">
-                                                    <label>Membership Type</label>
-                                                    <select class="form-control form-control-sm" ng-init=""
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Membership Type <span class="extrick">*</span></label>
+                                                    <select name="membershipId" class="form-control form-control-sm" ng-init=""
                                                         ng-model="model.membershipId" required>
                                                         <option value="" disabled>Nothing Selected</option>
                                                         <option ng-repeat="sel in MemberShipTypeList"
@@ -288,9 +297,9 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Booking Type</label>
-                                                    <select class="form-control form-control-sm" ng-init=""
-                                                        ng-model="model.bookingType">
+                                                    <label>Booking Type <span class="extrick">*</span></label>
+                                                    <select name="bookingType" id="bookingType" class="form-control form-control-sm" ng-init=""
+                                                        ng-model="model.bookingType" required>
                                                         <option value="" disabled>Nothing Selected</option>
                                                         <option ng-repeat="sel in bookingTypeList"
                                                             ng-selected="model.bookingType == sel" value="{{sel}}">
@@ -301,8 +310,8 @@
                                             <div class="row">
                                                 <div class="col-md-3 ">
                                                     <div class="form-group">
-                                                        <label>Business Category</label>
-                                                        <select class="form-control form-control-sm" ng-init=""
+                                                        <label>Business Category <span class="extrick">*</span></label>
+                                                        <select name="businessCategoryId" id="businessCategoryId" class="form-control form-control-sm" ng-init=""
                                                             ng-model="model.businessCategoryId" required>
                                                             <option value="" disabled>Nothing Selected</option>
                                                             <option ng-repeat="sel in BusinessCategoryList"
@@ -314,48 +323,49 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Vendor Name</label>
-                                                        <input type="text" style="text-transform: lowercase;"
+                                                        <label>Vendor Name <span class="extrick">*</span></label>
+                                                        <input type="text" name="companyName" id="companyName"
                                                             class="form-control form-control-sm"
-                                                            ng-model="model.companyName" required=""
+                                                            ng-model="model.companyName" required
                                                             placeholder="Company Name" autocomplete="off">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Joining Date</label>
-                                                        <input type="date" class="form-control form-control-sm"
-                                                            ng-model="model.doj" placeholder="DOJ" autocomplete="off">
+                                                        <label>Joining Date <span class="extrick">*</span></label>
+                                                        <input type="date" name="doj" id="doj" class="form-control form-control-sm"
+                                                            ng-model="model.doj" placeholder="DOJ" autocomplete="off" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Vendor Logo</label>
-                                                        <input type="file" class="btn-sm form-control-sm"
+                                                        <label>Vendor Logo <span class="extrick">*</span></label>
+                                                        <input type="file" name="companyLogo" id="companyLogo" class="btn-sm form-control-sm logo_file"
                                                             file-input="CompanyLogo">
                                                     </div>
+                                                    <!-- onchange="angular.element(this).scope().onChaacom()" -->
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Address 1</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.addressLine1"
+                                                        <label>Address 1 <span class="extrick">*</span></label>
+                                                        <input type="text" name="addressLine1" id="addressLine1" class="form-control form-control-sm"
+                                                            required ng-model="model.addressLine1"
                                                             placeholder="Address 1" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Address 2</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="addressLine2" id="addressLine2" class="form-control form-control-sm"
                                                             ng-model="model.addressLine2" placeholder="Address 2"
                                                             autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>City</label>
-                                                        <select class="form-control form-control-sm" ng-init=""
+                                                        <label>City <span class="extrick">*</span></label>
+                                                        <select name="cityMasterId" id="cityMasterId" class="form-control form-control-sm" ng-init=""
                                                             ng-model="model.cityMasterId" required>
                                                             <option value="" disabled>Nothing Selected</option>
                                                             <option ng-repeat="sel in CityList"
@@ -367,16 +377,16 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Pincode</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <label>Pincode <span class="extrick">*</span></label>
+                                                        <input type="text" name="zipcode" id="zipcode" class="form-control form-control-sm"
                                                             ng-model="model.zipcode" placeholder="Pincode"
-                                                            autocomplete="off">
+                                                            autocomplete="off" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Vendor Type</label>
-                                                        <select class="form-control form-control-sm" ng-init=""
+                                                        <label>Vendor Type <span class="extrick">*</span></label>
+                                                        <select name="companyType" id="companyType" class="form-control form-control-sm" ng-init=""
                                                             ng-model="model.companyType" required>
                                                             <option value="" disabled>Nothing Selected</option>
                                                             <option ng-repeat="sel in MessageList"
@@ -387,16 +397,16 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Registration Valid Upto</label>
-                                                        <input type="date" class="form-control form-control-sm"
+                                                        <label>Registration Valid Upto <span class="extrick">*</span></label>
+                                                        <input type="date" name="registrationValidUpto" id="registrationValidUpto" class="form-control form-control-sm"
                                                             ng-model="model.registrationValidUpto"
-                                                            placeholder="Registration Valid Upto" autocomplete="off">
+                                                            placeholder="Registration Valid Upto" autocomplete="off" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>GSTIN No</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="gstinNo" id="gstinNo" class="form-control form-control-sm"
                                                             ng-model="model.gstinNo" placeholder="Gstin No"
                                                             autocomplete="off">
                                                     </div>
@@ -404,7 +414,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Pancard No</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="paNo" id="paNo" class="form-control form-control-sm"
                                                             ng-model="model.paNo" placeholder="Pancard No"
                                                             autocomplete="off">
                                                     </div>
@@ -412,8 +422,8 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Week Start Day</label>
-                                                        <select class="form-control form-control-sm" ng-init=""
-                                                            ng-model="model.weekStartDay" required>
+                                                        <select name="weekStartDay" id="weekStartDay" class="form-control form-control-sm" ng-init=""
+                                                            ng-model="model.weekStartDay">
                                                             <option value="" disabled>Nothing Selected</option>
                                                             <option ng-repeat="sel in WeekStartDayList"
                                                                 ng-selected="model.weekStartDay == sel" value="{{sel}}">
@@ -424,7 +434,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Cancellation Policy</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="cancellationPolicy" id="cancellationPolicy" class="form-control form-control-sm"
                                                             ng-model="model.cancellationPolicy"
                                                             placeholder="Cancellation Policy" autocomplete="off">
                                                     </div>
@@ -432,7 +442,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
+                                                <button type="button" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
                                                     changes</button>
                                                 </div> 
                                                 <button type="button" class="btn btn-primary mt-4 btn-lg pull-right"
@@ -443,8 +453,8 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Phone</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <label>Phone <span class="extrick">*</span></label>
+                                                        <input type="text" name="phone" id="phone" class="form-control form-control-sm"
                                                             required onkeypress="return isNumber(event)"
                                                             maxlength="10" ng-model="model.phone" placeholder="Phone"
                                                             autocomplete="off">
@@ -454,21 +464,21 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Fax</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="fax" id="fax" class="form-control form-control-sm"
                                                             ng-model="model.fax" placeholder="Fax" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>URL</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="url" id="url" class="form-control form-control-sm"
                                                             ng-model="model.url" placeholder="http://www.tymlee.com" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Support Email</label>
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="supportEmail" id="supportEmail" class="form-control form-control-sm"
                                                             ng-model="model.supportEmail" placeholder="Support Email"
                                                             autocomplete="off">
 
@@ -476,9 +486,9 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Map Location &nbsp;<i class="fa  fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Set your google map location. e.g. http://maps.google.com/maps?daddr=23.012109,72.4757344"></i></label>
+                                                        <label>Map Location <span class="extrick">*</span> &nbsp;<i class="fa  fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Set your google map location. e.g. http://maps.google.com/maps?daddr=23.012109,72.4757344"></i></label>
            
-                                                        <input type="text" class="form-control form-control-sm"
+                                                        <input type="text" name="mapLocation" id="mapLocation" class="form-control form-control-sm"
                                                             ng-model="model.mapLocation" placeholder="Map Location"
                                                             autocomplete="off" required>
                                                     </div>
@@ -486,7 +496,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
+                                                <button type="button" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
                                                     changes</button>
                                                 </div> 
                                                 <button type="button" class="btn btn-primary mt-4 btn-lg pull-right"
@@ -498,60 +508,60 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank Name</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            ng-model="model.bankName" required=""
+                                                        <label>Bank Name <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankName" id="bankName" class="form-control form-control-sm"
+                                                            ng-model="model.bankName" required
                                                             placeholder="Bank Name" autocomplete="off">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank Branch</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankBranchName"
+                                                        <label>Bank Branch <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankBranchName" id="bankBranchName" class="form-control form-control-sm"
+                                                            required ng-model="model.bankBranchName"
                                                             placeholder="Bank Branch" autocomplete="off">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank Address</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankAddress"
+                                                        <label>Bank Address <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankAddress" id="bankAddress" class="form-control form-control-sm"
+                                                            required ng-model="model.bankAddress"
                                                             placeholder="Bank Address" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank State</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankState"
+                                                        <label>Bank State <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankState" id="bankState" class="form-control form-control-sm"
+                                                            required ng-model="model.bankState"
                                                             placeholder="Bank State" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank City</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankCity"
+                                                        <label>Bank City <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankCity" id="bankCity" class="form-control form-control-sm"
+                                                            required ng-model="model.bankCity"
                                                             placeholder="Bank City" autocomplete="off">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank Account No</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankAccountNo"
+                                                        <label>Bank Account No <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankAccountNo" id="bankAccountNo" class="form-control form-control-sm"
+                                                            required ng-model="model.bankAccountNo"
                                                             placeholder="Bank Account No" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Bank IFSC Code</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.bankIfscCode"
+                                                        <label>Bank IFSC Code <span class="extrick">*</span></label>
+                                                        <input type="text" name="bankIfscCode" id="bankIfscCode" class="form-control form-control-sm"
+                                                            required ng-model="model.bankIfscCode"
                                                             placeholder="Bank IFSC Code" autocomplete="off">
                                                     </div>
                                                 </div>
@@ -560,7 +570,7 @@
 
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
+                                                    <button type="button" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
                                                         changes</button>
                                                     </div>
                                                 <button type="button" class="btn btn-primary mt-4 btn-lg pull-right"
@@ -571,16 +581,16 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Person Name</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.personName"
+                                                        <label>Person Name <span class="extrick">*</span></label>
+                                                        <input type="text" name="personName" id="personName" class="form-control form-control-sm"
+                                                             ng-model="model.personName"
                                                             placeholder="Person Name" autocomplete="off">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Person Image</label>
-                                                        <input type="file" class="btn-sm form-control-sm"
+                                                        <input type="file" name="personPhotoAttachment" id="personPhotoAttachment" class="btn-sm form-control-sm"
                                                             file-input="PersonImage">
                                                     </div>
                                                     <div class="mb-2"
@@ -592,7 +602,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Aadhar Card</label>
-                                                        <input type="file" class="btn-sm form-control-sm"
+                                                        <input type="file" name="aadharCardAttachment" id="aadharCardAttachment" class="btn-sm form-control-sm"
                                                             file-input="AadharCard">
                                                     </div>
                                                     <div class="mb-2"
@@ -604,7 +614,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Pan Card</label>
-                                                        <input type="file" class="btn-sm form-control-sm"
+                                                        <input type="file" name="panCardAttachment" id="panCardAttachment" class="btn-sm form-control-sm"
                                                             file-input="PanCard">
                                                     </div>
                                                     <div class="mb-2"
@@ -616,7 +626,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Cancelled Cheque</label>
-                                                        <input type="file" class="btn-sm form-control-sm"
+                                                        <input type="file" name="cancelledChequeAttachment" id="cancelledChequeAttachment" class="btn-sm form-control-sm"
                                                             file-input="CancelledCheque">
                                                     </div>
                                                     <div class="mb-2"
@@ -628,7 +638,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
+                                                    <button type="button" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
                                                         changes</button>
                                                     </div>
                                                 <button type="button" class="btn btn-primary mt-4 btn-lg pull-right"
@@ -640,9 +650,9 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Admin Email</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            required="" ng-model="model.adminEmail"
+                                                        <label>Admin Email <span class="extrick">*</span></label>
+                                                        <input type="text" name="adminEmail" id="adminEmail" class="form-control form-control-sm"
+                                                            required ng-model="model.adminEmail"
                                                             placeholder="Admin Email" autocomplete="off">
                                                     </div>
                                                 </div>
@@ -652,7 +662,7 @@
                                                             <div class="form-group">
                                                                 <label>Admin Password</label>
 
-                                                                <input type="password" placeholder="Password" id="pwd"
+                                                                <input type="password" name="adminPassword" id="adminPassword" placeholder="Password" id="pwd"
                                                                     ng-model="model.adminPassword"
                                                                     class="form-control form-control-sm" name="password"
                                                                     autocomplete="off" />
@@ -670,8 +680,8 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Admin Mobile</label>
-                                                        <input type="text" id=pass class="form-control form-control-sm"
-                                                            required="" onkeypress="return isAdminNumber(event)"
+                                                        <input type="text" name="adminMobile" id="adminMobile" class="form-control form-control-sm"
+                                                             onkeypress="return isAdminNumber(event)"
                                                             ng-model="model.adminMobile" placeholder="Admin Mobile"
                                                             autocomplete="off">
                                                     </div>
@@ -679,7 +689,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="submit" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
+                                                    <button type="button" class="btn btn-primary mt-4 btn-lg" ng-disabled="btnsave">Save
                                                         changes</button>
                                                     </div>
                                                 <button type="button" class="btn btn-primary mt-4 btn-lg pull-right"
@@ -689,7 +699,7 @@
                                         <section id="notes" class="tab-panel" ng-show="selectedTab.key == 'notes'">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <textarea class="textarea" placeholder="Place some text here"
+                                                    <textarea class="textarea" name="notes" id="notes" placeholder="Place some text here"
                                                         ng-model="model.notes"
                                                         style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                                                     <button type="submit" class="btn btn-primary mt-4 btn-lg pull-right"

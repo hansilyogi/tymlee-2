@@ -675,15 +675,18 @@ router.post("/addCompanyMaster", async function(req, res, next) {
     var a = Math.floor(100000 + Math.random() * 900000);
     try {
         let existCompany = await companyMasterSchema.find({
-            companyName: { $regex: new RegExp(companyName.toLowerCase(), "i") },
+            companyName: companyName,
         });
+        console.log("1");
         if (existCompany.length == 1) {
+            console.log("2");
             res.status(200).json({
                 Message: "Company Name Already Registered!",
                 Data: 0,
                 IsSuccess: true,
             });
         } else {
+            console.log("3");
             var companymaster = new companyMasterSchema({
                 _id: new config.mongoose.Types.ObjectId(),
                 membershipId: membershipId,
@@ -718,15 +721,15 @@ router.post("/addCompanyMaster", async function(req, res, next) {
                 companyType: companyType,
                 personName: personName,
                 aadharCard: aadharCard,
-                aadharCardAttachment: aadharCardAttachment || '',
+                // aadharCardAttachment: aadharCardAttachment || '',
                 companyLogo: companyLogo || '',
-                companyLogoAttachment: companyLogoAttachment || '',
+                // companyLogoAttachment: companyLogoAttachment || '',
                 personPhoto: personPhoto || '',
-                personPhotoAttachment: personPhotoAttachment || '',
+                // personPhotoAttachment: personPhotoAttachment || '',
                 panCard: panCard || '',
-                panCardAttachment:panCardAttachment || '',
+                // panCardAttachment:panCardAttachment || '',
                 cancelledCheque: cancelledCheque || '',
-                cancelledChequeAttachment:cancelledChequeAttachment || '',
+                // cancelledChequeAttachment:cancelledChequeAttachment || '',
                 // personPhoto: req.files.personPhoto == undefined ?
                 //     null : req.files.personPhoto[0].path,
                 // aadharCard: req.files.aadharCard == undefined ?
@@ -741,12 +744,17 @@ router.post("/addCompanyMaster", async function(req, res, next) {
                 registrationValidUpto: registrationValidUpto,
                 notes: notes || ''
             });
+            console.log("location : "+companymaster.mapLocation);
+            console.log("phone :"+companymaster.phone);
+            console.log("4");
             var datas = await companymaster.save();
             if (datas) {
+            console.log("5");
                 res
                     .status(200)
                     .json({ Message: "Company Master Added!", Data: 1, IsSuccess: true });
             } else {
+            console.log("6");
                 res.status(200).json({
                     Message: "Company Master Not Added!",
                     Data: 0,

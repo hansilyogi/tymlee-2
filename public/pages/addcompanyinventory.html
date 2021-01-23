@@ -89,7 +89,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Inventory Name</label>
-                                    <input type="text" class="form-control form-control-sm" ng-model="InventoryName"
+                                    <input type="text" name="InventoryName" class="form-control form-control-sm" ng-model="InventoryName"
                                         placeholder="Inventory Name" autocomplete="off">
 
                                 </div>
@@ -97,7 +97,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Inventory Description</label>
-                                    <input type="text" class="form-control form-control-sm"
+                                    <input type="text" name="InventoryDescription" class="form-control form-control-sm"
                                         ng-model="InventoryDescription" placeholder="Inventory Description"
                                         autocomplete="off">
 
@@ -114,13 +114,13 @@
                                     </div> -->
 
                                     <div class="form-check form-check-inline">
-                                        <input type="radio" class="form-check-input" id="materialInline1" name="inlineMaterialRadiosExample" ng-value="true" ng-model="multipleService">
+                                        <input type="radio" name="multipleService" class="form-check-input" id="materialInline1" name="inlineMaterialRadiosExample" ng-value="true" ng-model="multipleService">
                                         <label class="form-check-label" for="materialInline1">Yes</label>
                                       </div>
                                       
                                       <!-- Material inline 2 -->
                                       <div class="form-check form-check-inline">
-                                        <input type="radio" class="form-check-input" id="materialInline2" name="inlineMaterialRadiosExample" ng-value="false" ng-model="multipleService">
+                                        <input type="radio" name="multipleService" class="form-check-input" id="materialInline2" name="inlineMaterialRadiosExample" ng-value="false" ng-model="multipleService">
                                         <label class="form-check-label" for="materialInline2">No</label>
                                       </div>
                                 </div>
@@ -128,7 +128,7 @@
                             <div class="col-md-3" ng-show="isTableBooking">
                                 <div class="form-group">
                                     <label>Number of Tables</label> &nbsp;
-                                    <input type="number" class="form-control form-control-sm" required
+                                    <input type="number" name="tableCounts" class="form-control form-control-sm"
                                             ng-model="tableCounts" placeholder="Number of tables"
                                             autocomplete="off">
                                 </div>
@@ -136,7 +136,7 @@
                             <div class="col-md-3" ng-if="!companyId">
                                 <div class="form-group">
                                     <label>Company</label> &nbsp;
-                                    <select class="form-control form-control-sm" ng-model="companyId" ng-init="">
+                                    <select name="companyId" class="form-control form-control-sm" ng-model="companyId" ng-init="">
                                         <option value="" disabled>Nothing Selected</option>
                                         <option ng-repeat="company in companies" ng-selected="RateType == company._id"
                                             value="{{company._id}}">
@@ -152,7 +152,7 @@
                                 <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Appointment Minutes</label>
-                                        <input type="number" class="form-control form-control-sm"
+                                        <input name="appointmentMinutes" type="number" class="form-control form-control-sm"
                                             ng-model="AppointmentMinutes" placeholder="Appointment Minutes"
                                             autocomplete="off">
 
@@ -161,7 +161,7 @@
                                 <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Rate Type</label>
-                                        <select class="form-control form-control-sm" ng-model="RateType" ng-init="">
+                                        <select name="RateType" class="form-control form-control-sm" ng-model="RateType" ng-init="">
                                             <option value="" disabled>Nothing Selected</option>
                                             <option ng-repeat="sel in RateTypeList" ng-selected="RateType == sel"
                                                 value="{{sel}}">
@@ -173,7 +173,7 @@
                                 <div class="col-md-3" ng-show="defaultInventory">
                                     <div class="form-group">
                                         <label>Rate Amount</label>
-                                        <input type="number" step="0.01" min="0" max="100000"
+                                        <input type="number" name="RateAmount" step="0.01" min="0" max="100000"
                                             class="form-control form-control-sm" ng-model="RateAmount" placeholder="0"
                                             autocomplete="off">
                                     </div>
@@ -181,7 +181,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes1 Name</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes1Name" class="form-control form-control-sm"
                                             ng-model="InventoryNotes1Name" placeholder="Inventory Notes1 Name"
                                             autocomplete="off">
                                     </div>
@@ -189,7 +189,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes1</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes1" class="form-control form-control-sm"
                                             ng-model="InventoryNotes1" placeholder="Inventory Notes1"
                                             autocomplete="off">
                                     </div>
@@ -197,7 +197,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes2 Name</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes2Name" class="form-control form-control-sm"
                                             ng-model="InventoryNotes2Name" placeholder="Inventory Notes2 Name"
                                             autocomplete="off">
                                     </div>
@@ -205,7 +205,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes2</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes2" class="form-control form-control-sm"
                                             ng-model="InventoryNotes2" placeholder="Inventory Notes2"
                                             autocomplete="off">
                                     </div>
@@ -213,7 +213,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes3 Name</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes3Name" class="form-control form-control-sm"
                                             ng-model="InventoryNotes3Name" placeholder="Inventory Notes3 Name"
                                             autocomplete="off">
                                     </div>
@@ -221,7 +221,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Inventory Notes</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" name="InventoryNotes3" class="form-control form-control-sm"
                                             ng-model="InventoryNotes3" placeholder="Inventory Notes3"
                                             autocomplete="off">
                                     </div>
@@ -234,7 +234,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Service Provider Name</label>
-                                            <input type="text" class="form-control form-control-sm"
+                                            <input type="text" name="ServiceProviderName" class="form-control form-control-sm"
                                                 ng-model="ServiceProviderName" placeholder="Service Provider Name"
                                                 autocomplete="off">
 
@@ -243,7 +243,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Service Provider Description</label>
-                                            <input type="text" class="form-control form-control-sm"
+                                            <input type="text" name="ServiceProviderDescription" class="form-control form-control-sm"
                                                 ng-model="ServiceProviderDescription"
                                                 placeholder="Service Provider Description" autocomplete="off">
 
@@ -252,7 +252,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Appointment Minutes</label>
-                                            <input type="number" step="0.01" min="0" max="10000"
+                                            <input type="number" name="AppointmentMinutesData" step="0.01" min="0" max="10000"
                                                 class="form-control form-control-sm" ng-model="AppointmentMinutesData"
                                                 placeholder="Appointment Minutes" autocomplete="off">
 
@@ -261,7 +261,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Rate Amount</label>
-                                            <input type="number" step="0.01" min="0" max="100000"
+                                            <input type="number" name="RateAmountData" step="0.01" min="0" max="100000"
                                                 class="form-control form-control-sm" ng-model="RateAmountData"
                                                 placeholder="0" autocomplete="off">
                                         </div>
@@ -269,7 +269,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Rate Type</label>
-                                            <select class="form-control form-control-sm" ng-model="RateTypeData"
+                                            <select name="RateTypeData" class="form-control form-control-sm" ng-model="RateTypeData"
                                                 ng-init="">
                                                 <option value="" disabled>Nothing Selected</option>
                                                 <option ng-repeat="sel in RateTypeList"

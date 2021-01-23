@@ -7,7 +7,7 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     $scope.PayThroughList = ['UPI', 'Credit Card', 'Debit Card', 'NetBanking'];
     $scope.MessageList = ['Proprietorship', 'Partnership', ' Private Limited', ' LLP', 'Limited'];
     $scope.WeekStartDayList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    $scope.bookingTypeList = ['Appointment', 'Table']
+    $scope.bookingTypeList = ['Appointment', 'Table'];
     $scope.CityList = [];
     $scope.BankDataList = [];
     $scope.defaultshow = true;
@@ -16,6 +16,7 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
     $scope.color = {
         'background-color': 'grey'
     };
+    var res;
     $scope.tabs = [
         { id: 1, name: 'Vendor Detail', key:"vendorInfo", active: false },
         { id: 1, name: 'Contact Us', key:"contactus", active: false },
@@ -53,10 +54,62 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
 
     $scope.changeTab = function(tab) {
         $scope.selectedTab = tab;
+    };
+
+    // $('#companyLogo').change( function(event) {
+    //     res = $("img").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+    //     console.log(res);
+    // });
+
+    
+
+    $('#companyLogo').change(function(){
+        // readURL(this.files[0]);
+        // res = input.files[0];
+        // $(this).attr("event","change");
+        res = this.files[0];
+        console.log(this.files[0]);
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#prev_img').attr('src', e.target.result);
+            }
+            res = input.files[0];
+            // console.log(res);
+            reader.readAsDataURL(input.files[0]);
+        }
     }
+
+    // $scope.imgchange = function(f) {
+    //     var filePath = $('#companyLogo').val();
+    //     var reader = new FileReader();
+    //     reader.onload = function (e) {
+    //         $('#imgs').attr('src',e.target.result);
+    //     };
+    //     var c = reader.readAsDataURL(f.files[0]);    
+    //     console.log(c);      
+    // };
+
+    // $scope.onChaacom = function(x){
+    //     console.log("1");
+    //     console.log(x);
+    //     selectedfile = x.target.files[0];
+    //     console.log(selectedfile);
+    // };
 
     $scope.submitCompany = function() {
         var preForm = new FormData();
+        // console.log($("#companyName").val());
+        // console.log($("#addressLine1").val());
+        // console.log($("#mapLocation").val());
+        // console.log($("#companyLogo").val());
+        // console.log($("#personPhotoAttachment").val());
+        // console.log($("#aadharCardAttachment").val());
+        // console.log($("#panCardAttachment").val());
+        // console.log($("#phone").val());
 
         // preForm.append("personPhoto", $scope.PersonImage);
         // preForm.append("aadharCard", $scope.AadharCard);
@@ -78,45 +131,66 @@ app.controller('AddCompanyController', function($scope, $http, $q) {
         if ($scope.CompanyLogo != null && $scope.CompanyLogo.length > 0)
             preForm.append('companyLogo', $scope.CompanyLogo[0]);
 
-        preForm.append("id", $scope.Id);
-        preForm.append("doj", $scope.DOJ);
-        preForm.append("businessCategoryId", $scope.BusinessCategoryId);
-        preForm.append("companyName", $scope.CompanyName);
-        preForm.append("addressLine1", $scope.Address1);
-        preForm.append("addressLine2", $scope.Address2);
-        preForm.append("cityMasterId", $scope.CityId);
-        preForm.append("zipcode", $scope.Zipcode);
-        preForm.append("mapLocation", $scope.MapLocation);
-        preForm.append("phone", $scope.Phone);
-        preForm.append("fax", $scope.Fax);
-        preForm.append("url", $scope.Url);
-        preForm.append("supportEmail", $scope.SupportEmail);
-        preForm.append("adminEmail", $scope.AdminEmail);
-        preForm.append("adminMobile", $scope.AdminMobile);
-        preForm.append("adminPassword", $scope.AdminPassword);
-        preForm.append("gstinNo", $scope.GstinNo);
-        preForm.append("paNo", $scope.PancardNo);
-        preForm.append("bankName", $scope.BankName);
-        preForm.append("bankBranchName", $scope.BankBranchName);
-        preForm.append("bankAddress", $scope.BankAddress);
-        preForm.append("bankCity", $scope.BankCity);
-        preForm.append("bankState", $scope.BankState);
-        preForm.append("bankAccountNo", $scope.BankAccountNo);
-        preForm.append("bankIfscCode", $scope.BankIFSCCode);
-        preForm.append("companyType", $scope.CompanyType);
-        preForm.append("personName", $scope.PersonName);
-        preForm.append("weekStartDay", $scope.WeekStartDay);
-        preForm.append("cancellationPolicy", $scope.CancellationPolicy);
-        preForm.append("registrationValidUpto", $scope.RegistrationValidUpto);
+        var data = {
+            "id": 0,
+        "doj": $("#doj").val(),
+        "businessCategoryId": $("#businessCategoryId").val(),
+        "companyName": $("#companyName").val(),
+        "addressLine1": $("#addressLine1").val(),
+        "addressLine2": $("#addressLine2").val(),
+        "cityMasterId": $("#cityMasterId").val(),
+        "zipcode": $("#zipcode").val(),
+        "mapLocation": $("#mapLocation").val(),
+        "phone": $("#phone").val(),
+        "fax": $("#fax").val(),
+        "bookingType" : $("#bookingType").val(),
+        "url": $("#url").val(),
+        "supportEmail": $("#supportEmail").val(),
+        "adminEmail": $("#adminEmail").val(),
+        "adminMobile": $("#adminMobile").val(),
+        "adminPassword": $("#adminPassword").val(),
+        "gstinNo": $("#gstinNo").val(),
+        "paNo": $("#paNo").val(),
+        "bankName": $("#bankName").val(),
+        "bankBranchName": $("#bankBranchName").val(),
+        "bankAddress": $("#bankAddress").val(),
+        "bankCity": $("#bankCity").val(),
+        "bankState": $("#bankState").val(),
+        "bankAccountNo": $("#bankAccountNo").val(),
+        "bankIfscCode": $("#bankIfscCode").val(),
+        "companyType": $("#companyType").val(),
+        "personName": $("#personName").val(),
+        "weekStartDay": $("#weekStartDay").val(),
+        "cancellationPolicy": $("#cancellationPolicy").val(),
+        // "companyLogoAttachment": $("#companyLogo").val(),
+        "personPhotoAttachment": $("#personPhotoAttachment").val(),
+        "aadharCardAttachment": $("#aadharCardAttachment").val(),
+        "panCardAttachment": $("#panCardAttachment").val(),
+        "cancelledChequeAttachment": $("#cancelledChequeAttachment").val(),
+        "registrationValidUpto": $("#registrationValidUpto").val(),
+        };
 
+        // console.log(data);
+        // var data1 = new FormData(addvendor);
+        // data1.set("companyLogo" , '');
+        // data1.set("personPhotoAttachment" , '');
+        // data1.set("aadharCardAttachment" , '');
+        // data1.set("panCardAttachment" , '');
+        // data1.set("cancelledChequeAttachment" , '');
+        // // console.log("IMage Path = "+input1.files[0]);
+        // for (var pair of data1.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]);
+        // };
 
         $http({
             url: imageroute + "/admin/addCompanyMaster",
             method: "POST",
-            data: preForm,
-            transformRequest: angular.identity,
-            headers: { "Content-Type": undefined, "Process-Data": false },
+            data: data,
+            // transformRequest: angular.identity,
+            // headers: { "Content-Type": undefined, "Process-Data": false },
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
         }).then(function(response) {
+                console.log(response);
                 if (response.data.Data == 1) {
                     alert("Company Saved!");
                     $("#modal-lg-company").modal("toggle");
